@@ -1,0 +1,27 @@
+import React, { useState } from "react";
+import UserSidebarComponent from "./../components/user/UserSidebarComponent";
+import UserNavbarComponent from "./../components/user/UserNavbarComponent";
+import { Outlet } from "react-router-dom";
+import UserFooterComponent from "./../components/user/UserFooterComponent";
+
+function UserLayout() {
+  const [offCanvasToggle, setOffCanvasToggle] = useState(false);
+  return (
+    <div className="flex w-full">
+      <UserSidebarComponent
+        offCanvasToggle={offCanvasToggle}
+        setOffCanvasToggle={setOffCanvasToggle}
+      />
+      <div className="lg:w-[80%] w-full">
+        <UserNavbarComponent
+          offCanvasToggle={offCanvasToggle}
+          setOffCanvasToggle={setOffCanvasToggle}
+        />
+        <Outlet />
+        <UserFooterComponent />
+      </div>
+    </div>
+  );
+}
+
+export default UserLayout;

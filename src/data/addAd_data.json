@@ -1,0 +1,2414 @@
+{
+  "mainCategories": [
+    {
+      "id": "mobiles",
+      "text": "Mobiles"
+    },
+    {
+      "id": "motors",
+      "text": "Motors"
+    },
+    {
+      "id": "property-for-sale",
+      "text": "Property For Sale"
+    },
+    {
+      "id": "property-for-rent",
+      "text": "Property For Rent"
+    },
+    {
+      "id": "electronics-and-home-appliances",
+      "text": "Electronics & Home Appliances"
+    },
+    {
+      "id": "bike",
+      "text": "Bike"
+    },
+    {
+      "id": "animals",
+      "text": "Animals"
+    },
+    {
+      "id": "furniture-and-home",
+      "text": "Furniture & Home Decor"
+    },
+    {
+      "id": "fashion-and-beauty",
+      "text": "Fashion & Beauty"
+    },
+    {
+      "id": "book-and-sports",
+      "text": "Book & Sports Items"
+    },
+    {
+      "id": "kids",
+      "text": "Kids"
+    }
+  ],
+  "mobile": [
+    {
+      "mobileSubCategories": [
+        {
+          "id": "mobile-phones",
+          "text": "Mobile Phones"
+        },
+        {
+          "id": "tablets",
+          "text": "Tablets"
+        },
+        {
+          "id": "accessories",
+          "text": "Accessories"
+        }
+      ]
+    },
+    {
+      "mobileBrands": [
+        {
+          "id": "apple",
+          "text": "Apple"
+        },
+        {
+          "id": "samsung",
+          "text": "Samsung"
+        },
+        {
+          "id": "lenovo",
+          "text": "Lenovo"
+        },
+        {
+          "id": "amazon",
+          "text": "Amazon"
+        },
+        {
+          "id": "huawei",
+          "text": "Huawei"
+        },
+        {
+          "id": "asus",
+          "text": "Asus"
+        },
+        {
+          "id": "dell",
+          "text": "Dell"
+        },
+        {
+          "id": "alcatel",
+          "text": "Alcatel"
+        },
+        {
+          "id": "huion",
+          "text": "Huion"
+        },
+        {
+          "id": "wacom",
+          "text": "Wacom"
+        },
+        {
+          "id": "acer",
+          "text": "Acer"
+        },
+        {
+          "id": "honor",
+          "text": "Honor"
+        },
+        {
+          "id": "rca",
+          "text": "RCA"
+        },
+        {
+          "id": "mione",
+          "text": "Mione"
+        },
+        {
+          "id": "q-tabs",
+          "text": "Q Tabs"
+        },
+        {
+          "id": "other-tablets",
+          "text": "Other Tablets"
+        },
+        {
+          "id": "dany-tabs",
+          "text": "Dany Tabs"
+        }
+      ]
+    },
+    {
+      "mobileCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "open-box",
+          "text": "Open Box"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "refurbished",
+          "text": "Refurbished"
+        },
+        {
+          "id": "parts",
+          "text": "For Parts"
+        }
+      ]
+    },
+    {
+      "mobileLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "motors": [
+    {
+      "motorsSubCategories": [
+        {
+          "id": "cars",
+          "text": "Cars"
+        },
+        {
+          "id": "car-accessories",
+          "text": "Car Accessories"
+        },
+        {
+          "id": "spare-parts",
+          "text": "Spare Parts"
+        },
+        {
+          "id": "buses-vans-and-trucks",
+          "text": "Buses, Vans & Trucks"
+        },
+        {
+          "id": "rickshaw-and-chingchi",
+          "text": "Rickshaw & Chingchi"
+        },
+        {
+          "id": "tractors-and-trailers",
+          "text": "Tractors & Trailers"
+        },
+        {
+          "id": "boats",
+          "text": "Boats"
+        },
+        {
+          "id": "other-vehicles",
+          "text": "Other Vehicles"
+        }
+      ]
+    },
+    {
+      "motorsMake": [
+        {
+          "id": "suzuki",
+          "text": "Suzuki"
+        },
+        {
+          "id": "toyota",
+          "text": "Toyota"
+        },
+        {
+          "id": "honda",
+          "text": "Honda"
+        },
+        {
+          "id": "daihatsu",
+          "text": "Daihatsu"
+        },
+        {
+          "id": "nissan",
+          "text": "Nissan"
+        },
+        {
+          "id": "adam",
+          "text": "Adam"
+        },
+        {
+          "id": "audi",
+          "text": "Audi"
+        },
+        {
+          "id": "bmw",
+          "text": "BMW"
+        },
+        {
+          "id": "mercedes",
+          "text": "Mercedes"
+        },
+        {
+          "id": "ford",
+          "text": "Ford"
+        },
+        {
+          "id": "hyundai",
+          "text": "Hyundai"
+        },
+        {
+          "id": "kia",
+          "text": "Kia"
+        },
+        {
+          "id": "mg",
+          "text": "MG"
+        },
+        {
+          "id": "proton",
+          "text": "Proton"
+        },
+        {
+          "id": "changan",
+          "text": "Changan"
+        },
+        {
+          "id": "faw",
+          "text": "FAW"
+        },
+        {
+          "id": "prince",
+          "text": "Prince"
+        },
+        {
+          "id": "united",
+          "text": "United"
+        },
+        {
+          "id": "volkswagen",
+          "text": "Volkswagen"
+        },
+        {
+          "id": "other-makes",
+          "text": "Other Makes"
+        }
+      ]
+    },
+    {
+      "motorsCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "reconditioned",
+          "text": "Reconditioned"
+        },
+        {
+          "id": "parts",
+          "text": "For Parts"
+        }
+      ]
+    },
+    {
+      "motorsFuel": [
+        {
+          "id": "petrol",
+          "text": "Petrol"
+        },
+        {
+          "id": "diesel",
+          "text": "Diesel"
+        },
+        {
+          "id": "lpg",
+          "text": "LPG"
+        },
+        {
+          "id": "cng",
+          "text": "CNG"
+        },
+        {
+          "id": "hybrid",
+          "text": "Hybrid"
+        },
+        {
+          "id": "electric",
+          "text": "Electric"
+        }
+      ]
+    },
+    {
+      "motorsTransmission": [
+        {
+          "id": "auto",
+          "text": "Automatic"
+        },
+        {
+          "id": "manual",
+          "text": "Manual"
+        }
+      ]
+    },
+    {
+      "motorsBodyType": [
+        {
+          "id": "sedan",
+          "text": "Sedan"
+        },
+        {
+          "id": "hatchback",
+          "text": "Hatchback"
+        },
+        {
+          "id": "suv",
+          "text": "SUV"
+        },
+        {
+          "id": "sports-coupe",
+          "text": "Sports / Coupe"
+        },
+        {
+          "id": "convertible",
+          "text": "Convertible"
+        },
+        {
+          "id": "estate",
+          "text": "Estate"
+        },
+        {
+          "id": "mpv",
+          "text": "MPV"
+        },
+        {
+          "id": "pickup",
+          "text": "Pickup"
+        },
+        {
+          "id": "van-bus",
+          "text": "Van / Bus"
+        },
+        {
+          "id": "small-city-car",
+          "text": "Small city car"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "motorsDocuments": [
+        {
+          "id": "original",
+          "text": "Original"
+        },
+        {
+          "id": "duplicate",
+          "text": "Duplicate"
+        },
+        {
+          "id": "lost",
+          "text": "Lost"
+        }
+      ]
+    },
+    {
+      "motorsAssembly": [
+        {
+          "id": "local",
+          "text": "Local"
+        },
+        {
+          "id": "imported",
+          "text": "Imported"
+        }
+      ]
+    },
+    {
+      "motorsLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "propertyForSale": [
+    {
+      "propertySaleSubCategories": [
+        {
+          "id": "houses",
+          "text": "Houses"
+        },
+        {
+          "id": "plots",
+          "text": "Plots"
+        },
+        {
+          "id": "flats",
+          "text": "Flats"
+        },
+        {
+          "id": "commercial",
+          "text": "Commercial"
+        },
+        {
+          "id": "farm-houses",
+          "text": "Farm Houses"
+        },
+        {
+          "id": "rooms",
+          "text": "Rooms"
+        },
+        {
+          "id": "other-property",
+          "text": "Other Property"
+        }
+      ]
+    },
+    {
+      "propertySaleAreaType": [
+        {
+          "id": "agriculture-land",
+          "text": "Agricultural Land"
+        },
+        {
+          "id": "commercial-plots",
+          "text": "Commercial Plots"
+        },
+        {
+          "id": "files",
+          "text": "Files"
+        },
+        {
+          "id": "industrial-land",
+          "text": "Industrial Land"
+        },
+        {
+          "id": "residential-plots",
+          "text": "Residential Plots"
+        },
+        {
+          "id": "plot-form",
+          "text": "Plot Form"
+        }
+      ]
+    },
+    {
+      "propertySaleAreaUnit": [
+        {
+          "id": "kanal",
+          "text": "Kanal"
+        },
+        {
+          "id": "marla",
+          "text": "Marla"
+        },
+        {
+          "id": "square-feet",
+          "text": "Square Feet"
+        },
+        {
+          "id": "square-meter",
+          "text": "Square Meter"
+        },
+        {
+          "id": "square-yards",
+          "text": "Square Yards"
+        }
+      ]
+    },
+    {
+      "propertySaleLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "propertyForRent": [
+    {
+      "propertyRentSubCategories": [
+        {
+          "id": "houses",
+          "text": "Houses"
+        },
+        {
+          "id": "flats",
+          "text": "Flats"
+        },
+        {
+          "id": "commercial",
+          "text": "Commercial"
+        },
+        {
+          "id": "rooms",
+          "text": "Rooms"
+        },
+        {
+          "id": "portions-and-floors",
+          "text": "Portions & Floors"
+        },
+        {
+          "id": "vacation-rentals",
+          "text": "Vacation Rentals"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "propertyRentFurnishedStatus": [
+        {
+          "id": "yes",
+          "text": "Yes"
+        },
+        {
+          "id": "no",
+          "text": "No"
+        }
+      ]
+    },
+    {
+      "propertyRentBedrooms": [
+        {
+          "id": "1",
+          "text": "1"
+        },
+        {
+          "id": "2",
+          "text": "2"
+        },
+        {
+          "id": "3",
+          "text": "3"
+        },
+        {
+          "id": "4",
+          "text": "4"
+        },
+        {
+          "id": "5",
+          "text": "5"
+        },
+        {
+          "id": "6+",
+          "text": "6+"
+        },
+        {
+          "id": "studio",
+          "text": "Studio"
+        }
+      ]
+    },
+    {
+      "propertyRentBathrooms": [
+        {
+          "id": "1",
+          "text": "1"
+        },
+        {
+          "id": "2",
+          "text": "2"
+        },
+        {
+          "id": "3",
+          "text": "3"
+        },
+        {
+          "id": "4",
+          "text": "4"
+        },
+        {
+          "id": "5",
+          "text": "5"
+        },
+        {
+          "id": "6",
+          "text": "6"
+        },
+        {
+          "id": "7+",
+          "text": "7+"
+        }
+      ]
+    },
+    {
+      "propertyRentStoreys": [
+        {
+          "id": "1",
+          "text": "1"
+        },
+        {
+          "id": "2",
+          "text": "2"
+        },
+        {
+          "id": "3",
+          "text": "3"
+        },
+        {
+          "id": "4+",
+          "text": "4+"
+        }
+      ]
+    },
+    {
+      "propertyRentConstructionStatus": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "under-construction",
+          "text": "Under Construction"
+        }
+      ]
+    },
+    {
+      "propertyRentAreaUnit": [
+        {
+          "id": "kanal",
+          "text": "Kanal"
+        },
+        {
+          "id": "marla",
+          "text": "Marla"
+        },
+        {
+          "id": "square-feet",
+          "text": "Square Feet"
+        },
+        {
+          "id": "square-meter",
+          "text": "Square Meter"
+        },
+        {
+          "id": "square-yards",
+          "text": "Square Yards"
+        }
+      ]
+    },
+    {
+      "propertyRentLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "electronicsAndHomeAppliances": [
+    {
+      "electronicsAndHomeAppliancesSubCategories": [
+        {
+          "id": "computers-and-accessories",
+          "text": "Computers & Accessories"
+        },
+        {
+          "id": "tv-home-audio-and-video",
+          "text": "TV - Home Audio & Video"
+        },
+        {
+          "id": "cameras-and-accessories",
+          "text": "Cameras & Accessories"
+        },
+        {
+          "id": "games-and-entertainment",
+          "text": "Games & Entertainment"
+        },
+        {
+          "id": "other-home-appliances",
+          "text": "Other Home Appliances"
+        },
+        {
+          "id": "kitchen-appliances",
+          "text": "Kitchen Appliances"
+        },
+        {
+          "id": "ac-and-coolers",
+          "text": "AC & Coolers"
+        },
+        {
+          "id": "washing-machines-and-dryers",
+          "text": "Washing Machines & Dryers"
+        },
+        {
+          "id": "generators-ups-and-power-solutions",
+          "text": "Generators, UPS & Power Solutions"
+        },
+        {
+          "id": "solar-panels-and-inverters",
+          "text": "Solar Panels & Inverters"
+        }
+      ]
+    },
+    {
+      "electronicsAndHomeAppliancesBrand": [
+        {
+          "id": "samsung",
+          "text": "Samsung"
+        },
+        {
+          "id": "lg",
+          "text": "LG"
+        },
+        {
+          "id": "sony",
+          "text": "Sony"
+        },
+        {
+          "id": "apple",
+          "text": "Apple"
+        },
+        {
+          "id": "dell",
+          "text": "Dell"
+        },
+        {
+          "id": "hp",
+          "text": "HP"
+        },
+        {
+          "id": "lenovo",
+          "text": "Lenovo"
+        },
+        {
+          "id": "panasonic",
+          "text": "Panasonic"
+        },
+        {
+          "id": "philips",
+          "text": "Philips"
+        },
+        {
+          "id": "haier",
+          "text": "Haier"
+        },
+        {
+          "id": "dawlance",
+          "text": "Dawlance"
+        },
+        {
+          "id": "orient",
+          "text": "Orient"
+        },
+        {
+          "id": "gree",
+          "text": "Gree"
+        },
+        {
+          "id": "tcl",
+          "text": "TCL"
+        },
+        {
+          "id": "xiaomi",
+          "text": "Xiaomi"
+        },
+        {
+          "id": "canon",
+          "text": "Canon"
+        },
+        {
+          "id": "nikon",
+          "text": "Nikon"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "electronicsAndHomeAppliancesCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "refurbished",
+          "text": "Refurbished"
+        },
+        {
+          "id": "open-box",
+          "text": "Open Box"
+        },
+        {
+          "id": "for-parts",
+          "text": "For Parts"
+        }
+      ]
+    },
+    {
+      "electronicsAndHomeAppliancesWarranty": [
+        {
+          "id": "under-warranty",
+          "text": "Under Warranty"
+        },
+        {
+          "id": "warranty-expired",
+          "text": "Warranty Expired"
+        },
+        {
+          "id": "no-warranty",
+          "text": "No Warranty"
+        }
+      ]
+    },
+    {
+      "electronicsAndHomeAppliancesLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "bike": [
+    {
+      "bikeSubCategories": [
+        {
+          "id": "motocycles",
+          "text": "Motorcycles"
+        },
+        {
+          "id": "scooters",
+          "text": "Scooters"
+        },
+        {
+          "id": "spare-parts",
+          "text": "Spare Parts"
+        },
+        {
+          "id": "bicycles",
+          "text": "Bicycles"
+        },
+        {
+          "id": "atv-and-quads",
+          "text": "ATV & Quads"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "bikeMake": [
+        {
+          "id": "honda",
+          "text": "Honda"
+        },
+        {
+          "id": "yamaha",
+          "text": "Yamaha"
+        },
+        {
+          "id": "suzuki",
+          "text": "Suzuki"
+        },
+        {
+          "id": "united",
+          "text": "United"
+        },
+        {
+          "id": "road-prince",
+          "text": "Road Prince"
+        },
+        {
+          "id": "unique",
+          "text": "Unique"
+        },
+        {
+          "id": "super-power",
+          "text": "Super Power"
+        },
+        {
+          "id": "super-star",
+          "text": "Super Star"
+        },
+        {
+          "id": "metro",
+          "text": "Metro"
+        },
+        {
+          "id": "crown",
+          "text": "Crown"
+        },
+        {
+          "id": "kawasaki",
+          "text": "Kawasaki"
+        },
+        {
+          "id": "power",
+          "text": "Power"
+        },
+        {
+          "id": "ravi",
+          "text": "Ravi"
+        },
+        {
+          "id": "eagle",
+          "text": "Eagle"
+        },
+        {
+          "id": "habib",
+          "text": "Habib"
+        },
+        {
+          "id": "ghani",
+          "text": "Ghani"
+        },
+        {
+          "id": "sohrab",
+          "text": "Sohrab"
+        },
+        {
+          "id": "beneli",
+          "text": "Beneli"
+        },
+        {
+          "id": "derbi",
+          "text": "Derbi"
+        },
+        {
+          "id": "zongshen",
+          "text": "Zongshen"
+        },
+        {
+          "id": "cf-moto",
+          "text": "CF Moto"
+        },
+        {
+          "id": "hero",
+          "text": "Hero"
+        },
+        {
+          "id": "lifan",
+          "text": "Lifan"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "bikeEngineType": [
+        {
+          "id": "2-stroke",
+          "text": "2 Stroke"
+        },
+        {
+          "id": "4-stroke",
+          "text": "4 Stroke"
+        }
+      ]
+    },
+    {
+      "bikeEngineCapacity": [
+        {
+          "id": "100cc-149cc",
+          "text": "100cc - 149cc"
+        },
+        {
+          "id": "70cc",
+          "text": "70cc"
+        },
+        {
+          "id": "150cc-199cc",
+          "text": "150cc - 199cc"
+        },
+        {
+          "id": "200cc-249cc",
+          "text": "200cc - 249cc"
+        },
+        {
+          "id": "50cc",
+          "text": "50cc"
+        },
+        {
+          "id": "250cc-299cc",
+          "text": "250cc - 299cc"
+        },
+        {
+          "id": "300cc-499cc",
+          "text": "300cc - 499cc"
+        },
+        {
+          "id": "500cc-699cc",
+          "text": "500cc - 699cc"
+        },
+        {
+          "id": "700cc-999cc",
+          "text": "700cc - 999cc"
+        },
+        {
+          "id": "1000cc",
+          "text": "1000cc"
+        },
+        {
+          "id": "above-1000cc",
+          "text": "Above 1000cc"
+        }
+      ]
+    },
+    {
+      "bikeIgnitionType": [
+        {
+          "id": "self-start",
+          "text": "Self Start"
+        },
+        {
+          "id": "kick-start",
+          "text": "Kick Start"
+        }
+      ]
+    },
+    {
+      "bikeOrigin": [
+        {
+          "id": "local",
+          "text": "Local"
+        },
+        {
+          "id": "imported",
+          "text": "Imported"
+        },
+        {
+          "id": "reconditioned",
+          "text": "Reconditioned"
+        }
+      ]
+    },
+    {
+      "bikeCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        }
+      ]
+    },
+    {
+      "bikeRegistrationCity": [
+        {
+          "id": "lahore",
+          "text": "Lahore"
+        },
+        {
+          "id": "karachi",
+          "text": "Karachi"
+        },
+        {
+          "id": "islamabad",
+          "text": "Islamabad"
+        },
+        {
+          "id": "rawalpindi",
+          "text": "Rawalpindi"
+        },
+        {
+          "id": "faisalabad",
+          "text": "Faisalabad"
+        },
+        {
+          "id": "unregistered",
+          "text": "Unregistered"
+        },
+        {
+          "id": "abbottabad",
+          "text": "Abbottabad"
+        },
+        {
+          "id": "multan",
+          "text": "Multan"
+        },
+        {
+          "id": "gujranwala",
+          "text": "Gujranwala"
+        },
+        {
+          "id": "peshawar",
+          "text": "Peshawar"
+        },
+        {
+          "id": "quetta",
+          "text": "Quetta"
+        },
+        {
+          "id": "sialkot",
+          "text": "Sialkot"
+        },
+        {
+          "id": "sargodha",
+          "text": "Sargodha"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "bikeLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "animal": [
+    {
+      "animalSubCategories": [
+        {
+          "id": "birds",
+          "text": "Birds"
+        },
+        {
+          "id": "cats",
+          "text": "Cats"
+        },
+        {
+          "id": "dogs",
+          "text": "Dogs"
+        },
+        {
+          "id": "fishs-and-aquariums",
+          "text": "Fishs & Aquariums"
+        },
+        {
+          "id": "horses",
+          "text": "Horses"
+        },
+        {
+          "id": "livestock",
+          "text": "Livestock"
+        }
+      ]
+    },
+    {
+      "animalType": [
+        {
+          "id": "pet",
+          "text": "Pet"
+        },
+        {
+          "id": "livestock",
+          "text": "Livestock"
+        },
+        {
+          "id": "farm-animal",
+          "text": "Farm Animal"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "animalSex": [
+        {
+          "id": "male",
+          "text": "Male"
+        },
+        {
+          "id": "female",
+          "text": "Female"
+        },
+        {
+          "id": "pair",
+          "text": "Pair"
+        }
+      ]
+    },
+    {
+      "animalVaccinationStatus": [
+        {
+          "id": "vaccinated",
+          "text": "Vaccinated"
+        },
+        {
+          "id": "partially-vaccinated",
+          "text": "Partially Vaccinated"
+        },
+        {
+          "id": "not-vaccinated",
+          "text": "Not Vaccinated"
+        }
+      ]
+    },
+    {
+      "animalLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "furnitureAndHomeDecor": [
+    {
+      "furnitureAndHomeDecorSubCategories": [
+        {
+          "id": "sofa-and-chairs",
+          "text": "Sofa & Chairs"
+        },
+        {
+          "id": "beds-and-wardrobes",
+          "text": "Beds & Wardrobes"
+        },
+        {
+          "id": "home-decor",
+          "text": "Home Decor"
+        },
+        {
+          "id": "table-and-dining",
+          "text": "Table & Dining"
+        },
+        {
+          "id": "office-furniture",
+          "text": "Office Furniture"
+        },
+        {
+          "id": "other-household-items",
+          "text": "Other Household Items"
+        }
+      ]
+    },
+    {
+      "furnitureAndHomeDecorItemType": [
+        {
+          "id": "sofa",
+          "text": "Sofa"
+        },
+        {
+          "id": "chair",
+          "text": "Chair"
+        },
+        {
+          "id": "bed",
+          "text": "Bed"
+        },
+        {
+          "id": "wardrobe",
+          "text": "Wardrobe"
+        },
+        {
+          "id": "dining-table",
+          "text": "Dining Table"
+        },
+        {
+          "id": "coffee-table",
+          "text": "Coffee Table"
+        },
+        {
+          "id": "desk",
+          "text": "Desk"
+        },
+        {
+          "id": "bookcase",
+          "text": "Bookcase"
+        },
+        {
+          "id": "painting",
+          "text": "Painting"
+        },
+        {
+          "id": "vase",
+          "text": "Vase"
+        },
+        {
+          "id": "lamp",
+          "text": "Lamp"
+        },
+        {
+          "id": "carpet",
+          "text": "Carpet"
+        },
+        {
+          "id": "curtains",
+          "text": "Curtains"
+        },
+        {
+          "id": "mirror",
+          "text": "Mirror"
+        },
+        {
+          "id": "outdoor-furniture",
+          "text": "Outdoor Furniture"
+        },
+        {
+          "id": "kids-furniture",
+          "text": "Kids Furniture"
+        }
+      ]
+    },
+    {
+      "furnitureAndHomeDecorMaterial": [
+        {
+          "id": "wood",
+          "text": "Wood"
+        },
+        {
+          "id": "metal",
+          "text": "Metal"
+        },
+        {
+          "id": "fabric",
+          "text": "Fabric"
+        },
+        {
+          "id": "leather",
+          "text": "Leather"
+        },
+        {
+          "id": "plastic",
+          "text": "Plastic"
+        },
+        {
+          "id": "glass",
+          "text": "Glass"
+        },
+        {
+          "id": "marble",
+          "text": "Marble"
+        },
+        {
+          "id": "rattan",
+          "text": "Rattan"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "furnitureAndHomeDecorCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "like-new",
+          "text": "Like New"
+        },
+        {
+          "id": "good",
+          "text": "Good"
+        },
+        {
+          "id": "fair",
+          "text": "Fair"
+        }
+      ]
+    },
+    {
+      "furnitureAndHomeDecorLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "fashionAndBeauty": [
+    {
+      "fashionAndBeautySubCategory": [
+        {
+          "id": "clothes",
+          "text": "Clothes"
+        },
+        {
+          "id": "footwear",
+          "text": "Footwear"
+        },
+        {
+          "id": "watches",
+          "text": "Watches"
+        },
+        {
+          "id": "jewellery",
+          "text": "Jewellery"
+        },
+        {
+          "id": "sunglasses",
+          "text": "Sunglasses"
+        },
+        {
+          "id": "bags-and-luggages",
+          "text": "Bags & Luggages"
+        },
+        {
+          "id": "wedding",
+          "text": "Wedding"
+        },
+        {
+          "id": "skin-and-care",
+          "text": "Skin & Care"
+        },
+        {
+          "id": "makeup",
+          "text": "Makeup"
+        },
+        {
+          "id": "perfumes",
+          "text": "Perfumes"
+        },
+        {
+          "id": "other-fashion",
+          "text": "Other Fashion"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautyBrand": [
+        {
+          "id": "zara",
+          "text": "Zara"
+        },
+        {
+          "id": "h-and-m",
+          "text": "H&M"
+        },
+        {
+          "id": "nike",
+          "text": "Nike"
+        },
+        {
+          "id": "adidas",
+          "text": "Adidas"
+        },
+        {
+          "id": "gucci",
+          "text": "Gucci"
+        },
+        {
+          "id": "prada",
+          "text": "Prada"
+        },
+        {
+          "id": "chanel",
+          "text": "Chanel"
+        },
+        {
+          "id": "louis-vuitton",
+          "text": "Louis Vuitton"
+        },
+        {
+          "id": "khaadi",
+          "text": "Khaadi"
+        },
+        {
+          "id": "gul-ahmed",
+          "text": "Gul Ahmed"
+        },
+        {
+          "id": "sana-safinaz",
+          "text": "Sana Safinaz"
+        },
+        {
+          "id": "maria-b",
+          "text": "Maria B"
+        },
+        {
+          "id": "alkaram",
+          "text": "Alkaram"
+        },
+        {
+          "id": "junaid-jamshed",
+          "text": "Junaid Jamshed"
+        },
+        {
+          "id": "bata",
+          "text": "Bata"
+        },
+        {
+          "id": "service",
+          "text": "Service"
+        },
+        {
+          "id": "unbranded",
+          "text": "Unbranded"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautyGender": [
+        {
+          "id": "male",
+          "text": "Male"
+        },
+        {
+          "id": "female",
+          "text": "Female"
+        },
+        {
+          "id": "unisex",
+          "text": "Unisex"
+        },
+        {
+          "id": "boy",
+          "text": "Boy"
+        },
+        {
+          "id": "girl",
+          "text": "Girl"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautySize": [
+        {
+          "id": "xs",
+          "text": "XS"
+        },
+        {
+          "id": "s",
+          "text": "S"
+        },
+        {
+          "id": "m",
+          "text": "M"
+        },
+        {
+          "id": "l",
+          "text": "L"
+        },
+        {
+          "id": "xl",
+          "text": "XL"
+        },
+        {
+          "id": "xxl",
+          "text": "XXL"
+        },
+        {
+          "id": "xxxl",
+          "text": "XXXL"
+        },
+        {
+          "id": "5",
+          "text": "5"
+        },
+        {
+          "id": "6",
+          "text": "6"
+        },
+        {
+          "id": "7",
+          "text": "7"
+        },
+        {
+          "id": "8",
+          "text": "8"
+        },
+        {
+          "id": "9",
+          "text": "9"
+        },
+        {
+          "id": "10",
+          "text": "10"
+        },
+        {
+          "id": "11",
+          "text": "11"
+        },
+        {
+          "id": "12",
+          "text": "12"
+        },
+        {
+          "id": "free-size",
+          "text": "Free Size"
+        },
+        {
+          "id": "custom",
+          "text": "Custom"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautyMaterial": [
+        {
+          "id": "cotton",
+          "text": "Cotton"
+        },
+        {
+          "id": "silk",
+          "text": "Silk"
+        },
+        {
+          "id": "wool",
+          "text": "Wool"
+        },
+        {
+          "id": "polyester",
+          "text": "Polyester"
+        },
+        {
+          "id": "denim",
+          "text": "Denim"
+        },
+        {
+          "id": "leather",
+          "text": "Leather"
+        },
+        {
+          "id": "chiffon",
+          "text": "Chiffon"
+        },
+        {
+          "id": "linen",
+          "text": "Linen"
+        },
+        {
+          "id": "velvet",
+          "text": "Velvet"
+        },
+        {
+          "id": "satin",
+          "text": "Satin"
+        },
+        {
+          "id": "lawn",
+          "text": "Lawn"
+        },
+        {
+          "id": "khaddar",
+          "text": "Khaddar"
+        },
+        {
+          "id": "mixed",
+          "text": "Mixed"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautyCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautyType": [
+        {
+          "id": "shirt",
+          "text": "Shirt"
+        },
+        {
+          "id": "t-shirt",
+          "text": "T-Shirt"
+        },
+        {
+          "id": "dress",
+          "text": "Dress"
+        },
+        {
+          "id": "jeans",
+          "text": "Jeans"
+        },
+        {
+          "id": "trousers",
+          "text": "Trousers"
+        },
+        {
+          "id": "suit",
+          "text": "Suit"
+        },
+        {
+          "id": "jacket",
+          "text": "Jacket"
+        },
+        {
+          "id": "sweater",
+          "text": "Sweater"
+        },
+        {
+          "id": "kurta",
+          "text": "Kurta"
+        },
+        {
+          "id": "shalwar-kameez",
+          "text": "Shalwar Kameez"
+        },
+        {
+          "id": "saree",
+          "text": "Saree"
+        },
+        {
+          "id": "lehenga",
+          "text": "Lehenga"
+        },
+        {
+          "id": "sneakers",
+          "text": "Sneakers"
+        },
+        {
+          "id": "formal-shoes",
+          "text": "Formal Shoes"
+        },
+        {
+          "id": "sandals",
+          "text": "Sandals"
+        },
+        {
+          "id": "heels",
+          "text": "Heels"
+        },
+        {
+          "id": "boots",
+          "text": "Boots"
+        },
+        {
+          "id": "slippers",
+          "text": "Slippers"
+        },
+        {
+          "id": "watch",
+          "text": "Watch"
+        },
+        {
+          "id": "bag",
+          "text": "Bag"
+        },
+        {
+          "id": "belt",
+          "text": "Belt"
+        },
+        {
+          "id": "sunglasses",
+          "text": "Sunglasses"
+        },
+        {
+          "id": "jewelry",
+          "text": "Jewelry"
+        },
+        {
+          "id": "perfume",
+          "text": "Perfume"
+        }
+      ]
+    },
+    {
+      "fashionAndBeautyLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "booksAndSports": [
+    {
+      "booksAndSportsSubCategories": [
+        {
+          "id": "books-and-magazines",
+          "text": "Books & Magazines"
+        },
+        {
+          "id": "musical-instruments",
+          "text": "Musical Instruments"
+        },
+        {
+          "id": "sports-equipment",
+          "text": "Sports Equipments"
+        },
+        {
+          "id": "gym-and-fitness",
+          "text": "Gym & Fitness"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "booksAndSportsType": [
+        {
+          "id": "novel",
+          "text": "Novel"
+        },
+        {
+          "id": "textbook",
+          "text": "Textbook"
+        },
+        {
+          "id": "magazine",
+          "text": "Magazine"
+        },
+        {
+          "id": "comic-book",
+          "text": "Comic Book"
+        },
+        {
+          "id": "childrens-book",
+          "text": "Children's Book"
+        },
+        {
+          "id": "reference-book",
+          "text": "Reference Book"
+        },
+        {
+          "id": "guitar",
+          "text": "Guitar"
+        },
+        {
+          "id": "keyboard",
+          "text": "Keyboard"
+        },
+        {
+          "id": "drums",
+          "text": "Drums"
+        },
+        {
+          "id": "violin",
+          "text": "Violin"
+        },
+        {
+          "id": "flute",
+          "text": "Flute"
+        },
+        {
+          "id": "cricket-bat",
+          "text": "Cricket Bat"
+        },
+        {
+          "id": "football",
+          "text": "Football"
+        },
+        {
+          "id": "tennis-racket",
+          "text": "Tennis Racket"
+        },
+        {
+          "id": "basketball",
+          "text": "Basketball"
+        },
+        {
+          "id": "cycling-gear",
+          "text": "Cycling Gear"
+        },
+        {
+          "id": "dumbbells",
+          "text": "Dumbbells"
+        },
+        {
+          "id": "treadmill",
+          "text": "Treadmill"
+        },
+        {
+          "id": "exercise-bike",
+          "text": "Exercise Bike"
+        },
+        {
+          "id": "yoga-mat",
+          "text": "Yoga Mat"
+        },
+        {
+          "id": "collectibles",
+          "text": "Collectibles"
+        },
+        {
+          "id": "art-supplies",
+          "text": "Art Supplies"
+        },
+        {
+          "id": "craft-supplies",
+          "text": "Craft Supplies"
+        },
+        {
+          "id": "board-games",
+          "text": "Board Games"
+        }
+      ]
+    },
+    {
+      "booksAndSportsCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "like-new",
+          "text": "Like New"
+        },
+        {
+          "id": "good",
+          "text": "Good"
+        },
+        {
+          "id": "fair",
+          "text": "Fair"
+        }
+      ]
+    },
+    {
+      "booksAndSportsLanguage": [
+        {
+          "id": "eng",
+          "text": "English"
+        },
+        {
+          "id": "urd",
+          "text": "Urdu"
+        },
+        {
+          "id": "arab",
+          "text": "Arabic"
+        },
+        {
+          "id": "other",
+          "text": "Other"
+        }
+      ]
+    },
+    {
+      "booksAndSportsFormat": [
+        {
+          "id": "paperback",
+          "text": "Paperback"
+        },
+        {
+          "id": "hardcover",
+          "text": "Hardcover"
+        },
+        {
+          "id": "e-book",
+          "text": "E-book"
+        },
+        {
+          "id": "cd",
+          "text": "CD"
+        },
+        {
+          "id": "vinyl",
+          "text": "Vinyl"
+        },
+        {
+          "id": "cassette",
+          "text": "Cassette"
+        },
+        {
+          "id": "physical",
+          "text": "Physical"
+        },
+        {
+          "id": "digital",
+          "text": "Digital"
+        }
+      ]
+    },
+    {
+      "booksAndSportsLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ],
+  "kids": [
+    {
+      "kidsSubCategories": [
+        {
+          "id": "kids-furniture",
+          "text": "Kids Furniture"
+        },
+        {
+          "id": "toys-and-games",
+          "text": "Toys & Games"
+        },
+        {
+          "id": "prams-and-walkers",
+          "text": "Prams & Walkers"
+        },
+        {
+          "id": "swings-and-bouncers",
+          "text": "Swings & Bouncers"
+        },
+        {
+          "id": "car-seats",
+          "text": "Car Seats"
+        },
+        {
+          "id": "kids-bikes-and-scooters",
+          "text": "Kids Bikes & Scooters"
+        },
+        {
+          "id": "kids-accessories",
+          "text": "Kids Accessories"
+        },
+        {
+          "id": "kids-clothing",
+          "text": "Kids Clothing"
+        },
+        {
+          "id": "other-kids-items",
+          "text": "Other Kids Items"
+        }
+      ]
+    },
+    {
+      "kidsItemType": [
+        {
+          "id": "crib",
+          "text": "Crib"
+        },
+        {
+          "id": "changing-table",
+          "text": "Changing Table"
+        },
+        {
+          "id": "high-chair",
+          "text": "High Chair"
+        },
+        {
+          "id": "kids-bed",
+          "text": "Kids Bed"
+        },
+        {
+          "id": "educational-toy",
+          "text": "Educational Toy"
+        },
+        {
+          "id": "action-figure",
+          "text": "Action Figure"
+        },
+        {
+          "id": "board-game",
+          "text": "Board Game"
+        },
+        {
+          "id": "stuffed-animal",
+          "text": "Stuffed Animal"
+        },
+        {
+          "id": "stroller",
+          "text": "Stroller"
+        },
+        {
+          "id": "walker",
+          "text": "Walker"
+        },
+        {
+          "id": "bouncer",
+          "text": "Bouncer"
+        },
+        {
+          "id": "car-seat",
+          "text": "Car Seat"
+        },
+        {
+          "id": "baby-clothes",
+          "text": "Baby Clothes"
+        },
+        {
+          "id": "kids-clothes",
+          "text": "Kids Clothes"
+        },
+        {
+          "id": "footwear",
+          "text": "Footwear"
+        },
+        {
+          "id": "bike",
+          "text": "Bike"
+        },
+        {
+          "id": "scooter",
+          "text": "Scooter"
+        },
+        {
+          "id": "accessories",
+          "text": "Accessories"
+        }
+      ]
+    },
+    {
+      "kidsAgeGroup": [
+        {
+          "id": "0-6-months",
+          "text": "0-6 Months"
+        },
+        {
+          "id": "6-12-months",
+          "text": "6-12 Months"
+        },
+        {
+          "id": "1-2-years",
+          "text": "1-2 Years"
+        },
+        {
+          "id": "2-4-years",
+          "text": "2-4 Years"
+        },
+        {
+          "id": "4-6-years",
+          "text": "4-6 Years"
+        },
+        {
+          "id": "6-8-years",
+          "text": "6-8 Years"
+        },
+        {
+          "id": "8-12-years",
+          "text": "8-12 Years"
+        },
+        {
+          "id": "12-plus-years",
+          "text": "12+ Years"
+        }
+      ]
+    },
+    {
+      "kidsCondition": [
+        {
+          "id": "new",
+          "text": "New"
+        },
+        {
+          "id": "used",
+          "text": "Used"
+        },
+        {
+          "id": "like-new",
+          "text": "Like New"
+        },
+        {
+          "id": "good",
+          "text": "Good"
+        },
+        {
+          "id": "fair",
+          "text": "Fair"
+        }
+      ]
+    },
+    {
+      "kidsLocation": [
+        {
+          "id": "punjab",
+          "text": "Punjab"
+        },
+        {
+          "id": "sindh",
+          "text": "Sindh"
+        },
+        {
+          "id": "balochistan",
+          "text": "Balochistan"
+        },
+        {
+          "id": "kpk",
+          "text": "Khyber Pakhtunkhwa"
+        },
+        {
+          "id": "gilgit-baltistan",
+          "text": "Gilgit Baltistan"
+        }
+      ]
+    }
+  ]
+}
