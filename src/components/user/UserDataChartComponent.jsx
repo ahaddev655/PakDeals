@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 
 function UserDataChartComponent({
@@ -7,9 +7,6 @@ function UserDataChartComponent({
   pendingListings,
   totalListings,
 }) {
-  // ==================== AUTH CHECK ====================
-
-  // ==================== CHART OPTIONS ====================
   const options = {
     chart: {
       type: "pie",
@@ -18,7 +15,6 @@ function UserDataChartComponent({
     plotOptions: {
       pie: {
         expandOnClick: true,
-        size: "100%",
       },
     },
     labels: ["Total", "Active", "Expired", "Pending"],
@@ -45,11 +41,13 @@ function UserDataChartComponent({
         return `${seriesName} : ${value}`;
       },
     },
-
     responsive: [
       {
         breakpoint: 768,
         options: {
+          chart: {
+            width: "100%",
+          },
           legend: {
             position: "bottom",
             fontSize: "13px",
@@ -73,13 +71,16 @@ function UserDataChartComponent({
           Listing Analytics
         </h1>
       </div>
-      <div className="w-full h-87.5 md:h-112.5 flex justify-center items-center shadow-sm rounded-lg">
-        <Chart
-          options={options}
-          series={series}
-          type="pie"
-          className="w-full h-full"
-        />
+      <div className="relative w-full h-[450px] flex justify-center items-center shadow-sm rounded-lg overflow-hidden">
+        <div className="absolute inset-0 w-auto h-auto overflow-hidden">
+          <Chart
+            options={options}
+            series={series}
+            type="pie"
+            width="100%"
+            height="100%"
+          />
+        </div>
       </div>
     </div>
   );

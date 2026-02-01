@@ -9,7 +9,7 @@ function UserDashboardPage() {
   const [pendingListings, setPendingListings] = useState(Number(1024));
   const [expiredListings, setExpiredListings] = useState(Number(1024));
   return (
-    <div className="space-y-8 page py-6!">
+    <div className="space-y-8 sm:px-6 px-2.5 py-6">
       {/* -------------------- HEADING -------------------- */}
       <div className="space-y-3 mb-6">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
