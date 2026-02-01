@@ -56,8 +56,8 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       {/* OFFCANVAS MENU */}
       <div
         className={`w-full py-4 md:px-12 sm:px-6 px-2.5 absolute left-0 bg-white transition-all ease-in-out shadow-lg border border-t-0 border-gray-200 duration-300 origin-top scale-y-0 opacity-0 ${
-   navbarToggle ? "scale-y-100 opacity-100" : ""
- }`}
+          navbarToggle ? "scale-y-100 opacity-100" : ""
+        }`}
         style={{ bottom: "-218px" }}
       >
         <ul className="flex flex-col gap-4">

@@ -11,7 +11,7 @@ import SignUpComponent from "./components/main/SignUpComponent";
 import LoginComponent from "./components/main/LoginComponent";
 import UserLayout from "./layouts/UserLayout";
 import UserDashboardPage from "./pages/user/UserDashboardPage";
-import UserAdsPage from './pages/user/UserAdsPage';
+import UserAdsPage from "./pages/user/UserAdsPage";
 // ==================== ADMIN PAGES ====================
 
 function App() {

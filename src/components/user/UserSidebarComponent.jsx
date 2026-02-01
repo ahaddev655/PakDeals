@@ -106,7 +106,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
               onClick={() => setOffCanvasToggle(false)}
             />
           </div>
-          
+
           {/* HEADING */}
           <div className="text-center">
             <Link

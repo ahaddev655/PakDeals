@@ -1,8 +1,9 @@
 import { Eye, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function UserListingsComponent() {
   const [selectedNavTab, setSelectedNavTab] = useState("all-ads");
+  const [selectedAd, setSelectedAd] = useState(null);
   const [selectedSort, setSelectedSort] = useState("by-name");
   const [sortDropdownToggle, setSortDropdownToggle] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ function UserListingsComponent() {
   const [ads, setAds] = useState([
     {
       id: 1,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "Samsung Galaxy S25 Ultra",
       category: "Mobile Phones",
       price: "500000",
@@ -30,7 +31,7 @@ function UserListingsComponent() {
     },
     {
       id: 2,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "iPhone 14 Pro",
       category: "Mobile Phones",
       price: "300000",
@@ -39,7 +40,7 @@ function UserListingsComponent() {
     },
     {
       id: 3,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "OnePlus 11",
       category: "Mobile Phones",
       price: "200000",
@@ -48,7 +49,7 @@ function UserListingsComponent() {
     },
     {
       id: 4,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "Nokia 3310",
       category: "Mobile Phones",
       price: "100000",
@@ -57,7 +58,7 @@ function UserListingsComponent() {
     },
     {
       id: 5,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "Motorola Edge",
       category: "Mobile Phones",
       price: "50000",
@@ -66,7 +67,7 @@ function UserListingsComponent() {
     },
     {
       id: 6,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "Samsung Note 20",
       category: "Mobile Phones",
       price: "350000",
@@ -75,7 +76,7 @@ function UserListingsComponent() {
     },
     {
       id: 7,
-      img: "/assets/profile.jpg",
+      img: "/assets/k5lf638szuebxt02cpab.jpg",
       title: "iPhone 12",
       category: "Mobile Phones",
       price: "250000",
@@ -154,7 +155,7 @@ function UserListingsComponent() {
         </div>
       </div>
       {/* ==================== LISTING CONTAINER ==================== */}
-      <div className="bg-white py-3">
+      <div className="bg-white">
         {/* -------------------- LOADER -------------------- */}
         {loading && (
           <p className="text-center text-sm text-gray-700">
@@ -192,16 +193,13 @@ function UserListingsComponent() {
                       : ad.status === selectedNavTab,
                   )
                   .sort((a, b) => {
-                    if (selectedSort === "by-date") {
-                      return new Date(b.createdAt) - new Date(a.createdAt);
-                    }
                     if (selectedSort === "by-name") {
                       return a.title.localeCompare(b.title);
                     }
                     if (selectedSort === "by-year") {
                       return (
-                        new Date(b.createdAt).getFullYear() -
-                        new Date(a.createdAt).getFullYear()
+                        new Date(a.createdAt).getFullYear() -
+                        new Date(b.createdAt).getFullYear()
                       );
                     }
                     return 0;
@@ -231,7 +229,10 @@ function UserListingsComponent() {
                         {ad.createdAt.replaceAll("-", "/")}
                       </td>
                       <td className="py-4 px-6 flex items-center justify-center gap-4">
-                        <div className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-blue-800 transition-all duration-300 ease-in-out cursor-pointer">
+                        <div
+                          className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-blue-800 transition-all duration-300 ease-in-out cursor-pointer"
+                          onClick={() => setSelectedAd(ad)}
+                        >
                           <Eye strokeWidth={1.9} size={18} />
                         </div>
                         <div className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-red-800 transition-all duration-300 ease-in-out cursor-pointer">
@@ -246,6 +247,121 @@ function UserListingsComponent() {
         ) : (
           <p className="text-center text-sm text-gray-700">No ads available</p>
         )}
+        <div
+          className={`fixed top-0 left-0 bg-black/50 backdrop-blur-md w-full h-full flex items-center justify-center transition-opacity duration-300 ease-in-out ${selectedAd ? "opacity-100 z-10" : "opacity-0 -z-10"}`}
+          onClick={() => setSelectedAd(null)}
+        >
+          <div
+            className={`bg-white w-md rounded-lg border border-gray-400 shadow-lg py-4 px-6 transition-all duration-300 ease-in-out ${selectedAd ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {selectedAd && (
+              <div>
+                {/* -------------------- AD IMAGE -------------------- */}
+                <div className="w-full h-50 rounded-lg">
+                  <img
+                    src={selectedAd.img}
+                    alt="IMG"
+                    className="w-full h-full rounded-lg"
+                  />
+                </div>
+                <div className="mt-3 space-y-3">
+                  {/* -------------------- TITLE -------------------- */}
+                  <div className="flex items-center gap-1">
+                    <h5 className="text-lg font-medium">Title:</h5>
+                    <h5 className="text-lg font-medium text-blue-700">
+                      {selectedAd.title}
+                    </h5>
+                  </div>
+                  {/* -------------------- CATEGORY -------------------- */}
+                  <div className="flex items-center gap-1">
+                    <h5 className="text-lg font-medium">Category:</h5>
+                    <h5 className="text-lg font-medium text-blue-700">
+                      {selectedAd.category}
+                    </h5>
+                  </div>
+                  {/* -------------------- PRICE -------------------- */}
+                  <div className="flex items-center gap-1">
+                    <h5 className="text-lg font-medium">Price:</h5>
+                    <h5 className="text-lg font-medium text-blue-700">
+                      PKR {Number(selectedAd.price).toLocaleString()}
+                    </h5>
+                  </div>
+                  {/* -------------------- STATUS -------------------- */}
+                  <div className="flex items-center gap-1">
+                    <h5 className="text-lg font-medium">Status:</h5>
+                    <h5 className="text-lg font-medium text-blue-700">
+                      {selectedAd.status}
+                    </h5>
+                  </div>
+                  {/* -------------------- CREATED ON -------------------- */}
+                  <div className="flex items-center gap-1">
+                    <h5 className="text-lg font-medium">Created On:</h5>
+                    <h5 className="text-lg font-medium text-blue-700">
+                      {selectedAd.createdAt.replaceAll("-", "/")}
+                    </h5>
+                  </div>
+                </div>
+                {/* -------------------- BUTTONS -------------------- */}
+                <div className="flex items-center gap-6 mt-3">
+                  <button
+                    type="button"
+                    className="w-full py-3 px-6 bg-gray-500 hover:bg-gray-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                    onClick={() => setSelectedAd(null)}
+                  >
+                    Cancel
+                  </button>
+
+                  {selectedAd.status === "active" ? (
+                    <button
+                      type="button"
+                      className="w-full py-3 px-6 bg-red-500 hover:bg-red-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                      onClick={() => {
+                        setAds((prev) =>
+                          prev.map((ad) =>
+                            ad.id === selectedAd.id
+                              ? { ...ad, status: "inactive" }
+                              : ad,
+                          ),
+                        );
+                        setSelectedAd((prev) => ({
+                          ...prev,
+                          status: "inactive",
+                        }));
+                        setSelectedAd(null);
+                      }}
+                    >
+                      Inactive
+                    </button>
+                  ) : selectedAd.status === "inactive" ? (
+                    <button
+                      type="button"
+                      className="w-full py-3 px-6 bg-green-500 hover:bg-green-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                      onClick={() => {
+                        setAds((prev) =>
+                          prev.map((ad) =>
+                            ad.id === selectedAd.id
+                              ? { ...ad, status: "active" }
+                              : ad,
+                          ),
+                        );
+                        setSelectedAd((prev) => ({
+                          ...prev,
+                          status: "active",
+                        }));
+                        setSelectedAd(null);
+                      }}
+                    >
+                      Active
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

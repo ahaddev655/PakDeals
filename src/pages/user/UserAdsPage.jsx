@@ -1,5 +1,5 @@
-import React from 'react'
-import UserListingsComponent from '../../components/user/UserListingsComponent';
+import React from "react";
+import UserListingsComponent from "../../components/user/UserListingsComponent";
 
 function UserAdsPage() {
   return (
@@ -15,4 +15,4 @@ function UserAdsPage() {
   );
 }
 
-export default UserAdsPage
+export default UserAdsPage;
