@@ -1,5 +1,5 @@
 import React from "react";
-import UserListingsComponent from "../../components/user/UserListingsComponent";
+import UserAdsComponent from "./../../components/user/UserAdsComponent";
 
 function UserAdsPage() {
   return (
@@ -10,7 +10,7 @@ function UserAdsPage() {
         <p className="text-gray-500">Manage all your listings here</p>
       </div>
       {/* -------------------- LISTING TABLE -------------------- */}
-      <UserListingsComponent />
+      <UserAdsComponent />
     </div>
   );
 }

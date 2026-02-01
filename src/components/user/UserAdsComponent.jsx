@@ -1,11 +1,12 @@
 import { Eye, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-function UserListingsComponent() {
+function UserAdsComponent() {
   const [selectedNavTab, setSelectedNavTab] = useState("all-ads");
   const [selectedAd, setSelectedAd] = useState(null);
   const [selectedSort, setSelectedSort] = useState("by-name");
   const [sortDropdownToggle, setSortDropdownToggle] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const tabs = [
     { key: "all-ads", label: "All Ads" },
@@ -93,16 +94,22 @@ function UserListingsComponent() {
     expired: "bg-red-100 text-red-600",
   };
 
+  const removeAd = (id) => {
+    setAds((prev) => prev.filter((ad) => ad.id !== id));
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
-      {/* ==================== LISTING HEADER ==================== */}
+      {/* ==================== ADS HEADER ==================== */}
       <div className="border-b border-gray-300 p-6 md:flex md:justify-between md:space-y-0 space-y-5 items-center">
         {/* -------------------- SEARCHBAR -------------------- */}
         <div className="relative">
           <Search className="absolute text-[#7f7f7f] top-2 left-2" />
           <input
             type="text"
-            placeholder="Search Listing"
+            placeholder="Search Ad"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="border-2 border-gray-200 rounded-md p-2 text-[15px] w-53 pl-10"
           />
         </div>
@@ -154,7 +161,7 @@ function UserListingsComponent() {
           </div>
         </div>
       </div>
-      {/* ==================== LISTING CONTAINER ==================== */}
+      {/* ==================== ADS CONTAINER ==================== */}
       <div className="bg-white">
         {/* -------------------- LOADER -------------------- */}
         {loading && (
@@ -162,7 +169,7 @@ function UserListingsComponent() {
             Loading your ads...
           </p>
         )}
-        {/* -------------------- LISTING TABLE -------------------- */}
+        {/* -------------------- ADS TABLE -------------------- */}
         {ads.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -187,10 +194,13 @@ function UserListingsComponent() {
               </thead>
               <tbody>
                 {ads
-                  .filter((ad) =>
-                    selectedNavTab === "all-ads"
-                      ? true
-                      : ad.status === selectedNavTab,
+                  .filter(
+                    (ad) =>
+                      (selectedNavTab === "all-ads" ||
+                        ad.status === selectedNavTab) &&
+                      ad.title
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()),
                   )
                   .sort((a, b) => {
                     if (selectedSort === "by-name") {
@@ -207,7 +217,7 @@ function UserListingsComponent() {
                   .map((ad, i, arr) => (
                     <tr
                       key={ad.id}
-                      className={`border-b ${i === arr.length - 1 ? "border-transparent" : "border-gray-300"}`}
+                      className={`border-b hover:bg-gray-100 transition-colors ease-in-out duration-200 ${i === arr.length - 1 ? "border-transparent" : "border-gray-300"}`}
                     >
                       <td className="py-4 px-6 text-[15px] text-gray-700">
                         {ad.title}
@@ -235,7 +245,10 @@ function UserListingsComponent() {
                         >
                           <Eye strokeWidth={1.9} size={18} />
                         </div>
-                        <div className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-red-800 transition-all duration-300 ease-in-out cursor-pointer">
+                        <div
+                          className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-red-800 transition-all duration-300 ease-in-out cursor-pointer"
+                          onClick={() => removeAd(ad.id)}
+                        >
                           <Trash2 strokeWidth={1.9} size={18} />
                         </div>
                       </td>
@@ -245,7 +258,9 @@ function UserListingsComponent() {
             </table>
           </div>
         ) : (
-          <p className="text-center text-sm text-gray-700">No ads available</p>
+          <p className="text-center text-sm text-gray-700 py-3">
+            No ads available
+          </p>
         )}
         <div
           className={`fixed top-0 left-0 bg-black/50 backdrop-blur-md w-full h-full flex items-center justify-center transition-opacity duration-300 ease-in-out ${selectedAd ? "opacity-100 z-10" : "opacity-0 -z-10"}`}
@@ -367,4 +382,4 @@ function UserListingsComponent() {
   );
 }
 
-export default UserListingsComponent;
+export default UserAdsComponent;
