@@ -12,6 +12,8 @@ import LoginComponent from "./components/main/LoginComponent";
 import UserLayout from "./layouts/UserLayout";
 import UserDashboardPage from "./pages/user/UserDashboardPage";
 import UserAdsPage from "./pages/user/UserAdsPage";
+import UserAdAdsPage from './pages/user/UserAdAdsPage';
+import UserFavoritesPage from "./pages/user/UserFavoritesPage";
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -66,11 +68,11 @@ function App() {
         },
         {
           path: "/user-dashboard/add-ad",
-          element: <UserDashboardPage />,
+          element: <UserAdAdsPage />,
         },
         {
           path: "/user-dashboard/favorites",
-          element: <UserDashboardPage />,
+          element: <UserFavoritesPage />,
         },
         {
           path: "/user-dashboard/payments",

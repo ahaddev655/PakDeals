@@ -71,7 +71,7 @@ function UserDataChartComponent({
           Listing Analytics
         </h1>
       </div>
-      <div className="relative w-full h-[450px] flex justify-center items-center shadow-sm rounded-lg overflow-hidden">
+      <div className="relative w-full h-112.5 flex justify-center items-center shadow-sm rounded-lg overflow-hidden">
         <div className="absolute inset-0 w-auto h-auto overflow-hidden">
           <Chart
             options={options}

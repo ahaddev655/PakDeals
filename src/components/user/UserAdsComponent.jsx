@@ -262,6 +262,7 @@ function UserAdsComponent() {
             No ads available
           </p>
         )}
+        {/* -------------------- ADS POPUP -------------------- */}
         <div
           className={`fixed top-0 left-0 bg-black/50 backdrop-blur-md w-full h-full flex items-center justify-center transition-opacity duration-300 ease-in-out ${selectedAd ? "opacity-100 z-10" : "opacity-0 -z-10"}`}
           onClick={() => setSelectedAd(null)}
