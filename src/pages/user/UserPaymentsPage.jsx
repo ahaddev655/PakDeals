@@ -1,4 +1,5 @@
 import React from "react";
+import UserPaymentComponent from "../../components/user/UserPaymentComponent";
 
 function UserPaymentsPage() {
   return (
@@ -8,7 +9,8 @@ function UserPaymentsPage() {
         <h1 className="text-3xl font-semibold">Payments</h1>
         <p className="text-gray-500">Lorem ipsum dolor sit amet, consectetur</p>
       </div>
-      {/* -------------------- PAYMENTS -------------------- */}
+      {/* -------------------- PAYMENTS COMPONENT -------------------- */}
+      <UserPaymentComponent />
     </div>
   );
 }

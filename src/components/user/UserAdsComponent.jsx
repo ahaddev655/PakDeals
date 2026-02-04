@@ -185,7 +185,7 @@ function UserAdsComponent() {
                   ].map((h, i) => (
                     <th
                       key={i}
-                      className={`font-semibold text-[#495057] py-3 px-6 ${i < 2 ? "text-start" : "text-center"}`}
+                      className={`font-semibold text-[#495057] py-3 px-6 ${i < 2 ? "text-start" : "text-center"} ${h === "Category" ? "hidden md:table-cell" : ""}`}
                     >
                       {h}
                     </th>
@@ -220,9 +220,12 @@ function UserAdsComponent() {
                       className={`border-b hover:bg-gray-100 transition-colors ease-in-out duration-200 ${i === arr.length - 1 ? "border-transparent" : "border-gray-300"}`}
                     >
                       <td className="py-4 px-6 text-[15px] text-gray-700">
-                        {ad.title}
+                        <span className="hidden md:inline">{ad.title}</span>
+                        <span className="md:hidden">
+                          {ad.title.slice(0, 7) + "..."}
+                        </span>
                       </td>
-                      <td className="py-4 px-6 text-[15px] text-gray-700">
+                      <td className="py-4 px-6 text-[15px] text-gray-700 hidden md:table-cell">
                         {ad.category}
                       </td>
                       <td className="py-4 px-6 text-center">
