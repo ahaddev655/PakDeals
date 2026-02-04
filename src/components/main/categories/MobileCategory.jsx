@@ -163,7 +163,7 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
       <button
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
-        transition-all duration-300"
+        transition-all duration-300 font-medium rounded-lg"
       >
         Submit Mobile Ad
       </button>

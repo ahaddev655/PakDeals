@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserDataCardsComponent from "../../components/user/UserDataCardsComponent";
 import UserDataChartComponent from "../../components/user/UserDataChartComponent";
 import UserRecentActivitiesComponent from "../../components/user/UserRecentActivitiesComponent";
+import { useNavigate } from "react-router-dom";
 
 function UserDashboardPage() {
+  // ==================== AUTH CHECK ====================
+  const userToken = localStorage.getItem("userToken");
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
+  //   useEffect(() => {
+  //     if (userToken && userId) {
+  //       return;
+  //     }
+  //     setTimeout(() => {
+  //       navigate("/signup");
+  //     }, 500);
+  //   }, []);
   const [totalListings, setTotalListings] = useState(Number(1024));
   const [activeListings, setActiveListings] = useState(Number(1024));
   const [pendingListings, setPendingListings] = useState(Number(1024));

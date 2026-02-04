@@ -231,8 +231,9 @@ function kidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       </div>
 
       <button
+        type="submit"
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
-        transition-all duration-300 font-medium"
+        transition-all duration-300 font-medium rounded-lg"
       >
         Submit Kids Ad
       </button>

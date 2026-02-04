@@ -14,6 +14,7 @@ import UserDashboardPage from "./pages/user/UserDashboardPage";
 import UserAdsPage from "./pages/user/UserAdsPage";
 import UserAdAdsPage from './pages/user/UserAdAdsPage';
 import UserFavoritesPage from "./pages/user/UserFavoritesPage";
+import UserPaymentsPage from "./pages/user/UserPaymentsPage";
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -76,7 +77,7 @@ function App() {
         },
         {
           path: "/user-dashboard/payments",
-          element: <UserDashboardPage />,
+          element: <UserPaymentsPage />,
         },
         {
           path: "/user-dashboard/chats",

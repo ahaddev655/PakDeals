@@ -263,7 +263,8 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       {/* ====================== SUBMIT BUTTON ====================== */}
       <button
         type="submit"
-        className="bg-white rounded-md hover:-translate-y-1 shadow-lg shadow-blue-900/50 py-3 px-6 font-medium hover:rounded-4xl hover:bg-blue-900 hover:text-white transition-all ease-linear duration-200"
+        className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
+        transition-all duration-300 font-medium rounded-lg"
       >
         Submit Animals Ad
       </button>
