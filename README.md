@@ -20,7 +20,7 @@ PakDeals is a modern online marketplace platform designed to connect buyers and 
 
 - **Frontend:** React.js, Tailwind CSS
 - **Backend:** Node.js, Express.js _(if applicable)_
-- **Database:** MongoDB _(if applicable)_
+- **Database:** mySQL _(if applicable)_
 - **Icons:** Lucide React
 - **Routing:** React Router
 
@@ -32,7 +32,7 @@ Follow these steps to run PakDeals locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/pakdeals.git
+git clone https://github.com/ahaddev/pakdeals.git
 
 # Navigate to the project folder
 cd pakdeals
