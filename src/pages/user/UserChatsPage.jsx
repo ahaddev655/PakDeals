@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatsLayout from './../../layouts/ChatsLayout';
+import { useNavigate } from "react-router-dom";
 
 function UserChatsPage() {
+  // ====================== AUTH CHECK ======================
+  const userToken = localStorage.getItem("userToken");
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userToken && userId) {
+      return;
+    }
+    setTimeout(() => {
+      navigate("/signup");
+    }, 500);
+  }, []);
   return (
     <div className="py-6">
       {/* -------------------- HEADING -------------------- */}

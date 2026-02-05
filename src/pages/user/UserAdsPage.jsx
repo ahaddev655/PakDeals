@@ -7,14 +7,14 @@ function UserAdsPage() {
   const userToken = localStorage.getItem("userToken");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
-  // useEffect(() => {
-  //     if (userToken && userId) {
-  //       return;
-  //     }
-  //     setTimeout(() => {
-  //       navigate("/signup");
-  //     }, 500);
-  //   }, []);
+  useEffect(() => {
+      if (userToken && userId) {
+        return;
+      }
+      setTimeout(() => {
+        navigate("/signup");
+      }, 500);
+    }, []);
   return (
     <div className="space-y-8 sm:px-6 px-2.5 py-6">
       {/* -------------------- HEADING -------------------- */}

@@ -19,14 +19,14 @@ function UserAdAdsPage() {
   const userToken = localStorage.getItem("userToken");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (userToken && userId) {
-  //     return;
-  //   }
-  //   setTimeout(() => {
-  //     navigate("/signup");
-  //   }, 500);
-  // }, []);
+  useEffect(() => {
+    if (userToken && userId) {
+      return;
+    }
+    setTimeout(() => {
+      navigate("/signup");
+    }, 500);
+  }, []);
 
   // ====================== GLOBAL DROPDOWN ======================
   const [openDropdown, setOpenDropdown] = useState(null);
