@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 function UserPaymentComponent() {
   // ==================== SORT DROPDOWN JS ====================
-  const [selectedSort, setSelectedSort] = useState("by-date");
+  const [selectedSort, setSelectedSort] = useState("by-amount");
   const [sortDropdownToggle, setSortDropdownToggle] = useState(false);
   const sortTabs = [
     { key: "by-date", label: "Sort By Date" },

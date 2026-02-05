@@ -12,9 +12,11 @@ import LoginComponent from "./components/main/LoginComponent";
 import UserLayout from "./layouts/UserLayout";
 import UserDashboardPage from "./pages/user/UserDashboardPage";
 import UserAdsPage from "./pages/user/UserAdsPage";
-import UserAdAdsPage from './pages/user/UserAdAdsPage';
+import UserAdAdsPage from "./pages/user/UserAdAdsPage";
 import UserFavoritesPage from "./pages/user/UserFavoritesPage";
 import UserPaymentsPage from "./pages/user/UserPaymentsPage";
+import UserChatsPage from "./pages/user/UserChatsPage";
+import ChatsMainComponent from "./components/user/chats/ChatsMainComponent";
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -81,7 +83,13 @@ function App() {
         },
         {
           path: "/user-dashboard/chats",
-          element: <UserDashboardPage />,
+          element: <UserChatsPage />,
+          children: [
+            {
+              path: ":id",
+              element: <ChatsMainComponent />,
+            },
+          ],
         },
         {
           path: "/user-dashboard/profile-settings",

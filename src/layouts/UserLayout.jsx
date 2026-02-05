@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import UserSidebarComponent from "./../components/user/UserSidebarComponent";
 import UserNavbarComponent from "./../components/user/UserNavbarComponent";
 import { Outlet } from "react-router-dom";
-import UserFooterComponent from "./../components/user/UserFooterComponent";
 
 function UserLayout() {
   const [offCanvasToggle, setOffCanvasToggle] = useState(false);
@@ -18,7 +17,6 @@ function UserLayout() {
           setOffCanvasToggle={setOffCanvasToggle}
         />
         <Outlet />
-        <UserFooterComponent />
       </div>
     </div>
   );
