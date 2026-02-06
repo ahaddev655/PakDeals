@@ -17,6 +17,18 @@ function UserDataChartComponent({
         expandOnClick: true,
       },
     },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: "18px",
+        fontWeight: "700",
+        colors: ["#f8f8f8"],
+      },
+      dropShadow: {
+        enabled: false,
+      },
+    },
+
     labels: ["Total", "Active", "Expired", "Pending"],
     legend: {
       position: "right",

@@ -15,7 +15,7 @@ import UserAdsPage from "./pages/user/UserAdsPage";
 import UserAdAdsPage from "./pages/user/UserAdAdsPage";
 import UserFavoritesPage from "./pages/user/UserFavoritesPage";
 import UserPaymentsPage from "./pages/user/UserPaymentsPage";
-import UserChatsPage from "./pages/user/UserChatsPage";
+import UserChatsPage from "./pages/user/chats/UserChatsPage";
 import ChatsMainComponent from "./components/user/chats/ChatsMainComponent";
 // ==================== ADMIN PAGES ====================
 

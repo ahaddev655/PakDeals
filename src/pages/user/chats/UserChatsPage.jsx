@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ChatsLayout from './../../layouts/ChatsLayout';
+import ChatsLayout from '../../../layouts/ChatsLayout';
 import { useNavigate } from "react-router-dom";
 
 function UserChatsPage() {

@@ -7,7 +7,23 @@ function ChatsMainComponent() {
       msg: "How likely are you to recommend our company to your friends and family?",
     },
     {
-      sender: "Arlene McCoy",
+      sender: "Muhammad",
+      msg: "How likely are you to recommend our company to your friends and family?",
+    },
+    {
+      sender: "You",
+      msg: "How likely are you to recommend our company to your friends and family?",
+    },
+    {
+      sender: "John Doe",
+      msg: "How likely are you to recommend our company to your friends and family?",
+    },
+    {
+      sender: "You",
+      msg: "How likely are you to recommend our company to your friends and family?",
+    },
+    {
+      sender: "Ahad",
       msg: "How likely are you to recommend our company to your friends and family?",
     },
   ]);
@@ -27,7 +43,7 @@ function ChatsMainComponent() {
   return (
     <div className="relative h-screen bg-gray-100">
       {/* -------------------- CHATS -------------------- */}
-      <div className="p-6 overflow-y-auto h-140.75">
+      <div className="p-6 overflow-y-auto h-110 space-y-3">
         {msgs.map((msg, i) => (
           <div
             key={i}
@@ -52,7 +68,7 @@ function ChatsMainComponent() {
       {/* -------------------- CHATS INPUT -------------------- */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white py-3 px-4 absolute bottom-0 left-0 w-full border-t border-gray-200 flex items-center gap-3 z-10"
+        className="bg-white py-3 px-4 absolute bottom-7 left-0 w-full border-t border-gray-200 flex items-center gap-3 z-10"
       >
         <input
           type="text"

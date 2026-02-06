@@ -5,7 +5,7 @@ import MainFooter from "./../components/main/MainFooter";
 
 function MainLayout() {
   return (
-    <div className="min-h-screen flex flex-col w-full">
+    <div className="min-h-screen flex flex-col">
       <MainHeader />
       <Outlet />
       <MainFooter />

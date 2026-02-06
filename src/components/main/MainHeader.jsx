@@ -8,7 +8,7 @@ function MainHeader() {
     <>
       <nav className="bg-linear-to-r from-blue-900 via-blue-900 to-blue-950 py-5 md:px-12 sm:px-6 px-2.5 relative">
         {/* Desktop Navbar */}
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto">
           {/* Logo */}
           <div className="shrink-0 w-1/5">
             <Link
@@ -48,7 +48,7 @@ function MainHeader() {
               <Heart />
             </Link>
             <Link
-              to={"/user-dashboard"}
+              to={"/user-dashboard/"}
               className="hover:bg-blue-900/60 hover:text-blue-800 text-white transition-colors ease-in-out duration-200 w-8 h-8 rounded-sm grid place-items-center cursor-pointer"
             >
               <User />
@@ -107,7 +107,7 @@ function MainHeader() {
               <Heart />
             </Link>
             <Link
-              to={"/user-dashboard"}
+              to={"/user-dashboard/"}
               className="hover:bg-blue-900/60 hover:text-blue-800 text-white transition-colors ease-in-out duration-200 w-8 h-8 rounded-sm grid place-items-center cursor-pointer"
             >
               <User />
