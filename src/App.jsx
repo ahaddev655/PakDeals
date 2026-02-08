@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// ==================== main PAGES ====================
+// ==================== MAIN PAGES ====================
 import HomePage from "./pages/main/HomePage";
 import MainLayout from "./layouts/MainLayout";
 import FavoritesPage from "./pages/main/FavoritesPage";
@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage";
 // ==================== AUTH ROUTES ====================
 import SignUpComponent from "./components/main/SignUpComponent";
 import LoginComponent from "./components/main/LoginComponent";
+// ==================== USER ROUTES ====================
 import UserLayout from "./layouts/UserLayout";
 import UserDashboardPage from "./pages/user/UserDashboardPage";
 import UserAdsPage from "./pages/user/UserAdsPage";
@@ -17,6 +18,8 @@ import UserFavoritesPage from "./pages/user/UserFavoritesPage";
 import UserPaymentsPage from "./pages/user/UserPaymentsPage";
 import UserChatsPage from "./pages/user/chats/UserChatsPage";
 import ChatsMainComponent from "./components/user/chats/ChatsMainComponent";
+import UserProfilePage from "./pages/user/chats/UserProfilePage";
+import UserProfileSettingsPage from "./pages/user/UserProfileSettingsPage";
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -66,23 +69,23 @@ function App() {
           element: <UserDashboardPage />,
         },
         {
-          path: "/user-dashboard/my-ads",
+          path: "my-ads",
           element: <UserAdsPage />,
         },
         {
-          path: "/user-dashboard/add-ad",
+          path: "add-ad",
           element: <UserAdAdsPage />,
         },
         {
-          path: "/user-dashboard/favorites",
+          path: "favorites",
           element: <UserFavoritesPage />,
         },
         {
-          path: "/user-dashboard/payments",
+          path: "payments",
           element: <UserPaymentsPage />,
         },
         {
-          path: "/user-dashboard/chats",
+          path: "chats",
           element: <UserChatsPage />,
           children: [
             {
@@ -92,8 +95,12 @@ function App() {
           ],
         },
         {
-          path: "/user-dashboard/profile-settings",
-          element: <UserDashboardPage />,
+          path: "profile/:id",
+          element: <UserProfilePage />,
+        },
+        {
+          path: "profile-settings",
+          element: <UserProfileSettingsPage />,
         },
       ],
     },

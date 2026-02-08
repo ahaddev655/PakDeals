@@ -36,7 +36,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   return (
     <>
       {/* SIDEBAR */}
-      <div className="sm:w-[20%] w-full bg-black min-h-screen flex-col shadow-[4px_0_24px_#0000004d] lg:flex hidden">
+      <div className="sm:w-[20%] w-full bg-black min-h-screen flex-col lg:flex hidden">
         <div className="text-center p-6">
           <Link
             to="/"
@@ -57,18 +57,18 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
                   to={link.link}
                   end
                   className={({ isActive }) =>
-                    `flex items-center gap-4 text-lg font-medium rounded-xl p-4 transition-colors ease-in-out duration-300 ${
+                    `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
                       isActive
                         ? "bg-blue-700 text-white shadow-lg shadow-blue-500/40"
-                        : "hover:bg-blue-50/7 hover:text-white group text-gray-400"
+                        : "hover:bg-blue-50/7 hover:text-white group text-gray-300/70"
                     }`
                   }
                 >
                   <Icon
-                    className="group-hover:scale-105 transition-transform ease-in-out duration-300 text-white"
+                    className="group-hover:scale-105 transition-transform ease-in-out duration-300 font-semibold"
                     strokeWidth={1.25}
                   />
-                  <span className="text-[15px]">{link.text}</span>
+                  <span className="text-[15px] font-medium!">{link.text}</span>
                 </NavLink>
               </li>
             );
@@ -129,15 +129,15 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
                     onClick={() => setOffCanvasToggle(false)}
                     end
                     className={({ isActive }) =>
-                      `flex items-center gap-4 text-lg font-medium rounded-xl p-4 transition-colors ease-in-out duration-300 ${
+                      `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
                         isActive
                           ? "bg-blue-800 text-white"
-                          : "hover:bg-blue-50/7 hover:text-white group text-gray-300"
+                          : "hover:bg-blue-50/7 hover:text-white group text-gray-300/70"
                       }`
                     }
                   >
                     <Icon
-                      className="group-hover:scale-105 transition-transform ease-in-out duration-300 text-white"
+                      className="group-hover:scale-105 transition-transform ease-in-out duration-300 font-semibold text-[15px]"
                       strokeWidth={1}
                     />
                     {link.text}

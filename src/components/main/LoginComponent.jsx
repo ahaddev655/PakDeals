@@ -1,10 +1,11 @@
 import { Eye, EyeClosed } from "lucide-react";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginComponent() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -41,6 +42,9 @@ function LoginComponent() {
     localStorage.setItem("userToken", "allow him");
     localStorage.setItem("userId", "1");
     toast.success("Login Successfully");
+    setTimeout(() => {
+      navigate("/user-dashboard/");
+    }, 3000);
   };
   return (
     <div className="page flex items-center justify-center h-screen">
@@ -55,13 +59,7 @@ function LoginComponent() {
           </h2>
         </div>
         <form onSubmit={handleFormSubmit} className="space-y-4 mt-3">
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            closeOnClick={false}
-            pauseOnHover
-            theme="light"
-          />
+          <ToastContainer position="top-right" autoClose={2500} theme="light" />
           {/* -------------------- EMAIL -------------------- */}
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="font-medium text-blue-800">

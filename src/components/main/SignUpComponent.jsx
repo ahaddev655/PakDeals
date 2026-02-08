@@ -1,10 +1,11 @@
 import { Eye, EyeClosed } from "lucide-react";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignUpComponent() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -22,16 +23,18 @@ function SignUpComponent() {
       toast.error("All fields are required");
       return;
     }
-    if (!formData.userName) {
-      toast.erroralert("Username required");
+    if (!formData.userName?.trim()) {
+      toast.error("Username is required");
       return;
     }
-    if (!formData.email) {
-      toast.error("Email required");
+
+    if (!formData.email?.trim()) {
+      toast.error("Email is required");
       return;
     }
-    if (!formData.password) {
-      toast.erroralert("Password required");
+
+    if (!formData.password?.trim()) {
+      toast.error("Password is required");
       return;
     }
     if (formData.password.length < 12) {
@@ -46,6 +49,9 @@ function SignUpComponent() {
     localStorage.setItem("userToken", "allow him");
     localStorage.setItem("userId", "1");
     toast.success("Form Submitted Successfully");
+    setTimeout(() => {
+      navigate("/user-dashboard/");
+    }, 3000);
   };
   return (
     <div className="page flex items-center justify-center h-screen">
@@ -60,13 +66,7 @@ function SignUpComponent() {
           </h2>
         </div>
         <form onSubmit={handleFormSubmit} className="space-y-4 mt-3">
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            closeOnClick={false}
-            pauseOnHover
-            theme="light"
-          />
+          <ToastContainer position="top-right" autoClose={2500} theme="light" />
           {/* -------------------- USERNAME -------------------- */}
           <div className="flex flex-col gap-1">
             <label htmlFor="userName" className="font-medium text-blue-800">
