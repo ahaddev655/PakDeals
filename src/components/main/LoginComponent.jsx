@@ -1,5 +1,5 @@
 import { Eye, EyeClosed } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -27,7 +27,7 @@ function LoginComponent() {
       return;
     }
     if (!formData.password) {
-      toast.erroralert("Password required");
+      toast.error("Password required");
       return;
     }
     if (formData.password.length < 12) {

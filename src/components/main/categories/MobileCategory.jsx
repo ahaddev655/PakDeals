@@ -96,7 +96,7 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
     console.log("MOBILE FORM SUBMITTED:", payload);
 
-    setDetails({
+    setOtherDetails({
       adTitle: "",
       description: "",
       price: "",

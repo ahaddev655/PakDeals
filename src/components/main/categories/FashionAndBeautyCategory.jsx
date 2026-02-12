@@ -201,7 +201,7 @@ function FashionAndBeautyCategory({
       {/* ====================== COLOR & MATERIAL ====================== */}
       <div className="sm:flex gap-6">
         {/* -------- COLOR -------- */}
-        {renderInput("Color", "color", otherDetails.color)}
+        {renderInput("Color", "color", "text", otherDetails.color)}
         {/* -------- MATERIAL -------- */}
         {renderDropdown(
           "Material",

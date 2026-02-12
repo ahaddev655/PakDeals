@@ -49,7 +49,7 @@ function UserDataCardsComponent({
                 {card.text}
               </p>
               <h3 className="mt-3 text-3xl font-semibold text-gray-700">
-                {card.value.toLocaleString()}
+                {(card.value || 0).toLocaleString()}
               </h3>
             </div>
 

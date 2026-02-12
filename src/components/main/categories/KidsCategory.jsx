@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-function kidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const FEATURES_LIST = [
     "Adjustable",
     "Foldable",
@@ -128,12 +128,14 @@ function kidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
     console.log("MOBILE FORM SUBMITTED:", payload);
 
-    setDetails({
+    setOtherDetails({
       adTitle: "",
       description: "",
       price: "",
       sellerName: "",
       sellerContact: "",
+      brand: "",
+      features: [],
     });
 
     setFilters({
@@ -176,7 +178,7 @@ function kidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       {/* ====================== BRAND & CONDITION ====================== */}
       <div className="sm:flex gap-6">
         {/* -------- BRAND -------- */}
-        {renderInput("Brand", "brand", otherDetails.brand)}
+          {renderInput("Brand", "brand", "text", otherDetails.brand)}
         {/* -------- CONDITION -------- */}
         {renderDropdown("Condition", "condition", "kidsCondition")}
       </div>
@@ -241,4 +243,4 @@ function kidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   );
 }
 
-export default kidsCategory;
+export default KidsCategory;

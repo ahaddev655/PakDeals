@@ -222,10 +222,11 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
               >
                 <input
                   type="checkbox"
+                  name={feature}
                   value={feature}
                   checked={otherDetails.features.includes(feature)}
                   onChange={() => handleFeatureChange(feature)}
-                  className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] relative checked:after:content-['✔'] checked:after:absolute checked:after:left-0.75 checked:after:top-[-0.5px] checked:after:text-white checked:after:text-sm focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none"
+                  className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] checked:shadow-[inset_0_0_0_2px_white] focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none cursor-pointer"
                 />
                 <span className="font-medium text-gray-700">{feature}</span>
               </label>

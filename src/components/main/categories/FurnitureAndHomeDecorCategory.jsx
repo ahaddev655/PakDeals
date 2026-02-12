@@ -124,19 +124,23 @@ function FurnitureAndHomeDecorCategory({
     e.preventDefault();
 
     const payload = {
-      category: "mobiles",
+      category: "furnitureAndHomeDecor",
       ...otherDetails,
       subCategory: filters.subCategory.label,
-      brand: filters.brand.label,
+      itemType: filters.itemType.label,
+      material: filters.material.label,
       condition: filters.condition.label,
       location: filters.location.label,
     };
 
-    console.log("MOBILE FORM SUBMITTED:", payload);
+    console.log("FURNITURE AND HOME DECOR FORM SUBMITTED:", payload);
 
-    setDetails({
+    setOtherDetails({
       adTitle: "",
       description: "",
+      brand: "",
+      dimensions: "",
+      features: [],
       price: "",
       sellerName: "",
       sellerContact: "",
@@ -144,7 +148,8 @@ function FurnitureAndHomeDecorCategory({
 
     setFilters({
       subCategory: DEFAULT_FILTER("Select Sub Category"),
-      brand: DEFAULT_FILTER("Select Brand"),
+      itemType: DEFAULT_FILTER("Select Item Type"),
+      material: DEFAULT_FILTER("Select Material"),
       condition: DEFAULT_FILTER("Select Condition"),
       location: DEFAULT_FILTER("Select Location"),
     });
@@ -190,7 +195,7 @@ function FurnitureAndHomeDecorCategory({
           "furnitureAndHomeDecorMaterial",
           true,
         )}
-        {renderInput("Brand", "brand", otherDetails.brand)}
+        {renderInput("Brand", "brand", "text", otherDetails.brand)}
       </div>
 
       {/* ====================== CONDITION & DIMENSIONS ====================== */}
@@ -203,6 +208,7 @@ function FurnitureAndHomeDecorCategory({
         {renderInput(
           "Dimensions (L x W x H)",
           "dimensions",
+          "text",
           otherDetails.dimensions,
         )}
       </div>

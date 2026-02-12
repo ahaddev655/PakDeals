@@ -226,6 +226,7 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
             <label className="font-semibold text-slate-600">Color</label>
             <input
               type="color"
+              name="carColor"
               className="w-25 border-2 border-gray-300 rounded-lg px-3 h-10.75 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
               value={otherDetails.carColor}
               onChange={handleDetailChange}

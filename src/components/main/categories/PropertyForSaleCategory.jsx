@@ -168,16 +168,11 @@ function PropertyForSaleCategory({
         <div className="w-full">
           <label className="font-semibold text-slate-600">Description</label>
           <textarea
-            type="text"
+            name="description"
             className="w-full border-2 border-gray-300 resize-none rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
             rows={6}
             value={otherDetails.description}
-            onChange={(e) =>
-              setOtherDetails({
-                ...otherDetails,
-                description: e.target.value,
-              })
-            }
+            onChange={handleDetailChange}
           ></textarea>
         </div>
 

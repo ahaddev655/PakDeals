@@ -14,41 +14,6 @@ function UserNotificationSettingsComponent() {
 
   const [data, setData] = useState(defaultData);
 
-  // ==================== REUSABLE COMPONENTS ====================
-  const inputComponent = (
-    label,
-    value,
-    name,
-    showPassword,
-    setShowPassword,
-    placeholder,
-  ) => {
-    return (
-      <div className="flex flex-col w-full relative">
-        <label htmlFor={name} className="font-medium text-gray-700">
-          {label}
-        </label>
-        <input
-          type={showPassword ? "text" : "password"}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 mt-1
-        focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-        transition-colors ease-in-out duration-300"
-          onChange={handleInputChange}
-        />
-
-        <div
-          className="absolute top-[55%] right-3 w-6 h-6 hover:text-blue-800 transition-colors ease-linear cursor-pointer"
-          onClick={() => setShowPassword(!showPassword)}
-        >
-          {showPassword ? <EyeClosed /> : <Eye />}
-        </div>
-      </div>
-    );
-  };
-
   // ==================== INPUT HANDLERS ====================
   const handleInputChange = (e) => {
     setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

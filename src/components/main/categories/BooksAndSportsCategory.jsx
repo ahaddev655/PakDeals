@@ -42,33 +42,35 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     e.preventDefault();
 
     const payload = {
-      category: "electronics-and-home-appliances",
+      category: "books-and-sports",
       ...otherDetails,
       subCategory: filters.subCategory?.label || "",
-      brand: filters.brand?.label || "",
+      itemType: filters.itemType?.label || "",
       condition: filters.condition?.label || "",
-      warranty: filters.warranty?.label || "",
+      language: filters.language?.label || "",
+      format: filters.format?.label || "",
       location: filters.location?.label || "",
       features: JSON.stringify(otherDetails.features),
     };
-    console.log("PROPERTY FOR RENT FORM SUBMITTED:", payload);
+    console.log("BOOKS AND SPORTS FORM SUBMITTED:", payload);
 
     setOtherDetails({
       adTitle: "",
       description: "",
       price: "",
+      genre: "",
+      author: "",
       sellerName: "",
       sellerContact: "",
       features: [],
-      type: "",
-      model: "",
     });
 
     setFilters({
       subCategory: DEFAULT_FILTER("Select Sub Category"),
-      brand: DEFAULT_FILTER("Select Brand"),
+      itemType: DEFAULT_FILTER("Select Item Type"),
+      language: DEFAULT_FILTER("Select Language"),
+      format: DEFAULT_FILTER("Select Format"),
       condition: DEFAULT_FILTER("Select Condition"),
-      warranty: DEFAULT_FILTER("Select Warranty"),
       location: DEFAULT_FILTER("Select Location"),
     });
   };

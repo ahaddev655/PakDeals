@@ -32,7 +32,7 @@ function PropertyForRentCategory({
     bedrooms: DEFAULT_FILTER("Select Bedrooms"),
     bathrooms: DEFAULT_FILTER("Select Bathrooms"),
     numberOfStoreys: DEFAULT_FILTER("Select No. of Storeys"),
-    constructionState: DEFAULT_FILTER("Select Constructioin State"),
+    constructionState: DEFAULT_FILTER("Select Construction State"),
     location: DEFAULT_FILTER("Select Location"),
   });
 
@@ -139,7 +139,7 @@ function PropertyForRentCategory({
       bedrooms: DEFAULT_FILTER("Select Bedrooms"),
       bathrooms: DEFAULT_FILTER("Select Bathrooms"),
       numberOfStoreys: DEFAULT_FILTER("Select No. of Storeys"),
-      constructionState: DEFAULT_FILTER("Select Constructioin State"),
+      constructionState: DEFAULT_FILTER("Select Construction State"),
       location: DEFAULT_FILTER("Select Location"),
     });
   };

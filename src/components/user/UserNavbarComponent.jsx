@@ -83,7 +83,7 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       {/* PROFILE */}
       <Link to={'/profile'} className="relative w-10 h-10 cursor-pointer">
         <img
-          src="/assets/profile.jpg"
+          src={new URL('/assets/profile.jpg', import.meta.url).href}
           alt="IMG"
           className="w-full rounded-full border-3 border-[#e2e8f0] hover:border-blue-600 transition-colors ease-in-out duration-300"
         />

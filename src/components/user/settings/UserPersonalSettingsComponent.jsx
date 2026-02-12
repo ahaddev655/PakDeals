@@ -17,7 +17,7 @@ function UserPersonalSettingsComponent() {
     country: "",
   };
 
-  const [personlData, setPersonlData] = useState(defaultPersonalData);
+  const [personalData, setPersonalData] = useState(defaultPersonalData);
   const [filters, setFilters] = useState(defaultFilters);
 
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -120,7 +120,7 @@ function UserPersonalSettingsComponent() {
 
   // ==================== INPUT HANDLERS ====================
   const handleInputChange = (e) => {
-    setPersonlData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSelect = (key, value) => {
@@ -173,7 +173,7 @@ function UserPersonalSettingsComponent() {
     }
 
     const payload = {
-      ...personlData,
+      ...personalData,
       country: filters.country,
     };
     toast.success("Form submitted successfully...");
@@ -202,7 +202,7 @@ function UserPersonalSettingsComponent() {
           {/* -------------------- FIRST NAME -------------------- */}
           {inputComponent(
             "First Name",
-            personlData.firstName,
+            personalData.firstName,
             "firstName",
             "text",
             "Enter Your First Name",
@@ -211,7 +211,7 @@ function UserPersonalSettingsComponent() {
           {/* -------------------- LAST NAME -------------------- */}
           {inputComponent(
             "Last Name",
-            personlData.lastName,
+            personalData.lastName,
             "lastName",
             "text",
             "Enter Your Last Name",
@@ -224,7 +224,7 @@ function UserPersonalSettingsComponent() {
           {/* -------------------- EMAIL -------------------- */}
           {inputComponent(
             "Email Address",
-            personlData.email,
+            personalData.email,
             "email",
             "text",
             "Enter Your Email Address",
@@ -233,7 +233,7 @@ function UserPersonalSettingsComponent() {
           {/* -------------------- MOBILE NUMBER -------------------- */}
           {inputComponent(
             "Mobile Number",
-            personlData.mobileNumber,
+            personalData.mobileNumber,
             "mobileNumber",
             "tel",
             "Enter Your Mobile Number",
@@ -255,7 +255,7 @@ function UserPersonalSettingsComponent() {
           {/* -------------------- CITY -------------------- */}
           {inputComponent(
             "City",
-            personlData.city,
+            personalData.city,
             "city",
             "text",
             "Enter Your City Name",
@@ -265,7 +265,7 @@ function UserPersonalSettingsComponent() {
         {/* ==================== ADDRESS ==================== */}
         {inputComponent(
           "Address",
-          personlData.address,
+          personalData.address,
           "address",
           "text",
           "Enter Your Address",
@@ -285,7 +285,7 @@ function UserPersonalSettingsComponent() {
             type="button"
             className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
             onClick={() => {
-              setPersonlData(defaultPersonalData);
+              setPersonalData(defaultPersonalData);
               setFilters(defaultFilters);
             }}
           >

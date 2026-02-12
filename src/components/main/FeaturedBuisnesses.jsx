@@ -50,7 +50,7 @@ const featuredBusinesses = [
   },
 ];
 
-function FeaturedBuisnesses() {
+function FeaturedBusinesses() {
   return (
     <section className="section">
       <div className="mb-6">
@@ -76,7 +76,7 @@ function FeaturedBuisnesses() {
         modules={[Autoplay, A11y]}
       >
         {featuredBusinesses.map((item, i) => (
-          <SwiperSlide key={i}>
+          <SwiperSlide key={`business-${i}`}>
             <div className="relative h-28 w-28 mx-auto">
               <img
                 src={item.logo}
@@ -103,4 +103,4 @@ function FeaturedBuisnesses() {
   );
 }
 
-export default FeaturedBuisnesses;
+export default FeaturedBusinesses;

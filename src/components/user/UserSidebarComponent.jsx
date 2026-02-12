@@ -130,7 +130,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
                   <NavLink
                     to={link.link}
                     onClick={() => setOffCanvasToggle(false)}
-                    end
+                    end={link.link !== "/user-dashboard/chats"}
                     className={({ isActive }) =>
                       `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
                         isActive

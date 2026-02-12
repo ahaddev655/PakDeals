@@ -157,7 +157,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   );
 
   const handleDetailChange = (e) => {
-    setOtherDetails((prev) => ({ ...prev, [e.target.name]: [e.target.value] }));
+    setOtherDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSelect = (key, item) => {

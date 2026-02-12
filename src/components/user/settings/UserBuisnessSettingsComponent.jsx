@@ -161,7 +161,7 @@ function UserBuisnessSettingsComponent() {
             Company Description
           </label>
           <textarea
-            name="companyDescription"
+            name="description"
             value={data.description}
             placeholder="Describe YOur Company"
             className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800

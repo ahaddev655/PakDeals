@@ -2,7 +2,7 @@ import { Eye, Heart, Package, X } from "lucide-react";
 import React, { useState } from "react";
 
 function UserRecentActivitiesComponent() {
-  const [activities, setActivites] = useState([
+  const [activities, setActivities] = useState([
     {
       activity: "Your listing Audi Q3 3.5 Sportpack has been approved",
       type: "listing",
@@ -42,7 +42,7 @@ function UserRecentActivitiesComponent() {
   ]);
 
   const removeActivity = (index) => {
-    setActivites((prev) => prev.filter((_, i) => i !== index));
+    setActivities((prev) => prev.filter((_, i) => i !== index));
   };
   return (
     <div className="col-span-1 bg-white p-4 shadow-lg rounded-lg border border-gray-300">

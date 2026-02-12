@@ -133,6 +133,7 @@ function UserAdsComponent() {
           {/* -------------------- SORT DROPDOWN -------------------- */}
           <div className="relative sm:mt-0 mt-4">
             <button
+              type="button"
               onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
               className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md w-35.25"
             >

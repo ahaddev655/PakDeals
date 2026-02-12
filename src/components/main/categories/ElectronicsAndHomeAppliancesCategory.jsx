@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-function electronicsAndHomeAppliancesCategory({
+function ElectronicsAndHomeAppliancesCategory({
   openDropdown,
   setOpenDropdown,
   addAd_data,
@@ -286,4 +286,4 @@ function electronicsAndHomeAppliancesCategory({
   );
 }
 
-export default electronicsAndHomeAppliancesCategory;
+export default ElectronicsAndHomeAppliancesCategory;
