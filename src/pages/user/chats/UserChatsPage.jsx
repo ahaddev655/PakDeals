@@ -16,7 +16,7 @@ function UserChatsPage() {
     }, 500);
   }, []);
   return (
-    <div className="py-6">
+    <div className="pt-6 pb-1">
       {/* -------------------- HEADING -------------------- */}
       <div className="sm:px-6 px-2.5 space-y-3 mb-6">
         <h1 className="text-3xl font-semibold">Chats</h1>

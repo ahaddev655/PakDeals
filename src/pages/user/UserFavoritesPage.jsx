@@ -10,14 +10,14 @@ function UserFavoritesPage() {
   const userToken = localStorage.getItem("userToken");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
-    useEffect(() => {
-      if (userToken && userId) {
-        return;
-      }
-      setTimeout(() => {
-        navigate("/signup");
-      }, 500);
-    }, []);
+  useEffect(() => {
+    if (userToken && userId) {
+      return;
+    }
+    setTimeout(() => {
+      navigate("/signup");
+    }, 500);
+  }, []);
   // ==================== TOGGLE FAVORITES ====================
   useEffect(() => {
     const raw = localStorage.getItem("favoriteAds");
@@ -41,6 +41,14 @@ function UserFavoritesPage() {
   return (
     <div className="sm:px-6 px-2.5 py-6">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200">
+        <div className="flex items-center justify-between gap-5 py-4 px-7">
+          <h1 className="text-[32px] font-semibold text-gray-700">
+            My Favorites
+          </h1>
+          <p className="text-[#303030] font-light">
+            Lorem ipsum dolor sit amet, consectetur
+          </p>
+        </div>
         {favorites.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">

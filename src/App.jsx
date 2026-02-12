@@ -20,6 +20,7 @@ import UserChatsPage from "./pages/user/chats/UserChatsPage";
 import ChatsMainComponent from "./components/user/chats/ChatsMainComponent";
 import UserProfilePage from "./pages/user/chats/UserProfilePage";
 import UserProfileSettingsPage from "./pages/user/UserProfileSettingsPage";
+import PersonalProfilePage from './pages/user/PersonalProfilePage';
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -101,6 +102,10 @@ function App() {
         {
           path: "profile-settings",
           element: <UserProfileSettingsPage />,
+        },
+        {
+          path: 'profile',
+          element: <PersonalProfilePage />
         },
       ],
     },

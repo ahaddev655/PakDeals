@@ -101,7 +101,7 @@ function UserAdsComponent() {
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
       {/* ==================== ADS HEADER ==================== */}
-      <div className="border-b border-gray-300 p-6 md:flex md:justify-between md:space-y-0 space-y-5 items-center">
+      <div className="border-b border-gray-300 p-6 lg:flex md:justify-between md:space-y-0 space-y-5 items-center">
         {/* -------------------- SEARCHBAR -------------------- */}
         <div className="relative">
           <Search className="absolute text-[#7f7f7f] top-2 left-2" />
@@ -134,7 +134,7 @@ function UserAdsComponent() {
           <div className="relative sm:mt-0 mt-4">
             <button
               onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
-              className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md"
+              className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md w-35.25"
             >
               {sortTabs.find((s) => s.key === selectedSort)?.label || "Sort"}
             </button>

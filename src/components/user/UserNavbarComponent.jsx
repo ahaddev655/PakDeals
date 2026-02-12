@@ -1,6 +1,6 @@
 import { Menu, MoveLeft, MoveRight, X } from "lucide-react";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const [navbarToggle, setNavbarToggle] = useState(false);
@@ -81,14 +81,14 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       </div>
 
       {/* PROFILE */}
-      <div className="relative w-10 h-10 cursor-pointer">
+      <Link to={'/profile'} className="relative w-10 h-10 cursor-pointer">
         <img
           src="/assets/profile.jpg"
           alt="IMG"
           className="w-full rounded-full border-3 border-[#e2e8f0] hover:border-blue-600 transition-colors ease-in-out duration-300"
         />
         <div className="w-3 h-3 border-2 border-white rounded-full bg-green-600 absolute bottom-0 right-0" />
-      </div>
+      </Link>
     </div>
   );
 }

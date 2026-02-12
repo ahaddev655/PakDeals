@@ -11,7 +11,7 @@ function UserLayout() {
         offCanvasToggle={offCanvasToggle}
         setOffCanvasToggle={setOffCanvasToggle}
       />
-      <div className="lg:w-[80%] w-full">
+      <div className="w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330">
         <UserNavbarComponent
           offCanvasToggle={offCanvasToggle}
           setOffCanvasToggle={setOffCanvasToggle}

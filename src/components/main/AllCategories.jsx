@@ -43,8 +43,8 @@ function AllCategories() {
     {
       icon: CircuitBoard,
       adCount: "20",
-      title: "Electronics & Home Appliances",
-      link: "/category/electronics-and-home-appliances",
+      title: "Electronics & Appliances",
+      link: "/category/electronics-and-appliances",
     },
     {
       icon: Motorbike,
@@ -97,7 +97,7 @@ function AllCategories() {
             <Link to={cats.link} key={i}>
               <div className="bg-white group h-full rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-blue-800 py-3 px-4">
                 <div className="flex items-center gap-2" key={i}>
-                  <div className="bg-orange-100/40 grid place-items-center w-13 h-13 rounded-full group-hover:bg-blue-900 group-hover:text-white transition-colors duration-300">
+                  <div className="bg-orange-100/40 grid place-items-center w-13 h-13 rounded-full group-hover:bg-blue-900 group-hover:text-white transition-colors duration-300 shrink-0">
                     <Icon />
                   </div>
                   <div>

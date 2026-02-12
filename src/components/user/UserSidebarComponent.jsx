@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import React from "react";
 import {
   CircleUserRound,
@@ -27,16 +27,19 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     },
   ];
 
+  const navigate = useNavigate();
+
   const userLogOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("userToken");
     localStorage.removeItem("userId");
+    navigate("/login");
   };
 
   return (
     <>
       {/* SIDEBAR */}
-      <div className="sm:w-[20%] w-full bg-black min-h-screen flex-col lg:flex hidden">
+      <div className="sm:w-73.25 w-full bg-black min-h-screen flex-col lg:flex hidden">
         <div className="text-center p-6">
           <Link
             to="/"
@@ -55,7 +58,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
               <li key={i}>
                 <NavLink
                   to={link.link}
-                  end
+                  end={link.link !== "/user-dashboard/chats"}
                   className={({ isActive }) =>
                     `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
                       isActive

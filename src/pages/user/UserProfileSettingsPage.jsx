@@ -60,7 +60,7 @@ function UserProfileSettingsPage() {
             </div>
           </div>
           {/* -------------------- NAVIGATION TABS -------------------- */}
-          <div className="w-full bg-white shadow-md rounded-lg p-3.75 space-y-1">
+          <div className="w-full bg-white shadow-md rounded-lg p-3.75 space-y-0.75">
             {tabs.map((tab, i) => {
               const Icon = tab.icon;
               return (

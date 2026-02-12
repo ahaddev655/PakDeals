@@ -7,7 +7,8 @@ function SignUpComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    userName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -19,12 +20,18 @@ function SignUpComponent() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.userName && !formData.email && !formData.password) {
+    if (
+      !formData.firstName &&
+      !formData.lastName &&
+      !formData.email &&
+      !formData.password
+    ) {
       toast.error("All fields are required");
       return;
     }
-    if (!formData.userName?.trim()) {
-      toast.error("Username is required");
+
+    if (!formData.firstName?.trim()) {
+      toast.error("First name is required");
       return;
     }
 
@@ -67,16 +74,32 @@ function SignUpComponent() {
         </div>
         <form onSubmit={handleFormSubmit} className="space-y-4 mt-3">
           <ToastContainer position="top-right" autoClose={2500} theme="light" />
-          {/* -------------------- USERNAME -------------------- */}
+          {/* -------------------- FIRSTNAME -------------------- */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="userName" className="font-medium text-blue-800">
-              Username
+            <label htmlFor="firstName" className="font-medium text-gray-700">
+              First name<span className="text-red-600"> *</span>
             </label>
             <input
               type="text"
-              name="userName"
-              id="userName"
-              placeholder="Enter Your Username"
+              name="firstName"
+              id="firstName"
+              placeholder="Enter Your First Name"
+              className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
+              focus:border-blue-800 focus:ring-2 focus:ring-blue-800
+              transition-colors ease-in-out duration-300"
+              onChange={handleInputChange}
+            />
+          </div>
+          {/* -------------------- LASTNAME -------------------- */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="lastName" className="font-medium text-gray-700">
+              Last name (optional)
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              placeholder="Enter Your Last Name"
               className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
             focus:border-blue-800 focus:ring-2 focus:ring-blue-800
               transition-colors ease-in-out duration-300"
@@ -85,8 +108,8 @@ function SignUpComponent() {
           </div>
           {/* -------------------- EMAIL -------------------- */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="font-medium text-blue-800">
-              Email
+            <label htmlFor="email" className="font-medium text-gray-700">
+              Email<span className="text-red-600"> *</span>
             </label>
             <input
               type="text"
@@ -101,8 +124,8 @@ function SignUpComponent() {
           </div>
           {/* -------------------- PASSWORD -------------------- */}
           <div className="flex flex-col gap-1 relative">
-            <label htmlFor="password" className="font-medium text-blue-800">
-              Password
+            <label htmlFor="password" className="font-medium text-gray-700">
+              Password<span className="text-red-600"> *</span>
             </label>
             <input
               type={showPassword ? "text" : "password"}
