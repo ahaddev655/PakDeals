@@ -20,9 +20,9 @@ function PersonalProfilePage() {
 
   const dataComponent = (label, dataKey) => {
     return (
-      <div className="flex items-center justify-between gap-3 bg-gray-50 hover:bg-gray-100 transition p-2 rounded-md border border-gray-200">
+      <div className="sm:flex items-center justify-between gap-3 bg-gray-50 hover:bg-gray-100 transition p-2 rounded-md border border-gray-200">
         <p className="font-medium text-gray-700">{label}</p>
-        <span className="font-semibold text-blue-700">{dataKey}</span>
+        <p className="font-semibold text-blue-700 text-end">{dataKey}</p>
       </div>
     );
   };
@@ -40,7 +40,7 @@ function PersonalProfilePage() {
               className="w-full h-full object-cover rounded-full border-4 border-blue-500 shadow-md"
             />
           </div>
-          <div className="flex mt-5 gap-5">
+          <div className="md:flex mt-5 space-y-5 md:space-y-0 gap-5">
             {/* -------------------- PERSONAL DATA -------------------- */}
             <div className="space-y-2">
               <h5 className="text-xl font-semibold text-gray-700 border-b border-gray-300 pb-1">
@@ -50,9 +50,9 @@ function PersonalProfilePage() {
               {dataComponent("Last Name", userData.lastName)}
               {dataComponent("Email", userData.email)}
               {dataComponent("Mobile", userData.mobileNumber)}
-              <div className="flex items-center justify-between gap-3 bg-gray-50 hover:bg-gray-100 transition p-2 rounded-md border border-gray-200">
+              <div className="sm:flex items-center justify-between gap-3 bg-gray-50 hover:bg-gray-100 transition p-2 rounded-md border border-gray-200">
                 <p className="font-medium text-gray-700">Location</p>
-                <span className="font-semibold text-blue-700">
+                <span className="font-semibold text-blue-700 text-end">
                   {userData.country + ", " + userData.city}
                 </span>
               </div>

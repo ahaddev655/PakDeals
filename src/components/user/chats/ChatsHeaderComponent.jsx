@@ -78,7 +78,7 @@ function ChatsHeaderComponent() {
                   : "scale-y-0 opacity-0"
               }`}
             >
-              <Link to={`/user-profile/${currentUser.id}`}>
+              <Link to={`/user-dashboard/profile/${currentUser.id}`}>
                 <div
                   className="cursor-pointer p-2 hover:bg-blue-50 rounded-md hover:text-blue-700"
                   onClick={() => setDropdownToggle(false)}

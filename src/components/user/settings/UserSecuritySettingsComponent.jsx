@@ -138,7 +138,7 @@ function UserSecuritySettingsComponent() {
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
-              className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] relative checked:after:content-['✔'] checked:after:absolute checked:after:left-0.75 checked:after:top-[-0.5px] checked:after:text-white checked:after:text-sm focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none"
+              className="checkbox"
               checked={data.enableTwoFactorAuthentication}
               onChange={(e) =>
                 setData((prev) => ({
@@ -155,7 +155,7 @@ function UserSecuritySettingsComponent() {
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
-              className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] relative checked:after:content-['✔'] checked:after:absolute checked:after:left-0.75 checked:after:top-[-0.5px] checked:after:text-white checked:after:text-sm focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none"
+              className="checkbox"
               checked={data.sendNotificationsWhenLogined}
               onChange={(e) =>
                 setData((prev) => ({

@@ -98,7 +98,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
         }`}
       >
         <div
-          className={`sm:w-[50%] w-full overflow-auto bg-black h-screen origin-top-left flex flex-col shadow-[4px_0_24px_#0000004d] p-6 transition-transform duration-300 ease-in-out ${
+          className={`w-full min-[610px]:w-73.25 overflow-auto bg-black h-screen origin-top-left flex flex-col shadow-[4px_0_24px_#0000004d] p-6 transition-transform duration-300 ease-in-out ${
             offCanvasToggle ? "scale-x-100" : "scale-x-0"
           }`}
         >

@@ -18,3 +18,18 @@
 body {
   @apply bg-[#f8f8f8]!;
 }
+
+.checkbox {
+  @apply w-5 h-5 appearance-none border-2 border-gray-300 rounded-sm relative focus:border-[#3a4fc4] focus:shadow-[0_0_0_.2rem_#3a4fc440] checked:bg-[#3a4fc4] checked:border-[#3a4fc4];
+}
+
+/* The checkmark icon */
+.checkbox:checked::after {
+  content: '';
+  @apply absolute inset-0;
+  background-color: white;
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWljb24gbHVjaWRlLWNoZWNrIj48cGF0aCBkPSJNMjAgNiA5IDE3bC01LTUiLz48L3N2Zz4=");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: 80%;
+}

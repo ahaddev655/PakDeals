@@ -101,7 +101,7 @@ function UserAdsComponent() {
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
       {/* ==================== ADS HEADER ==================== */}
-      <div className="border-b border-gray-300 p-6 lg:flex md:justify-between md:space-y-0 space-y-5 items-center">
+      <div className="p-6 lg:flex md:justify-between md:space-y-0 space-y-5 items-center">
         {/* -------------------- SEARCHBAR -------------------- */}
         <div className="relative">
           <Search className="absolute text-[#7f7f7f] top-2 left-2" />
@@ -113,55 +113,54 @@ function UserAdsComponent() {
             className="border-2 border-gray-200 rounded-md p-2 text-[15px] w-53 pl-10"
           />
         </div>
-        {/* -------------------- NAVIGATION TABS -------------------- */}
-        <div className="sm:flex items-center gap-3">
-          <div className="grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1">
-            {tabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setSelectedNavTab(tab.key)}
-                className={`font-medium py-2 px-4 rounded-md transition-colors duration-300 ${
-                  selectedNavTab === tab.key
-                    ? "border-b-2 border-blue-500 text-blue-700"
-                    : "hover:bg-blue-50 text-gray-500 hover:text-blue-700"
-                }`}
+        {/* -------------------- SORT DROPDOWN -------------------- */}
+        <div className="relative sm:mt-0 mt-4">
+          <button
+            type="button"
+            onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
+            className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md w-35.25"
+          >
+            {sortTabs.find((s) => s.key === selectedSort)?.label || "Sort"}
+          </button>
+          <div
+            className={`absolute top-full mt-2 left-0 w-40 bg-white shadow-lg border border-gray-200 p-1 rounded-md transition-all duration-300 origin-top transform ${
+              sortDropdownToggle
+                ? "scale-y-100 opacity-100"
+                : "scale-y-0 opacity-0"
+            }`}
+          >
+            {sortTabs.map((sort, i) => (
+              <div
+                key={i}
+                className="cursor-pointer p-2 hover:bg-blue-50 rounded-md hover:text-blue-700"
+                onClick={() => {
+                  setSelectedSort(sort.key);
+                  setSortDropdownToggle(false);
+                }}
               >
-                {tab.label}
-              </button>
+                {sort.label}
+              </div>
             ))}
-          </div>
-          {/* -------------------- SORT DROPDOWN -------------------- */}
-          <div className="relative sm:mt-0 mt-4">
-            <button
-              type="button"
-              onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
-              className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md w-35.25"
-            >
-              {sortTabs.find((s) => s.key === selectedSort)?.label || "Sort"}
-            </button>
-            <div
-              className={`absolute top-full mt-2 left-0 w-40 bg-white shadow-lg border border-gray-200 p-1 rounded-md transition-all duration-300 origin-top transform ${
-                sortDropdownToggle
-                  ? "scale-y-100 opacity-100"
-                  : "scale-y-0 opacity-0"
-              }`}
-            >
-              {sortTabs.map((sort, i) => (
-                <div
-                  key={i}
-                  className="cursor-pointer p-2 hover:bg-blue-50 rounded-md hover:text-blue-700"
-                  onClick={() => {
-                    setSelectedSort(sort.key);
-                    setSortDropdownToggle(false);
-                  }}
-                >
-                  {sort.label}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
+      {/* -------------------- NAVIGATION TABS -------------------- */}
+      <div className="grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 px-6 md:w-200">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setSelectedNavTab(tab.key)}
+            className={`font-medium py-2 px-4 rounded-md transition-colors duration-300 ${
+              selectedNavTab === tab.key
+                ? "border-b-2 border-blue-500 text-blue-700"
+                : "hover:bg-blue-50 text-gray-500 hover:text-blue-700"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <hr className="border-b border-gray-200 my-4" />
       {/* ==================== ADS CONTAINER ==================== */}
       <div className="bg-white">
         {/* -------------------- LOADER -------------------- */}
@@ -226,9 +225,11 @@ function UserAdsComponent() {
                           {ad.title.slice(0, 7) + "..."}
                         </span>
                       </td>
+
                       <td className="py-4 px-6 text-[15px] text-gray-700 hidden md:table-cell">
                         {ad.category}
                       </td>
+
                       <td className="py-4 px-6 text-center">
                         <span
                           className={`text-xs capitalize font-medium px-3 py-1 rounded-full ${statusStyles[ad.status]}`}
@@ -236,12 +237,15 @@ function UserAdsComponent() {
                           {ad.status}
                         </span>
                       </td>
+
                       <td className="py-4 px-6 text-[15px] text-gray-700 text-center">
                         PKR {Number(ad.price).toLocaleString()}
                       </td>
+
                       <td className="py-4 px-6 text-[15px] text-gray-700 text-center">
                         {ad.createdAt.replaceAll("-", "/")}
                       </td>
+
                       <td className="py-4 px-6 flex items-center justify-center gap-4">
                         <div
                           className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-blue-800 transition-all duration-300 ease-in-out cursor-pointer"
@@ -268,74 +272,68 @@ function UserAdsComponent() {
         )}
         {/* -------------------- ADS POPUP -------------------- */}
         <div
-          className={`fixed top-0 left-0 bg-black/50 backdrop-blur-md w-full h-full flex items-center justify-center transition-opacity duration-300 ease-in-out ${selectedAd ? "opacity-100 z-10" : "opacity-0 -z-10"}`}
+          className={`fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300 ${
+            selectedAd ? "opacity-100 z-50" : "opacity-0 -z-10"
+          }`}
           onClick={() => setSelectedAd(null)}
         >
           <div
-            className={`bg-white w-md rounded-lg border border-gray-400 shadow-lg py-4 px-6 transition-all duration-300 ease-in-out ${selectedAd ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+            className={`bg-white w-full max-w-md rounded-2xl border border-gray-200 shadow-2xl p-6 transition-all duration-300 ${
+              selectedAd
+                ? "opacity-100 translate-y-0 scale-100"
+                : "opacity-0 translate-y-6 scale-95"
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             {selectedAd && (
-              <div>
-                {/* -------------------- AD IMAGE -------------------- */}
-                <div className="w-full h-50 rounded-lg">
+              <div className="space-y-4">
+                {/* IMAGE */}
+                <div className="w-full h-56 rounded-xl overflow-hidden border border-gray-200 shadow-md">
                   <img
                     src={selectedAd.img}
                     alt="IMG"
-                    className="w-full h-full rounded-lg"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="mt-3 space-y-3">
-                  {/* -------------------- TITLE -------------------- */}
-                  <div className="flex items-center gap-1">
-                    <h5 className="text-lg font-medium">Title:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
-                      {selectedAd.title}
-                    </h5>
-                  </div>
-                  {/* -------------------- CATEGORY -------------------- */}
-                  <div className="flex items-center gap-1">
-                    <h5 className="text-lg font-medium">Category:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
-                      {selectedAd.category}
-                    </h5>
-                  </div>
-                  {/* -------------------- PRICE -------------------- */}
-                  <div className="flex items-center gap-1">
-                    <h5 className="text-lg font-medium">Price:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
-                      PKR {Number(selectedAd.price).toLocaleString()}
-                    </h5>
-                  </div>
-                  {/* -------------------- STATUS -------------------- */}
-                  <div className="flex items-center gap-1">
-                    <h5 className="text-lg font-medium">Status:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
-                      {selectedAd.status}
-                    </h5>
-                  </div>
-                  {/* -------------------- CREATED ON -------------------- */}
-                  <div className="flex items-center gap-1">
-                    <h5 className="text-lg font-medium">Created On:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
-                      {selectedAd.createdAt.replaceAll("-", "/")}
-                    </h5>
-                  </div>
+
+                {/* DETAILS */}
+                <div className="space-y-3">
+                  {[
+                    ["Title", selectedAd.title],
+                    ["Category", selectedAd.category],
+                    [
+                      "Price",
+                      `PKR ${Number(selectedAd.price).toLocaleString()}`,
+                    ],
+                    ["Status", selectedAd.status],
+                    ["Created On", selectedAd.createdAt.replaceAll("-", "/")],
+                  ].map(([label, value], i) => (
+                    <div key={i} className="flex justify-between items-center">
+                      <h5 className="text-sm font-semibold text-gray-500 uppercase">
+                        {label}
+                      </h5>
+                      <p className="text-sm font-semibold text-blue-700 text-right">
+                        {value}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-                {/* -------------------- BUTTONS -------------------- */}
-                <div className="flex items-center gap-6 mt-3">
+
+                {/* BUTTONS */}
+                <div className="flex gap-3 pt-2">
                   <button
                     type="button"
-                    className="w-full py-3 px-6 bg-gray-500 hover:bg-gray-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                    className="flex-1 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                     onClick={() => setSelectedAd(null)}
                   >
                     Cancel
                   </button>
 
-                  {selectedAd.status === "active" ? (
+                  {(selectedAd.status === "active" ||
+                    selectedAd.status === "featured") && (
                     <button
                       type="button"
-                      className="w-full py-3 px-6 bg-red-500 hover:bg-red-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                      className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
                         setAds((prev) =>
                           prev.map((ad) =>
@@ -353,10 +351,12 @@ function UserAdsComponent() {
                     >
                       Inactive
                     </button>
-                  ) : selectedAd.status === "inactive" ? (
+                  )}
+
+                  {selectedAd.status === "inactive" && (
                     <button
                       type="button"
-                      className="w-full py-3 px-6 bg-green-500 hover:bg-green-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                      className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
                         setAds((prev) =>
                           prev.map((ad) =>
@@ -374,8 +374,6 @@ function UserAdsComponent() {
                     >
                       Active
                     </button>
-                  ) : (
-                    ""
                   )}
                 </div>
               </div>

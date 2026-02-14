@@ -81,7 +81,7 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       </div>
 
       {/* PROFILE */}
-      <Link to={'/profile'} className="relative w-10 h-10 cursor-pointer">
+      <Link to={'/user-dashboard/profile'} className="relative w-10 h-10 cursor-pointer">
         <img
           src={new URL('/assets/profile.jpg', import.meta.url).href}
           alt="IMG"

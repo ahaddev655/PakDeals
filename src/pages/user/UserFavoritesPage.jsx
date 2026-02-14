@@ -82,7 +82,7 @@ function UserFavoritesPage() {
                           : "border-gray-300"
                       }`}
                     >
-                      <td className="py-4 px-6 text-[15px] text-gray-700">
+                      <td className="py-4 px-6 text-[15px] text-gray-700 font-semibold">
                         #{favorite.id}
                       </td>
 
@@ -139,7 +139,7 @@ function UserFavoritesPage() {
                 No favorites
               </h2>
               <p className="text-gray-400 mt-2">
-                You haven’t added any ads to favorites yet.
+                You haven't added any ads to favorites yet.
               </p>
             </div>
           </div>
@@ -147,64 +147,82 @@ function UserFavoritesPage() {
 
         {/* -------------------- ADS POPUP -------------------- */}
         <div
-          className={`fixed top-0 left-0 bg-black/50 backdrop-blur-md w-full h-full flex items-center justify-center transition-opacity duration-300 ease-in-out ${
-            selectedAd ? "opacity-100 z-10" : "opacity-0 -z-10"
+          className={`fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300 ${
+            selectedAd ? "opacity-100 z-50" : "opacity-0 -z-10"
           }`}
           onClick={() => setSelectedAd(null)}
         >
           <div
-            className={`bg-white w-md rounded-lg border border-gray-400 shadow-lg py-4 px-6 transition-all duration-300 ease-in-out ${
+            className={`bg-white w-full max-w-md rounded-2xl border border-gray-200 shadow-2xl p-6 md:p-8 transform transition-all duration-300 ${
               selectedAd
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-5"
+                ? "opacity-100 scale-100 translate-y-0"
+                : "opacity-0 scale-95 translate-y-6"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
             {selectedAd && (
-              <div>
+              <div className="space-y-5">
                 {/* -------------------- AD IMAGE -------------------- */}
-                <div className="w-full h-50 rounded-lg">
+                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gray-200 shadow-lg group">
                   <img
                     src={selectedAd.image}
                     alt="IMG"
-                    className="w-full h-full rounded-lg"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
+                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <div className="mt-3 space-y-3">
-                  {/* -------------------- TITLE -------------------- */}
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <h5 className="text-lg font-medium">Title:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
+
+                {/* -------------------- DETAILS -------------------- */}
+                <div className="space-y-4">
+                  {/* TITLE */}
+                  <div>
+                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Title
+                    </h5>
+                    <p className="text-xl font-bold text-gray-800 mt-1 leading-snug">
                       {selectedAd.title}
-                    </h5>
+                    </p>
                   </div>
-                  {/* -------------------- CATEGORY -------------------- */}
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <h5 className="text-lg font-medium">Category:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
+
+                  {/* CATEGORY */}
+                  <div>
+                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Category
+                    </h5>
+                    <span className="inline-block mt-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full">
                       {selectedAd.category}
-                    </h5>
+                    </span>
                   </div>
-                  {/* -------------------- PRICE -------------------- */}
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <h5 className="text-lg font-medium">Price:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
+
+                  {/* PRICE */}
+                  <div>
+                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Price
+                    </h5>
+                    <p className="text-3xl font-extrabold text-green-600 mt-1">
                       {selectedAd.price}
-                    </h5>
+                    </p>
                   </div>
-                  {/* -------------------- LOCATION -------------------- */}
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <h5 className="text-lg font-medium">Location:</h5>
-                    <h5 className="text-lg font-medium text-blue-700">
-                      {selectedAd.location}
+
+                  {/* LOCATION */}
+                  <div>
+                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Location
                     </h5>
+                    <div className="flex items-center gap-2 mt-1 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                      <MapPin size={16} className="text-blue-600" />
+                      <p className="text-sm font-medium text-gray-700">
+                        {selectedAd.location}
+                      </p>
+                    </div>
                   </div>
                 </div>
+
                 {/* -------------------- BUTTONS -------------------- */}
-                <div className="flex items-center gap-6 mt-3">
+                <div className="flex items-center gap-3 pt-2">
                   <button
                     type="button"
-                    className="w-full py-3 px-6 bg-gray-500 hover:bg-gray-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                    className="flex-1 py-3 bg-gray-600 hover:bg-gray-700 active:scale-[0.98] transition-all duration-200 text-white font-semibold rounded-xl shadow-md hover:shadow-lg"
                     onClick={() => setSelectedAd(null)}
                   >
                     Cancel
@@ -212,13 +230,13 @@ function UserFavoritesPage() {
 
                   <Link
                     to={`/${formatCategory(selectedAd.category)}/${selectedAd.id}`}
-                    className="w-full"
+                    className="flex-1"
                   >
                     <button
                       type="button"
-                      className="w-full py-3 px-6 bg-blue-500 hover:bg-blue-600 transition-colors ease-in-out duration-300 text-white rounded-sm"
+                      className="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] transition-all duration-200 text-white font-semibold rounded-xl shadow-md hover:shadow-lg"
                     >
-                      View
+                      View Details
                     </button>
                   </Link>
                 </div>
