@@ -68,6 +68,14 @@ function App() {
           path: "contact",
           element: <ContactPage />,
         },
+        {
+          path: "categories/:category/:id",
+          element: <AllAdsPage />,
+        },
+        {
+          path: "category/:category",
+          element: <AllAdsPage />,
+        },
 
         // -------------------- SIGNUP PAGE --------------------
         {

@@ -160,7 +160,10 @@ function RecentAds() {
           const isFav = favorites.some((item) => item.id === ad.id);
 
           return (
-            <Link key={ad.id} to={`/${formatCategory(ad.category)}/${ad.id}`}>
+            <Link
+              key={ad.id}
+              to={`/categories/${formatCategory(ad.category)}/${ad.id}`}
+            >
               <div className="border-2 border-blue-800 rounded-lg p-1">
                 <div className="relative">
                   <img src={ad.image} alt="IMG" className="w-full rounded-md" />
