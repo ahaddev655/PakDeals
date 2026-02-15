@@ -20,7 +20,11 @@ import UserChatsPage from "./pages/user/chats/UserChatsPage";
 import ChatsMainComponent from "./components/user/chats/ChatsMainComponent";
 import UserProfilePage from "./pages/user/chats/UserProfilePage";
 import UserProfileSettingsPage from "./pages/user/UserProfileSettingsPage";
-import PersonalProfilePage from './pages/user/PersonalProfilePage';
+import PersonalProfilePage from "./pages/user/PersonalProfilePage";
+import AllAdsPage from "./pages/main/AllAdsPage";
+import PricingPage from "./pages/main/PricingPage";
+import BlogsPages from "./pages/main/BlogsPages";
+import ContactPage from "./pages/main/ContactPage";
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -28,7 +32,7 @@ function App() {
     {
       errorElement: <ErrorPage />,
     },
-    // ==================== main ROUTES ====================
+    // ==================== MAIN ROUTES ====================
     {
       path: "/",
       element: <MainLayout />,
@@ -48,19 +52,36 @@ function App() {
           path: "add-ad",
           element: <AddAdPage />,
         },
-        // ==================== AUTH ROUTES ====================
+        {
+          path: "all-ads",
+          element: <AllAdsPage />,
+        },
+        {
+          path: "pricing",
+          element: <PricingPage />,
+        },
+        {
+          path: "blogs",
+          element: <BlogsPages />,
+        },
+        {
+          path: "contact",
+          element: <ContactPage />,
+        },
+
         // -------------------- SIGNUP PAGE --------------------
         {
-          path: "/signup",
+          path: "signup",
           element: <SignUpComponent />,
         },
         // -------------------- LOGIN PAGE --------------------
         {
-          path: "/login",
+          path: "login",
           element: <LoginComponent />,
         },
       ],
     },
+    // ==================== USER ROUTES ====================
     {
       path: "/user-dashboard",
       element: <UserLayout />,
@@ -104,8 +125,8 @@ function App() {
           element: <UserProfileSettingsPage />,
         },
         {
-          path: 'profile',
-          element: <PersonalProfilePage />
+          path: "profile",
+          element: <PersonalProfilePage />,
         },
       ],
     },

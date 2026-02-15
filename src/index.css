@@ -8,11 +8,11 @@
 }
 
 .page {
-  @apply py-12 md:px-12 sm:px-6 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto;
+  @apply py-12 sm:px-0 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto;
 }
 
 .section {
-  @apply pb-12 md:px-12 sm:px-6 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto;
+  @apply pb-12 sm:px-0 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto;
 }
 
 body {
@@ -32,4 +32,25 @@ body {
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: 80%;
+}
+
+input[type=radio] {
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3a4fc4;
+  border-radius: 50%;
+  cursor: pointer
+}
+
+input[type=radio]:checked {
+  background: #526cff;
+  border: 3px solid #fff;
+}
+
+.radio-div:has(input[type=radio]:checked) {
+  background: linear-gradient(#c7dcff, #fff) !important;
+  border: 1px solid #4879f6
 }
