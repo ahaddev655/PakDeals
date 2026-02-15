@@ -43,7 +43,7 @@ function PricingPage() {
   ];
   return (
     <div className="page max-w-2xl mx-auto">
-      <div className="space-y-6"> 
+      <div className="space-y-6">
         <h2 className="text-2xl font-bold text-black mb-6 text-center">
           Pricing Plans
         </h2>
@@ -82,6 +82,11 @@ function PricingPage() {
                 </div>
               </div>
               <div className="text-right">
+                {offer.discount && (
+                  <div className="text-sm text-green-600 font-medium">
+                    Save {offer.discount}%
+                  </div>
+                )}
                 <div className="text-lg font-bold text-blue-700">
                   PKR{offer.price}
                   {offer.discount && (
@@ -90,11 +95,6 @@ function PricingPage() {
                     </span>
                   )}
                 </div>
-                {offer.discount && (
-                  <div className="text-sm text-green-600 font-medium">
-                    Save {offer.discount}%
-                  </div>
-                )}
               </div>
             </div>
           </label>
