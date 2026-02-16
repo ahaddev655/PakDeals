@@ -25,19 +25,19 @@ function AllCategories() {
       icon: Smartphone,
       adCount: "10",
       title: "Mobiles",
-      link: "/category/mobile",
+      link: "/category/mobiles",
     },
     {
       icon: House,
       adCount: "15",
       title: "Property For Sale",
-      link: "/category/property-sale",
+      link: "/category/property-for-sale",
     },
     {
       icon: House,
       adCount: "15",
       title: "Property For Rent",
-      link: "/category/property-rent",
+      link: "/category/property-for-rent",
     },
     {
       icon: CircuitBoard,
@@ -61,7 +61,7 @@ function AllCategories() {
       icon: Armchair,
       adCount: "35",
       title: "Furniture & Home Decor",
-      link: "/category/furniture",
+      link: "/category/furniture-and-home-decor",
     },
     {
       icon: Handbag,
@@ -73,7 +73,7 @@ function AllCategories() {
       icon: Album,
       adCount: "45",
       title: "Books & Sports Items",
-      link: "/category/books-and-sports",
+      link: "/category/books-and-sports-items",
     },
     {
       icon: Baby,

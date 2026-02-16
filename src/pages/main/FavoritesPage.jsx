@@ -21,6 +21,14 @@ function FavoritesPage() {
 
   return (
     <div className="page">
+      <div className="flex items-center justify-between gap-5 mb-6">
+        <h1 className="text-[32px] font-semibold text-gray-700">
+          My Favorites
+        </h1>
+        <p className="text-[#303030] font-light">
+          Lorem ipsum dolor sit amet, consectetur
+        </p>
+      </div>
       {favorites.length === 0 ? (
         <div className="flex items-center justify-center w-full h-[65vh]">
           <div className="text-center">

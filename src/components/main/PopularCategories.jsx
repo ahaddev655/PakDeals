@@ -20,7 +20,7 @@ function PopularCategories() {
       icon: Smartphone,
       adCount: "10",
       title: "Mobiles",
-      link: "/category/mobile",
+      link: "/category/mobiles",
     },
     {
       icon: House,

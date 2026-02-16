@@ -25,6 +25,8 @@ import AllAdsPage from "./pages/main/AllAdsPage";
 import PricingPage from "./pages/main/PricingPage";
 import BlogsPages from "./pages/main/BlogsPages";
 import ContactPage from "./pages/main/ContactPage";
+import CategoryPage from "./pages/main/CategoryPage";
+import AdsDetailPage from "./pages/main/AdsDetailPage";
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -74,7 +76,11 @@ function App() {
         },
         {
           path: "category/:category",
-          element: <AllAdsPage />,
+          element: <CategoryPage />,
+        },
+        {
+          path: "/ad/:table_name/:id",
+          element: <AdsDetailPage />,
         },
 
         // -------------------- SIGNUP PAGE --------------------

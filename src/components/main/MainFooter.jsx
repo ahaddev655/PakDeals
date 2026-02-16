@@ -6,6 +6,7 @@ function MainFooter() {
   return (
     <footer className="bg-linear-to-r from-blue-900 via-blue-900 to-blue-950">
       <div className="md:px-12 sm:px-6 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto py-12">
+        {/* -------------------- FOOTER -------------------- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
           {/* ==================== LOGO + TAGS + DESCRIPTION ==================== */}
           <div className="lg:col-span-4 text-center md:text-start">
@@ -115,6 +116,12 @@ function MainFooter() {
             </div>
           </div>
         </div>
+      </div>
+      <hr className="border border-white my-6" />
+      {/* -------------------- COPYRIGHT -------------------- */}
+      <div className="w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto text-white font-medium sm:flex text-center items-center justify-between">
+        <p>Built with &hearts; by PakDeals</p>
+        <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
       </div>
     </footer>
   );

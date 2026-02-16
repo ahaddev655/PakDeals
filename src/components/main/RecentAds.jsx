@@ -89,8 +89,7 @@ function RecentAds() {
     return true;
   });
 
-  const formatCategory = (category) =>
-    category.toLowerCase().split(" ").join("-");
+  const formatLink = (adTable, id) => `/ad/${adTable}/${id}`;
 
   return (
     <section className="section">
@@ -162,7 +161,10 @@ function RecentAds() {
           return (
             <Link
               key={ad.id}
-              to={`/categories/${formatCategory(ad.category)}/${ad.id}`}
+              to={formatLink(
+                ad.category.toLowerCase().replace(/\s/g, "-"),
+                ad.id,
+              )}
             >
               <div className="border-2 border-blue-800 rounded-lg p-1">
                 <div className="relative">

@@ -70,7 +70,7 @@ function MainHeader() {
         </div>
 
         <div
-          className={`w-full border-t-2 border-white absolute top-full left-0 z-50 lg:hidden block space-y-6 origin-top bg-linear-to-r from-blue-900 via-blue-900 to-blue-950 transition-all ease-in-out duration-300 ${offCanvasToggle ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}`}
+          className={`w-full border-t-2 border-white p-3 absolute top-full left-0 z-50 lg:hidden block space-y-6 origin-top bg-linear-to-r from-blue-900 via-blue-900 to-blue-950 transition-all ease-in-out duration-300 ${offCanvasToggle ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}`}
         >
           <div>
             <form className="relative w-full">
