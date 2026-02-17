@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapPin, CalendarDays, Phone, Check } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 function AdsDetailPage() {
   const imageRef = useRef(null);
+  const location = useLocation();
+  const hideFeatures = location.pathname.startsWith("/ad/mobile/");
   const images = [
     "/assets/profile.jpg",
     "/assets/profile.jpg",
@@ -156,26 +159,31 @@ function AdsDetailPage() {
             </div>
           </div>
           {/* -------------------- AMENITIES -------------------- */}
-          <div className="mt-6 p-3 bg-white shadow-lg w-full rounded-lg">
-            <div className="mb-4">
-              <h1 className="text-xl font-semibold text-gray-700">Amenities</h1>
+          {!hideFeatures && (
+            <div className="mt-6 p-3 bg-white shadow-lg w-full rounded-lg">
+              <div className="mb-4">
+                <h1 className="text-xl font-semibold text-gray-700">
+                  Amenities
+                </h1>
+              </div>
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
+                {adDetails.features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 text-gray-500 mb-3"
+                  >
+                    <Check
+                      strokeWidth={1.4}
+                      size={18}
+                      className="text-blue-800"
+                    />
+                    <p className="text-sm">{feature}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
-              {adDetails.features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 text-gray-500 mb-3"
-                >
-                  <Check
-                    strokeWidth={1.4}
-                    size={18}
-                    className="text-blue-800"
-                  />
-                  <p className="text-sm">{feature}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          )}
+
           {/* -------------------- DESCRIPTION -------------------- */}
           <div className="mt-6 p-3 bg-white shadow-lg w-full rounded-lg">
             <div className="mb-4">
@@ -194,7 +202,7 @@ function AdsDetailPage() {
           <div
             ref={sidebarRef}
             className={`p-3 bg-white shadow-lg w-full rounded-lg h-fit ${
-              isFixed ? "lg:fixed lg:top-5 lg:w-1/4" : "relative mt-6"
+              isFixed ? "lg:fixed lg:top-5 lg:w-75.25" : "relative mt-6"
             }`}
           >
             {/* -------------------- NAME & DATE -------------------- */}

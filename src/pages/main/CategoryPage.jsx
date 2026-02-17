@@ -122,9 +122,11 @@ function CategoryPage() {
     <div className="page">
       <div className="flex items-center justify-between gap-3.5 mb-6">
         <h1 className="text-[32px] font-semibold text-gray-700 capitalize">
-          {currentCategorySlug
-            ? currentCategorySlug.split("-and-").join(" & ").replace("-", " ")
-            : "All Categories"}
+          {ads.find(
+            (ad) =>
+              ad.category.toLowerCase().replaceAll(" ", "-") ===
+              currentCategorySlug,
+          )?.category || "No Title"}
         </h1>
 
         <input

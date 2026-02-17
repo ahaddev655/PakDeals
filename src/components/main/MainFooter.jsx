@@ -86,7 +86,7 @@ function MainFooter() {
               />
               <button
                 type="submit"
-                className="absolute top-2 right-2 h-10 bg-white rounded-md px-4 hover:bg-gray-200 border border-blue-800 transition-colors duration-200"
+                className="absolute top-2 right-2 h-10 bg-white rounded-md px-4 hover:bg-gray-200 border border-blue-800 hover:border-gray-200 transition-colors duration-200"
               >
                 Subscribe
               </button>
@@ -117,9 +117,9 @@ function MainFooter() {
           </div>
         </div>
       </div>
-      <hr className="border border-white my-6" />
+      <hr className="border border-white mt-6" />
       {/* -------------------- COPYRIGHT -------------------- */}
-      <div className="w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto text-white font-medium sm:flex text-center items-center justify-between">
+      <div className="w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto text-white font-medium sm:flex text-center items-center justify-between my-6">
         <p>Built with &hearts; by PakDeals</p>
         <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
       </div>

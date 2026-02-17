@@ -26,13 +26,13 @@ function PopularCategories() {
       icon: House,
       adCount: "15",
       title: "Property For Sale",
-      link: "/category/property-sale",
+      link: "/category/property-for-sale",
     },
     {
       icon: House,
       adCount: "15",
       title: "Property For Rent",
-      link: "/category/property-rent",
+      link: "/category/property-for-rent",
     },
     {
       icon: Motorbike,

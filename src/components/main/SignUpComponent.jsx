@@ -62,7 +62,7 @@ function SignUpComponent() {
   };
   return (
     <div className="page flex items-center justify-center h-screen">
-      <div className="lg:w-md shadow-xl hover:shadow-2xl transition-shadow duration-200 border-2 border-blue-800 px-6 py-5 rounded-lg">
+      <div className="lg:w-md shadow-xl hover:shadow-2xl transition-shadow duration-200 border-2 border-blue-800 px-6 py-5 rounded-lg bg-white">
         {/* -------------------- Heading -------------------- */}
         <div className="text-center">
           <h2
@@ -163,14 +163,14 @@ function SignUpComponent() {
           <div>
             {/* -------------------- CONTINUE WITH -------------------- */}
             <div className="flex items-center gap-2">
-              <div className="w-[30%] h-0.5 bg-gray-600 rounded-full"></div>
+              <div className="w-[50%] h-0.5 bg-gray-600 rounded-full"></div>
               <div className="text-sm text-center text-gray-600 font-medium">
-                Or Continue With
+                OR
               </div>
-              <div className="w-[30%] h-0.5 bg-gray-600 rounded-full"></div>
+              <div className="w-[50%] h-0.5 bg-gray-600 rounded-full"></div>
             </div>
 
-            <div className="hover:scale-101 shadow-lg hover:shadow-xl gap-2 flex items-center justify-center transition-all p-3 rounded-sm text-red-600 font-medium cursor-pointer">
+            <div className="hover:scale-101 shadow-lg hover:shadow-xl gap-2 bg-gray-100 flex items-center justify-center transition-all p-3 rounded-sm text-red-600 font-medium cursor-pointer">
               <h3 className="font-semibold text-3xl">G</h3>
               <h3 className="text-lg">Continue With Google</h3>
             </div>
