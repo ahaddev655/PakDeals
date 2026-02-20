@@ -1,9 +1,10 @@
 import { Bell, Building, Camera, Shield, UserRound } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserPersonalSettingsComponent from "../../components/user/settings/UserPersonalSettingsComponent";
 import UserBuisnessSettingsComponent from "../../components/user/settings/UserBuisnessSettingsComponent";
 import UserSecuritySettingsComponent from "../../components/user/settings/UserSecuritySettingsComponent";
 import UserNotificationSettingsComponent from "../../components/user/settings/UserNotificationSettingsComponent";
+import axios from "axios";
 
 function UserProfileSettingsPage() {
   // ==================== NAVIGATION TABS JS ====================
@@ -30,6 +31,25 @@ function UserProfileSettingsPage() {
       icon: Bell,
     },
   ];
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const userId = localStorage.getItem("userId");
+  // ==================== API CONFIGURATION ====================
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .then((response) => {
+        const user = response.data.user;
+        setFirstName(user.firstName)
+        setLastName(user.lastName)
+        setEmail(user.email)
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.log("PERSONAL PROFILE API ERROR: ", error);
+      });
+  }, []);
   return (
     <div className="sm:px-6 px-2.5 py-6">
       <div className="flex justify-center gap-6">
@@ -37,20 +57,17 @@ function UserProfileSettingsPage() {
           {/* -------------------- PROFILE -------------------- */}
           <div className="w-full bg-white shadow-md rounded-lg p-3.75">
             {/* -------------------- PROFILE IMAGE -------------------- */}
-            <div className="relative w-25 h-25 border-4 border-[#e2e8f0] rounded-full mx-auto">
-              <img
-                src="/assets/profile.jpg"
-                alt="IMG"
-                className="w-full rounded-full border-4 border-blue-800 object-cover"
-              />
-              <div className="absolute bottom-0 right-0 border-2 bg-blue-800 border-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-blue-900 hover:scale-102 transition-transform duration-200 ease-in-out cursor-pointer">
-                <Camera className="text-white w-5 h-5" />
+            <div className="w-28 h-28 mx-auto mb-3">
+              <div className="w-full h-full object-cover rounded-full border-4 border-blue-500 shadow-md grid place-items-center text-4xl font-semibold text-white bg-blue-900 text-clip [text-shadow:2px_2px_6px_rgba(0,0,0,0.7)]">
+                {firstName?.charAt(0)}
               </div>
             </div>
             {/* -------------------- PROFILE NAME -------------------- */}
             <div className="text-center space-y-1 mt-4">
-              <h3 className="text-2xl font-semibold">John Doe</h3>
-              <p className="text-gray-500 font-light">john.doe@example.com</p>
+              <h3 className="text-2xl font-semibold">
+                {firstName + " " + lastName}
+              </h3>
+              <p className="text-gray-500 font-light">{email}</p>
             </div>
             {/* -------------------- VERIFIED -------------------- */}
             <div className="bg-green-700 text-center py-1 px-1 rounded-full w-21 text-xs mx-auto mt-3">

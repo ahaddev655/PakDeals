@@ -67,7 +67,7 @@ function SignUpComponent() {
     }
     // -------------------- INSERT USER API --------------------
     axios
-      .post("http://localhost:5000/api/auth/signup", formData)
+      .post("http://localhost:5000/api/auth/register", formData)
       .then((response) => {
         console.log(response.data);
         const user = response.data;
@@ -108,12 +108,15 @@ function SignUpComponent() {
             email: googleRes.data.email || "",
             password: "dummy_google_password_encrypted_and_AAAA",
           };
-
-          setGoogleFormData(googleData);
+          setGoogleFormData(googleData.data);
 
           // -------------------- INSERT USER API --------------------
           axios
-            .post("http://localhost:5000/api/auth/signup", googleFormData)
+            .post(
+              "http://localhost:5000/api/auth/google-register",
+              googleData,
+              { headers: { "Content-Type": "application/json" } },
+            )
             .then((response) => {
               const user = response.data;
               localStorage.setItem("userToken", user.token);
@@ -124,7 +127,7 @@ function SignUpComponent() {
                 navigate("/user-dashboard/");
               }, 3000);
 
-              setFormData({
+              setGoogleFormData({
                 firstName: "",
                 lastName: "",
                 email: "",

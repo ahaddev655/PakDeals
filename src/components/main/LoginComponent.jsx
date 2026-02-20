@@ -15,7 +15,6 @@ function LoginComponent() {
 
   const [googleFormData, setGoogleFormData] = useState({
     email: "",
-    password: "",
   });
 
   const handleInputChange = (e) => {
@@ -79,7 +78,6 @@ function LoginComponent() {
         .then((googleRes) => {
           const googleData = {
             email: googleRes.data.email || "",
-            password: "dummy_google_password_encrypted_and_AAAA",
           };
 
           console.log(googleData);
@@ -87,8 +85,10 @@ function LoginComponent() {
 
           // -------------------- API CONFIGURATION --------------------
           axios
-            .post("http://localhost:5000/api/auth/login", googleFormData)
+            .post("http://localhost:5000/api/auth/google-login", googleFormData)
+
             .then((response) => {
+              console.log(response.data.user);
               const user = response.data.user;
               localStorage.setItem("userToken", user.token);
               localStorage.setItem("userId", user.id);

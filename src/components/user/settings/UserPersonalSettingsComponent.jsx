@@ -1,26 +1,28 @@
 import { ChevronDown, RefreshCw, Save } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 
 function UserPersonalSettingsComponent() {
   // ==================== USE STATES ====================
   const defaultPersonalData = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    mobileNumber: "+1234567890",
-    city: "New York",
-    address: "123 Main Street",
+    firstName: "" || "",
+    lastName: "" || "",
+    email: "" || "",
+    mobileNumber: "" || "",
+    city: "" || "",
+    address: "" || "",
   };
 
   const defaultFilters = {
-    country: "",
+    country: "" || "",
   };
 
-  const [personalData, setPersonalData] = useState(defaultPersonalData);
+  const [personalData, setPersonalData] = useState({ defaultPersonalData });
   const [filters, setFilters] = useState(defaultFilters);
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const userId = localStorage.getItem("userId");
 
   const selectOptions = {
     countries: [
@@ -137,32 +139,32 @@ function UserPersonalSettingsComponent() {
 
     // -------------------- VALIDATIONS --------------------
     if (
-      !personlData.firstName &&
-      !personlData.lastName &&
-      !personlData.email &&
+      !personalData.firstName &&
+      !personalData.lastName &&
+      !personalData.email &&
       !filters.country &&
-      !personlData.mobileNumber
+      !personalData.mobileNumber
     ) {
       toast.error("All fields are required...");
       return;
     }
 
-    if (!personlData.firstName?.trim()) {
+    if (!personalData.firstName?.trim()) {
       toast.error("First name is required...");
       return;
     }
 
-    if (!personlData.lastName?.trim()) {
+    if (!personalData.lastName?.trim()) {
       toast.error("Last name is required...");
       return;
     }
 
-    if (!personlData.email?.trim()) {
+    if (!personalData.email?.trim()) {
       toast.error("Email address is required...");
       return;
     }
 
-    if (!personlData.mobileNumber?.trim()) {
+    if (!personalData.mobileNumber?.trim()) {
       toast.error("Mobile Number is required...");
       return;
     }
@@ -179,6 +181,19 @@ function UserPersonalSettingsComponent() {
     toast.success("Form submitted successfully...");
     console.log("PERSONAL DATA FOR SUBMITTED: ", payload);
   };
+
+  // ==================== API CONFIGURATION ====================
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .then((response) => {        
+        setPersonalData(response.data.user);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.log("PERSONAL PROFILE API ERROR: ", error);
+      });
+  }, []);
   return (
     <div className="py-4 px-5">
       {/* -------------------- HEADING -------------------- */}

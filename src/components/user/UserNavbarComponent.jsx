@@ -1,5 +1,6 @@
+import axios from "axios";
 import { Menu, MoveLeft, MoveRight, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
@@ -11,6 +12,22 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     { text: "Blogs", link: "/blogs" },
     { text: "Contact", link: "/contact" },
   ];
+
+  const [firstName, setFirstName] = useState("");
+  const userId = localStorage.getItem("userId");
+
+  // -------------------- API CONFIGURATION --------------------
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .then((response) => {
+        setFirstName(response.data.user.firstName);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.log("PERSONAL PROFILE API ERROR: ", error);
+      });
+  }, []);
 
   return (
     <div className="bg-white shadow-md py-5 md:px-12 sm:px-6 px-2.5 flex items-center justify-between relative">
@@ -81,12 +98,13 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       </div>
 
       {/* PROFILE */}
-      <Link to={'/user-dashboard/profile'} className="relative w-10 h-10 cursor-pointer">
-        <img
-          src={new URL('/assets/profile.jpg', import.meta.url).href}
-          alt="IMG"
-          className="w-full rounded-full border-3 border-[#e2e8f0] hover:border-blue-600 transition-colors ease-in-out duration-300"
-        />
+      <Link
+        to={"/user-dashboard/profile"}
+        className="relative w-10 h-10 cursor-pointer"
+      >
+        <div className="w-10 h-10 rounded-full border-3 border-[#e2e8f0] hover:border-blue-600 transition-colors ease-in-out duration-300 grid place-items-center text-lg font-semibold text-blue-900">
+          {firstName?.charAt(0)}
+        </div>
         <div className="w-3 h-3 border-2 border-white rounded-full bg-green-600 absolute bottom-0 right-0" />
       </Link>
     </div>
