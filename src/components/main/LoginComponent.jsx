@@ -2,11 +2,18 @@ import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function LoginComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [googleFormData, setGoogleFormData] = useState({
     email: "",
     password: "",
   });
@@ -17,7 +24,7 @@ function LoginComponent() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
+    // -------------------- CONDITIONAL VALIDITIONS --------------------
     if (!formData.email && !formData.password) {
       toast.error("All fields are required");
       return;
@@ -30,22 +37,89 @@ function LoginComponent() {
       toast.error("Password required");
       return;
     }
-    if (formData.password.length < 12) {
-      toast.error("The password should be atleast 12 characters long");
-      return;
-    }
     if (!formData.email.includes("@")) {
       toast.error("Email is invalid");
       return;
     }
-    console.log("LOGIN DATA:", formData);
-    localStorage.setItem("userToken", "allow him");
-    localStorage.setItem("userId", "1");
-    toast.success("Login Successfully");
-    setTimeout(() => {
-      navigate("/user-dashboard/");
-    }, 3000);
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post("http://localhost:5000/api/auth/login", formData)
+      .then((response) => {
+        console.log(response.data.user);
+        const user = response.data.user;
+        localStorage.setItem("token", user.token);
+        localStorage.setItem("id", user.id);
+        toast.success(response?.data?.message);
+        setFormData({
+          email: "",
+          password: "",
+        });
+        setTimeout(() => {
+          navigate("/user-dashboard/");
+        }, 3000);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+      });
   };
+
+  // ==================== GOOGLE FORM SUBMISSION ====================
+  const handleGoogleSubmit = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      if (!tokenResponse || !tokenResponse.access_token) {
+        toast.error("Invalid Google token");
+        return;
+      }
+
+      // -------------------- GOOGLE DATA FETCH --------------------
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokenResponse.access_token}`,
+        )
+        .then((googleRes) => {
+          const googleData = {
+            email: googleRes.data.email || "",
+            password: "dummy_google_password_encrypted_and_AAAA",
+          };
+
+          console.log(googleData);
+          setGoogleFormData(googleData);
+
+          // -------------------- API CONFIGURATION --------------------
+          axios
+            .post("http://localhost:5000/api/auth/login", googleFormData)
+            .then((response) => {
+              const user = response.data.user;
+              localStorage.setItem("userToken", user.token);
+              localStorage.setItem("userId", user.id);
+              toast.success(response?.data?.message);
+
+              setTimeout(() => {
+                navigate("/user-dashboard/");
+              }, 3000);
+
+              setFormData({
+                email: "",
+                password: "",
+              });
+            })
+            .catch((error) => {
+              toast.error(
+                error?.response?.data?.error || "Internal Server Error",
+              );
+            });
+        })
+        .catch((err) => {
+          console.error("Google login error:", err?.response || err);
+          toast.error("Google register failed");
+        });
+    },
+
+    onError: (error) => {
+      console.error("Google Sign-In Error:", error);
+      toast.error("Google Sign-In Failed");
+    },
+  });
   return (
     <div className="page flex items-center justify-center h-screen">
       <div className="lg:w-md shadow-xl hover:shadow-2xl transition-shadow duration-200 border-2 border-blue-800 px-6 py-5 rounded-lg bg-white">
@@ -69,6 +143,7 @@ function LoginComponent() {
               type="text"
               name="email"
               id="email"
+              value={formData.email}
               placeholder="Enter Your Email"
               className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
             focus:border-blue-800 focus:ring-2 focus:ring-blue-800
@@ -85,6 +160,7 @@ function LoginComponent() {
               type={showPassword ? "text" : "password"}
               name="password"
               id="password"
+              value={formData.password}
               placeholder="Enter Your Password"
               className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
             focus:border-blue-800 focus:ring-2 focus:ring-blue-800
@@ -124,7 +200,10 @@ function LoginComponent() {
               <div className="w-[50%] h-0.5 bg-gray-600 rounded-full"></div>
             </div>
 
-            <div className="hover:scale-101 shadow-lg hover:shadow-xl bg-gray-100 gap-2 flex items-center justify-center transition-all p-3 rounded-sm text-red-600 font-medium cursor-pointer">
+            <div
+              onClick={() => handleGoogleSubmit()}
+              className="hover:scale-101 shadow-lg hover:shadow-xl gap-2 bg-gray-100 flex items-center justify-center transition-all p-3 rounded-sm text-red-600 font-medium cursor-pointer"
+            >
               <h3 className="font-semibold text-3xl">G</h3>
               <h3 className="text-lg">Continue With Google</h3>
             </div>
