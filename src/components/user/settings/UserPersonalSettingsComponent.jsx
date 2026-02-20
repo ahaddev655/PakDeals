@@ -5,21 +5,16 @@ import axios from "axios";
 
 function UserPersonalSettingsComponent() {
   // ==================== USE STATES ====================
-  const defaultPersonalData = {
-    firstName: "" || "",
-    lastName: "" || "",
+
+  const [personalData, setPersonalData] = useState({
+    firstName: "" || null,
+    lastName: "" || null,
     email: "" || "",
-    mobileNumber: "" || "",
-    city: "" || "",
-    address: "" || "",
-  };
-
-  const defaultFilters = {
-    country: "" || "",
-  };
-
-  const [personalData, setPersonalData] = useState({ defaultPersonalData });
-  const [filters, setFilters] = useState(defaultFilters);
+    mobileNumber: "" || null,
+    city: "" || null,
+    address: "" || null,
+    country: "" || null,
+  });
 
   const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -85,13 +80,13 @@ function UserPersonalSettingsComponent() {
           <button
             type="button"
             className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-              filters[fieldKey] ? "text-black" : "text-gray-400"
+              personalData[fieldKey] ? "text-black" : "text-gray-400"
             }`}
             onClick={() =>
               setOpenDropdown(openDropdown === fieldKey ? null : fieldKey)
             }
           >
-            {filters[fieldKey] || defaultLabel}
+            {personalData[fieldKey] || defaultLabel}
             <ChevronDown />
           </button>
 
@@ -125,7 +120,7 @@ function UserPersonalSettingsComponent() {
   };
 
   const handleSelect = (key, value) => {
-    setFilters((prev) => ({
+    setPersonalData((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -141,7 +136,7 @@ function UserPersonalSettingsComponent() {
       !personalData.firstName &&
       !personalData.lastName &&
       !personalData.email &&
-      !filters.country &&
+      !personalData.country &&
       !personalData.mobileNumber
     ) {
       toast.error("All fields are required...");
@@ -168,15 +163,24 @@ function UserPersonalSettingsComponent() {
       return;
     }
 
-    if (!filters.country?.trim()) {
+    if (!personalData.country?.trim()) {
       toast.error("Country is required...");
       return;
     }
 
     const payload = {
       ...personalData,
-      country: filters.country,
     };
+
+    setPersonalData({
+      firstName: "" || null,
+      lastName: "" || null,
+      email: "" || "",
+      mobileNumber: "" || null,
+      city: "" || null,
+      address: "" || null,
+      country: "" || null,
+    });
     toast.success("Form submitted successfully...");
     console.log("PERSONAL DATA FOR SUBMITTED: ", payload);
   };
@@ -299,10 +303,17 @@ function UserPersonalSettingsComponent() {
           <button
             type="button"
             className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
-            onClick={() => {
-              setPersonalData(defaultPersonalData);
-              setFilters(defaultFilters);
-            }}
+            onClick={() =>
+              setPersonalData({
+                firstName: "" || null,
+                lastName: "" || null,
+                email: "" || "",
+                mobileNumber: "" || null,
+                city: "" || null,
+                address: "" || null,
+                country: "" || null,
+              })
+            }
           >
             <RefreshCw />
             Reset settings

@@ -6,13 +6,13 @@ import { toast, ToastContainer } from "react-toastify";
 function UserBuisnessSettingsComponent() {
   // ==================== USE STATES ====================
   const defaultData = {
-    company: "",
-    description: "",
+    company: "" || null,
+    description: "" || null,
   };
 
   const defaultFilters = {
-    buisnessCategory: "",
-    buisnessType: "",
+    buisnessCategory: "" || null,
+    buisnessType: "" || null,
   };
 
   const [data, setData] = useState(defaultData);

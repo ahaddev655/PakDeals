@@ -58,7 +58,7 @@ function UserSecuritySettingsComponent() {
   const handlePersonalSubmit = (e) => {
     e.preventDefault();
 
-    // ==================== VALIDATIONS ====================
+    // -------------------- VALIDATIONS --------------------
     if (!data.confirmPassword && !data.newPassword) {
       toast.error("All fields are required...");
       return;
@@ -73,6 +73,10 @@ function UserSecuritySettingsComponent() {
       toast.error("New password is required...");
       return;
     }
+    if (data.newPassword < 12) {
+      toast.error("New password should be 12 characters long...");
+      return;
+    }
 
     if (data.newPassword !== data.confirmPassword) {
       toast.error("Password do not match...");
@@ -82,26 +86,28 @@ function UserSecuritySettingsComponent() {
     const payload = {
       ...data,
     };
-    toast.success("Form submitted successfully...");
-    console.log("SECURITY DATA FOR SUBMITTED: ", payload);
-  };
-
-  // ==================== USER SECURITY DATA API CONFIGURATION JS ====================
-  const userId = localStorage.getItem("userId");
-  useEffect(() => {
+    // -------------------- API CONFIGURATION --------------------
+    const userId = localStorage.getItem("userId");
     axios
-      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .put(`http://localhost:5000/api/users/update-password/${userId}`, payload)
       .then((response) => {
-        console.log(response.data.user);
+        console.log(response.data);
         setData({
-          password: response.data.user.password,
+          newPassword: "",
+          confirmPassword: "",
         });
+        toast.success(response?.response?.data?.message || response?.data?.message || "Form submitted successfully...");
+        console.log("PASSWORD UPDATED SUCCESSFULLY: ", payload);
       })
       .catch((error) => {
-        toast.error(error?.response?.data?.error || "Internal Server Error");
-        console.log("PERSONAL PROFILE API ERROR: ", error);
+        console.log("UPDATE PASSWORD API ERROR: ", error);
+        toast.error(
+          error?.response?.data?.error ||
+            error?.response?.error ||
+            "Internal Server Error",
+        );
       });
-  }, []);
+  };
   return (
     <div className="py-4 px-5">
       {/* -------------------- HEADING -------------------- */}
