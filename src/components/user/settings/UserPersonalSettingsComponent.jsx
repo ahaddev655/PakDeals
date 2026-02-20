@@ -22,7 +22,6 @@ function UserPersonalSettingsComponent() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const [openDropdown, setOpenDropdown] = useState(null);
-  const userId = localStorage.getItem("userId");
 
   const selectOptions = {
     countries: [
@@ -182,11 +181,12 @@ function UserPersonalSettingsComponent() {
     console.log("PERSONAL DATA FOR SUBMITTED: ", payload);
   };
 
-  // ==================== API CONFIGURATION ====================
+  // ==================== USER PERSONAL DATA API CONFIGURATION JS ====================
+  const userId = localStorage.getItem("userId");
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/users/user/${userId}`)
-      .then((response) => {        
+      .then((response) => {
         setPersonalData(response.data.user);
       })
       .catch((error) => {

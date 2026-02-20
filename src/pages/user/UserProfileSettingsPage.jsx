@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import UserPersonalSettingsComponent from "../../components/user/settings/UserPersonalSettingsComponent";
 import UserBuisnessSettingsComponent from "../../components/user/settings/UserBuisnessSettingsComponent";
 import UserSecuritySettingsComponent from "../../components/user/settings/UserSecuritySettingsComponent";
-import UserNotificationSettingsComponent from "../../components/user/settings/UserNotificationSettingsComponent";
 import axios from "axios";
 
 function UserProfileSettingsPage() {
@@ -25,11 +24,6 @@ function UserProfileSettingsPage() {
       label: "Security",
       icon: Shield,
     },
-    {
-      key: "notifications",
-      label: "Notifications",
-      icon: Bell,
-    },
   ];
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -41,9 +35,9 @@ function UserProfileSettingsPage() {
       .get(`http://localhost:5000/api/users/user/${userId}`)
       .then((response) => {
         const user = response.data.user;
-        setFirstName(user.firstName)
-        setLastName(user.lastName)
-        setEmail(user.email)
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setEmail(user.email);
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
@@ -93,15 +87,13 @@ function UserProfileSettingsPage() {
             })}
           </div>
         </div>
-        <div className="lg:w-[75%] w-full bg-white shadow-md rounded-lg">
+        <div className="lg:w-[75%] w-full bg-white shadow-md rounded-lg h-fit">
           {navTabs === "personal-info" ? (
             <UserPersonalSettingsComponent />
           ) : navTabs === "buisness-info" ? (
             <UserBuisnessSettingsComponent />
-          ) : navTabs === "security" ? (
-            <UserSecuritySettingsComponent />
           ) : (
-            <UserNotificationSettingsComponent />
+            <UserSecuritySettingsComponent />
           )}
         </div>
       </div>

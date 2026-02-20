@@ -1,17 +1,14 @@
+import axios from "axios";
 import { ChevronDown, Eye, EyeClosed, RefreshCw, Save } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 function UserSecuritySettingsComponent() {
   // ==================== USE STATES ====================
   const defaultData = {
-    currentPassword: "3104944Tony",
     newPassword: "",
     confirmPassword: "",
-    enableTwoFactorAuthentication: false,
-    sendNotificationsWhenLogined: true,
   };
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -62,7 +59,7 @@ function UserSecuritySettingsComponent() {
     e.preventDefault();
 
     // ==================== VALIDATIONS ====================
-    if (!data.confirmPassword && !data.currentPassword && !data.newPassword) {
+    if (!data.confirmPassword && !data.newPassword) {
       toast.error("All fields are required...");
       return;
     }
@@ -88,6 +85,23 @@ function UserSecuritySettingsComponent() {
     toast.success("Form submitted successfully...");
     console.log("SECURITY DATA FOR SUBMITTED: ", payload);
   };
+
+  // ==================== USER SECURITY DATA API CONFIGURATION JS ====================
+  const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .then((response) => {
+        console.log(response.data.user);
+        setData({
+          password: response.data.user.password,
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.log("PERSONAL PROFILE API ERROR: ", error);
+      });
+  }, []);
   return (
     <div className="py-4 px-5">
       {/* -------------------- HEADING -------------------- */}
@@ -104,15 +118,6 @@ function UserSecuritySettingsComponent() {
       <form onSubmit={handlePersonalSubmit} className="space-y-5">
         {/* ==================== TOAST CONTAINER ==================== */}
         <ToastContainer position="top-right" autoClose={2500} theme="light" />
-        {/* ==================== CURRENT PASSWORD ==================== */}
-        {inputComponent(
-          "Current Password",
-          data.currentPassword,
-          "currentPassword",
-          showCurrentPassword,
-          setShowCurrentPassword,
-          "Enter Your Current Password",
-        )}
         {/* ==================== NEW AND CONFIRM PASSWORD ==================== */}
         <div className="flex items-center gap-3">
           {inputComponent(
@@ -131,44 +136,6 @@ function UserSecuritySettingsComponent() {
             setShowConfirmPassword,
             "Confirm Your New Password",
           )}
-        </div>
-
-        {/* ==================== SECURITY CHECKBOXES ==================== */}
-        <div className="p-3 space-y-4 border-l-3 border-green-500 rounded-lg bg-gray-100">
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={data.enableTwoFactorAuthentication}
-              onChange={(e) =>
-                setData((prev) => ({
-                  ...prev,
-                  enableTwoFactorAuthentication: e.target.checked,
-                }))
-              }
-            />
-
-            <label className="font-medium text-gray-700">
-              Enable Two-Factor Authentication
-            </label>
-          </div>
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={data.sendNotificationsWhenLogined}
-              onChange={(e) =>
-                setData((prev) => ({
-                  ...prev,
-                  sendNotificationsWhenLogined: e.target.checked,
-                }))
-              }
-            />
-
-            <label className="font-medium text-gray-700">
-              Send login alerts to email
-            </label>
-          </div>
         </div>
 
         {/* -------------------- SUBMIT BUTTONS -------------------- */}

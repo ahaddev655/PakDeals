@@ -1,12 +1,13 @@
+import axios from "axios";
 import { ChevronDown, RefreshCw, Save } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 function UserBuisnessSettingsComponent() {
   // ==================== USE STATES ====================
   const defaultData = {
-    company: "Tech Solutions Inc",
-    description: "Professional software developer with 5+ years experience",
+    company: "",
+    description: "",
   };
 
   const defaultFilters = {
@@ -125,6 +126,21 @@ function UserBuisnessSettingsComponent() {
     toast.success("Form submitted successfully...");
     console.log("BUISNESS DATA FOR SUBMITTED: ", payload);
   };
+
+  // ==================== USER BUISNESS DATA API CONFIGURATION JS ====================
+  const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .then((response) => {
+        setData(response.data.user);
+        setFilters(response.data.user);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.log("PERSONAL PROFILE API ERROR: ", error);
+      });
+  }, []);
   return (
     <div className="py-4 px-5">
       {/* -------------------- HEADING -------------------- */}
@@ -163,7 +179,7 @@ function UserBuisnessSettingsComponent() {
           <textarea
             name="description"
             value={data.description}
-            placeholder="Describe YOur Company"
+            placeholder="Describe Your Company"
             className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800
             transition-colors ease-in-out duration-300 resize-none"
             rows={5}
