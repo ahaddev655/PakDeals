@@ -1,5 +1,5 @@
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, Plus, X } from "lucide-react";
+import { useState, useRef } from "react";
 
 function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const FEATURES_LIST = [
@@ -18,15 +18,13 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const [filters, setFilters] = useState({
+
+  const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     itemType: DEFAULT_FILTER("Select Item Type"),
     ageGroup: DEFAULT_FILTER("Select Age Group"),
     condition: DEFAULT_FILTER("Select Condition"),
     location: DEFAULT_FILTER("Select Location"),
-  });
-
-  const [otherDetails, setOtherDetails] = useState({
     adTitle: "",
     description: "",
     brand: "",
@@ -34,26 +32,77 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     price: "",
     sellerName: "",
     sellerContact: "",
+    images: [],
   });
 
+  const fileInputRef = useRef(null);
+
   const handleDetailChange = (e) =>
-    setOtherDetails((p) => ({ ...p, [e.target.name]: e.target.value }));
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSelect = (key, item) => {
-    setFilters((p) => ({ ...p, [key]: { id: item.id, label: item.text } }));
+    setFormData((p) => ({ ...p, [key]: { id: item.id, label: item.text } }));
     setOpenDropdown("");
   };
 
   const handleFeatureChange = (feature) => {
-    setOtherDetails((prev) => {
+    setFormData((prev) => {
       const alreadySelected = prev.features.includes(feature);
-
       return {
         ...prev,
         features: alreadySelected
           ? prev.features.filter((f) => f !== feature)
           : [...prev.features, feature],
       };
+    });
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => {
+      const updatedImages = [...prev.images, ...files].slice(0, 5);
+      return { ...prev, images: updatedImages };
+    });
+  };
+
+  const removeImage = (index) => {
+    setFormData((prev) => {
+      const updatedImages = [...prev.images];
+      updatedImages.splice(index, 1);
+      return { ...prev, images: updatedImages };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const payload = {
+      category: "kids",
+      ...formData,
+      subCategory: formData.subCategory.label,
+      itemType: formData.itemType.label,
+      ageGroup: formData.ageGroup.label,
+      condition: formData.condition.label,
+      location: formData.location.label,
+      features: JSON.stringify(formData.features),
+    };
+
+    console.log("KIDS FORM SUBMITTED:", payload);
+
+    setFormData({
+      subCategory: DEFAULT_FILTER("Select Sub Category"),
+      itemType: DEFAULT_FILTER("Select Item Type"),
+      ageGroup: DEFAULT_FILTER("Select Age Group"),
+      condition: DEFAULT_FILTER("Select Condition"),
+      location: DEFAULT_FILTER("Select Location"),
+      adTitle: "",
+      description: "",
+      brand: "",
+      features: [],
+      price: "",
+      sellerName: "",
+      sellerContact: "",
+      images: [],
     });
   };
 
@@ -65,11 +114,11 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
           type="button"
           className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
         transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          filters[key]?.id ? "text-black" : "text-gray-400"
+          formData[key]?.id ? "text-black" : "text-gray-400"
         }`}
           onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
         >
-          {filters[key]?.label}
+          {formData[key]?.label}
           <ChevronDown />
         </button>
 
@@ -113,47 +162,12 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     </div>
   );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const payload = {
-      category: "kids",
-      ...otherDetails,
-      subCategory: filters.subCategory.label,
-      itemType: filters.itemType.label,
-      ageGroup: filters.ageGroup.label,
-      condition: filters.condition.label,
-      location: filters.location.label,
-    };
-
-    console.log("MOBILE FORM SUBMITTED:", payload);
-
-    setOtherDetails({
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      brand: "",
-      features: [],
-    });
-
-    setFilters({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      brand: DEFAULT_FILTER("Select Brand"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
-    });
-  };
-
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
       {/* ====================== SUB CATEGORY & ITEM TYPE ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- SUB CATEGORY -------- */}
         {renderDropdown("Sub Category", "subCategory", "kidsSubCategories")}
-        {/* -------- AD TITLE -------- */}
-        {renderInput("Ad Title", "adTitle", "text", otherDetails.adTitle)}
+        {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
       </div>
       {/* ====================== DESCRIPTION ====================== */}
       <div className="w-full">
@@ -161,32 +175,24 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         <textarea
           name="description"
           rows={6}
-          value={otherDetails.description}
+          value={formData.description}
           onChange={handleDetailChange}
           className="w-full border-2 rounded-lg px-3 py-2 border-gray-300 transition-colors duration-300 focus:ring-2 focus:ring-blue-800 resize-none"
         ></textarea>
       </div>
-
       {/* ====================== ITEM TYPE & AGE GROUP ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- ITEM TYPE -------- */}
         {renderDropdown("Item Type", "itemType", "kidsItemType", true)}
-        {/* -------- AGE GROUP -------- */}
         {renderDropdown("Age Group", "ageGroup", "kidsAgeGroup", true)}
       </div>
-
       {/* ====================== BRAND & CONDITION ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- BRAND -------- */}
-          {renderInput("Brand", "brand", "text", otherDetails.brand)}
-        {/* -------- CONDITION -------- */}
+        {renderInput("Brand", "brand", "text", formData.brand)}
         {renderDropdown("Condition", "condition", "kidsCondition")}
       </div>
-
       {/* ====================== FEATURES ====================== */}
       <div className="w-full">
         <label className="font-semibold text-slate-600">Features</label>
-
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-2 gap-3">
           {FEATURES_LIST.map((feature) => (
             <label
@@ -196,41 +202,68 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
               <input
                 type="checkbox"
                 value={feature}
-                checked={otherDetails.features.includes(feature)}
+                checked={formData.features.includes(feature)}
                 onChange={() => handleFeatureChange(feature)}
-                className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] relative checked:after:content-['✔'] checked:after:absolute checked:after:left-0.75 checked:after:top-[-0.5px] checked:after:text-white checked:after:text-sm focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none"
+                className="checkbox"
               />
               <span className="font-medium text-gray-700">{feature}</span>
             </label>
           ))}
         </div>
       </div>
-
       {/* ====================== LOCATION & PRICE ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- LOCATION -------- */}
         {renderDropdown("Location", "location", "kidsLocation")}
-        {/* -------- PRICE -------- */}
-        {renderInput("Price", "price", "number", otherDetails.price)}
+        {renderInput("Price", "price", "number", formData.price)}
       </div>
-
       {/* ====================== SELLER NAME & CONTACT ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- SELLER NAME -------- */}
-        {renderInput(
-          "Seller Name",
-          "sellerName",
-          "text",
-          otherDetails.sellerName,
-        )}
-        {/* -------- SELLER CONTACT -------- */}
+        {renderInput("Seller Name", "sellerName", "text", formData.sellerName)}
         {renderInput(
           "Seller Contact",
           "sellerContact",
           "tel",
-          otherDetails.sellerContact,
+          formData.sellerContact,
         )}
       </div>
+
+      {/* ====================== IMAGE UPLOAD ====================== */}
+      <div className="flex gap-2 flex-wrap">
+        {formData.images.map((img, idx) => (
+          <div
+            key={idx}
+            className="relative w-20 h-20 border border-gray-300 rounded-md flex items-center justify-center overflow-hidden"
+          >
+            <img
+              src={URL.createObjectURL(img)}
+              alt={`upload-${idx}`}
+              className="object-cover w-full h-full"
+            />
+            <div
+              className="absolute top-0 right-0 p-1 cursor-pointer bg-white rounded-full"
+              onClick={() => removeImage(idx)}
+            >
+              <X size={16} />
+            </div>
+          </div>
+        ))}
+        {formData.images.length < 5 && (
+          <div
+            className="w-20 h-20 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <Plus size={24} />
+          </div>
+        )}
+      </div>
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        className="hidden"
+        ref={fileInputRef}
+        onChange={handleImageChange}
+      />
 
       <button
         type="submit"

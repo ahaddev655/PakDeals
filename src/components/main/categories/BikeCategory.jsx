@@ -1,5 +1,5 @@
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, Plus, X } from "lucide-react";
+import { useState, useRef } from "react";
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const FEATURES_LIST = [
@@ -17,7 +17,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
 
-  const [filters, setFilters] = useState({
+  const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     make: DEFAULT_FILTER("Select Make"),
     engineType: DEFAULT_FILTER("Select Engine Type"),
@@ -27,9 +27,6 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     condition: DEFAULT_FILTER("Select Condition"),
     registrationCity: DEFAULT_FILTER("Select Registration City"),
     location: DEFAULT_FILTER("Select Location"),
-  });
-
-  const [otherDetails, setOtherDetails] = useState({
     adTitle: "",
     description: "",
     price: "",
@@ -39,42 +36,33 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     model: "",
     year: "",
     kmDriven: "",
+    images: [],
   });
+
+  const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const payload = {
       category: "bike",
-      ...otherDetails,
-      features: JSON.stringify(otherDetails.features),
-      subCategory: filters.subCategory?.label || "",
-      make: filters.make?.label || "",
-      engineType: filters.engineType?.label || "",
-      engineCapacity: filters.engineCapacity?.label || "",
-      ignitionType: filters.ignitionType?.label || "",
-      origin: filters.origin?.label || "",
-      registrationCity: filters.registrationCity?.label || "",
-      condition: filters.condition?.label || "",
-      location: filters.location?.label || "",
+      ...formData,
+      features: JSON.stringify(formData.features),
+      subCategory: formData.subCategory?.label || "",
+      make: formData.make?.label || "",
+      engineType: formData.engineType?.label || "",
+      engineCapacity: formData.engineCapacity?.label || "",
+      ignitionType: formData.ignitionType?.label || "",
+      origin: formData.origin?.label || "",
+      registrationCity: formData.registrationCity?.label || "",
+      condition: formData.condition?.label || "",
+      location: formData.location?.label || "",
     };
 
     // FILTERS
     console.log("BIKE FORM SUBMITTED:", payload);
 
-    setOtherDetails({
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      model: "",
-      year: "",
-      kmDriven: "",
-    });
-
-    setFilters({
+    setFormData({
       subCategory: DEFAULT_FILTER("Select Sub Category"),
       make: DEFAULT_FILTER("Select Make"),
       engineType: DEFAULT_FILTER("Select Engine Type"),
@@ -84,19 +72,56 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       condition: DEFAULT_FILTER("Select Condition"),
       registrationCity: DEFAULT_FILTER("Select Registration City"),
       location: DEFAULT_FILTER("Select Location"),
+      adTitle: "",
+      description: "",
+      price: "",
+      sellerName: "",
+      sellerContact: "",
+      features: [],
+      model: "",
+      year: "",
+      kmDriven: "",
+      images: [],
     });
   };
 
   const handleFeatureChange = (feature) => {
-    setOtherDetails((prev) => {
+    setFormData((prev) => {
       const alreadySelected = prev.features.includes(feature);
-
       return {
         ...prev,
         features: alreadySelected
           ? prev.features.filter((f) => f !== feature)
           : [...prev.features, feature],
       };
+    });
+  };
+
+  const handleDetailChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSelect = (key, item) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: { id: item.id, label: item.text },
+    }));
+    setOpenDropdown("");
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => {
+      const updatedImages = [...prev.images, ...files].slice(0, 5);
+      return { ...prev, images: updatedImages };
+    });
+  };
+
+  const removeImage = (index) => {
+    setFormData((prev) => {
+      const updatedImages = [...prev.images];
+      updatedImages.splice(index, 1);
+      return { ...prev, images: updatedImages };
     });
   };
 
@@ -108,11 +133,11 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
           type="button"
           className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
         transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          filters[key]?.id ? "text-black" : "text-gray-400"
+          formData[key]?.id ? "text-black" : "text-gray-400"
         }`}
           onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
         >
-          {filters[key]?.label}
+          {formData[key]?.label}
           <ChevronDown />
         </button>
 
@@ -156,70 +181,46 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     </div>
   );
 
-  const handleDetailChange = (e) => {
-    setOtherDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSelect = (key, item) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: { id: item.id, label: item.text },
-    }));
-    setOpenDropdown("");
-  };
-
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="space-y-4">
         {/* ====================== SUB CATEGORY & MAKE ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- SUB CATEGORY -------- */}
           {renderDropdown("Sub Category", "subCategory", "bikeSubCategories")}
-          {/* -------- MAKE -------- */}
           {renderDropdown("Sub Category", "make", "bikeMake", true)}
         </div>
 
         {/* ====================== AD TITLE ====================== */}
-        {renderInput("Ad Title", "adTitle", "text", otherDetails.adTitle)}
+        {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
 
         {/* ====================== DESCRIPTION ====================== */}
         <div className="w-full">
           <label className="font-semibold text-slate-600">Description</label>
           <textarea
-            type="text"
             className="w-full border-2 border-gray-300 resize-none rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
             rows={6}
-            value={otherDetails.description}
+            value={formData.description}
             onChange={(e) =>
-              setOtherDetails({
-                ...otherDetails,
-                description: e.target.value,
-              })
+              setFormData({ ...formData, description: e.target.value })
             }
           ></textarea>
         </div>
 
         {/* ====================== MODEL & YEAR ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- MODEL -------- */}
-          {renderInput("Model", "model", "text", otherDetails.model)}
-          {/* -------- YEAR -------- */}
-          {renderInput("Year", "year", "text", otherDetails.year)}
+          {renderInput("Model", "model", "text", formData.model)}
+          {renderInput("Year", "year", "text", formData.year)}
         </div>
 
         {/* ====================== ORIGIN & CONDITION ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- ORIGIN -------- */}
           {renderDropdown("Origin", "origin", "bikeOrigin")}
-          {/* -------- CONDITION -------- */}
           {renderDropdown("Condition", "condition", "bikeCondition")}
         </div>
 
         {/* ====================== ENGINE TYPE & ENGINE CAPACITY ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- ENGINE TYPE -------- */}
           {renderDropdown("Engine Type", "engineType", "bikeEngineType")}
-          {/* -------- ENGINE CAPACITY -------- */}
           {renderDropdown(
             "Engine Capacity",
             "engineCapacity",
@@ -229,14 +230,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
         {/* ====================== KM's DRIVEN & IGNITION TYPE ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- KM's DRIVEN -------- */}
-          {renderInput(
-            "KM's Driven",
-            "kmDriven",
-            "number",
-            otherDetails.kmDriven,
-          )}
-          {/* -------- IGNITION TYPE -------- */}
+          {renderInput("KM's Driven", "kmDriven", "number", formData.kmDriven)}
           {renderDropdown("Ignition Type", "ignitionType", "bikeIgnitionType")}
         </div>
 
@@ -261,9 +255,9 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
                 <input
                   type="checkbox"
                   value={feature}
-                  checked={otherDetails.features.includes(feature)}
+                  checked={formData.features.includes(feature)}
                   onChange={() => handleFeatureChange(feature)}
-                  className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] relative checked:after:content-['✔'] checked:after:absolute checked:after:left-0.75 checked:after:top-[-0.5px] checked:after:text-white checked:after:text-sm focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none"
+                  className="checkbox"
                 />
                 <span className="font-medium text-gray-700">{feature}</span>
               </label>
@@ -273,29 +267,65 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
         {/* ====================== LOCATION & PRICE ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- LOCATION -------- */}
           {renderDropdown("Location", "location", "bikeLocation")}
-          {/* -------- PRICE -------- */}
-          {renderInput("Price", "price", "number", otherDetails.price)}
+          {renderInput("Price", "price", "number", formData.price)}
         </div>
 
         {/* ====================== SELLER NAME & CONTACT ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {/* -------- SELLER NAME -------- */}
           {renderInput(
             "Seller Name",
             "sellerName",
             "text",
-            otherDetails.sellerName,
+            formData.sellerName,
           )}
-          {/* -------- SELLER CONTACT -------- */}
           {renderInput(
             "sellerContact",
             "sellerContact",
             "tel",
-            otherDetails.sellerContact,
+            formData.sellerContact,
           )}
         </div>
+
+        {/* ====================== IMAGE UPLOAD ====================== */}
+        <div className="flex gap-2 flex-wrap">
+          {formData.images.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative w-20 h-20 border border-gray-300 rounded-md flex items-center justify-center overflow-hidden"
+            >
+              <img
+                src={URL.createObjectURL(img)}
+                alt={`upload-${idx}`}
+                className="object-cover w-full h-full"
+              />
+              <div
+                className="absolute top-0 right-0 p-1 cursor-pointer bg-white rounded-full"
+                onClick={() => removeImage(idx)}
+              >
+                <X size={16} />
+              </div>
+            </div>
+          ))}
+
+          {formData.images.length < 5 && (
+            <div
+              className="w-20 h-20 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800"
+              onClick={() => fileInputRef.current.click()}
+            >
+              <Plus size={24} />
+            </div>
+          )}
+        </div>
+
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+        />
       </div>
 
       {/* ====================== SUBMIT BUTTON ====================== */}

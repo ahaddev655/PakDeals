@@ -1,5 +1,5 @@
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, Plus, X } from "lucide-react";
+import { useState, useRef } from "react";
 
 function FurnitureAndHomeDecorCategory({
   openDropdown,
@@ -22,15 +22,13 @@ function FurnitureAndHomeDecorCategory({
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const [filters, setFilters] = useState({
+
+  const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     itemType: DEFAULT_FILTER("Select Item Type"),
     material: DEFAULT_FILTER("Select Material"),
     condition: DEFAULT_FILTER("Select Condition"),
     location: DEFAULT_FILTER("Select Location"),
-  });
-
-  const [otherDetails, setOtherDetails] = useState({
     adTitle: "",
     description: "",
     brand: "",
@@ -39,26 +37,47 @@ function FurnitureAndHomeDecorCategory({
     price: "",
     sellerName: "",
     sellerContact: "",
+    images: [],
   });
 
+  const fileInputRef = useRef(null);
+
   const handleDetailChange = (e) =>
-    setOtherDetails((p) => ({ ...p, [e.target.name]: e.target.value }));
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSelect = (key, item) => {
-    setFilters((p) => ({ ...p, [key]: { id: item.id, label: item.text } }));
+    setFormData((p) => ({
+      ...p,
+      [key]: { id: item.id, label: item.text },
+    }));
     setOpenDropdown("");
   };
 
   const handleFeatureChange = (feature) => {
-    setOtherDetails((prev) => {
+    setFormData((prev) => {
       const alreadySelected = prev.features.includes(feature);
-
       return {
         ...prev,
         features: alreadySelected
           ? prev.features.filter((f) => f !== feature)
           : [...prev.features, feature],
       };
+    });
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => {
+      const updatedImages = [...prev.images, ...files].slice(0, 5);
+      return { ...prev, images: updatedImages };
+    });
+  };
+
+  const removeImage = (index) => {
+    setFormData((prev) => {
+      const updatedImages = [...prev.images];
+      updatedImages.splice(index, 1);
+      return { ...prev, images: updatedImages };
     });
   };
 
@@ -70,11 +89,11 @@ function FurnitureAndHomeDecorCategory({
           type="button"
           className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
         transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          filters[key]?.id ? "text-black" : "text-gray-400"
+          formData[key]?.id ? "text-black" : "text-gray-400"
         }`}
           onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
         >
-          {filters[key]?.label}
+          {formData[key]?.label}
           <ChevronDown />
         </button>
 
@@ -125,17 +144,23 @@ function FurnitureAndHomeDecorCategory({
 
     const payload = {
       category: "furnitureAndHomeDecor",
-      ...otherDetails,
-      subCategory: filters.subCategory.label,
-      itemType: filters.itemType.label,
-      material: filters.material.label,
-      condition: filters.condition.label,
-      location: filters.location.label,
+      ...formData,
+      subCategory: formData.subCategory.label,
+      itemType: formData.itemType.label,
+      material: formData.material.label,
+      condition: formData.condition.label,
+      location: formData.location.label,
+      features: JSON.stringify(formData.features),
     };
 
     console.log("FURNITURE AND HOME DECOR FORM SUBMITTED:", payload);
 
-    setOtherDetails({
+    setFormData({
+      subCategory: DEFAULT_FILTER("Select Sub Category"),
+      itemType: DEFAULT_FILTER("Select Item Type"),
+      material: DEFAULT_FILTER("Select Material"),
+      condition: DEFAULT_FILTER("Select Condition"),
+      location: DEFAULT_FILTER("Select Location"),
       adTitle: "",
       description: "",
       brand: "",
@@ -144,14 +169,7 @@ function FurnitureAndHomeDecorCategory({
       price: "",
       sellerName: "",
       sellerContact: "",
-    });
-
-    setFilters({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      itemType: DEFAULT_FILTER("Select Item Type"),
-      material: DEFAULT_FILTER("Select Material"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
+      images: [],
     });
   };
 
@@ -159,13 +177,11 @@ function FurnitureAndHomeDecorCategory({
     <form className="space-y-4" onSubmit={handleSubmit}>
       {/* ====================== SUB CATEGORY & ITEM TYPE ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- SUB CATEGORY -------- */}
         {renderDropdown(
           "Sub Category",
           "subCategory",
           "furnitureAndHomeDecorSubCategories",
         )}
-        {/* -------- ITEM TYPE -------- */}
         {renderDropdown(
           "Item Type",
           "itemType",
@@ -174,14 +190,14 @@ function FurnitureAndHomeDecorCategory({
         )}
       </div>
       {/* ====================== AD TITLE ====================== */}
-      {renderInput("Ad Title", "adTitle", "text", otherDetails.adTitle)}
+      {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
       {/* ====================== DESCRIPTION ====================== */}
       <div className="w-full">
         <label className="font-semibold text-slate-600">Description</label>
         <textarea
           name="description"
           rows={6}
-          value={otherDetails.description}
+          value={formData.description}
           onChange={handleDetailChange}
           className="w-full border-2 rounded-lg px-3 py-2 border-gray-300 transition-colors duration-300 focus:ring-2 focus:ring-blue-800 resize-none"
         ></textarea>
@@ -195,7 +211,7 @@ function FurnitureAndHomeDecorCategory({
           "furnitureAndHomeDecorMaterial",
           true,
         )}
-        {renderInput("Brand", "brand", "text", otherDetails.brand)}
+        {renderInput("Brand", "brand", "text", formData.brand)}
       </div>
 
       {/* ====================== CONDITION & DIMENSIONS ====================== */}
@@ -209,7 +225,7 @@ function FurnitureAndHomeDecorCategory({
           "Dimensions (L x W x H)",
           "dimensions",
           "text",
-          otherDetails.dimensions,
+          formData.dimensions,
         )}
       </div>
 
@@ -226,9 +242,9 @@ function FurnitureAndHomeDecorCategory({
               <input
                 type="checkbox"
                 value={feature}
-                checked={otherDetails.features.includes(feature)}
+                checked={formData.features.includes(feature)}
                 onChange={() => handleFeatureChange(feature)}
-                className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] relative checked:after:content-['✔'] checked:after:absolute checked:after:left-0.75 checked:after:top-[-0.5px] checked:after:text-white checked:after:text-sm focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none"
+                className="checkbox"
               />
               <span className="font-medium text-gray-700">{feature}</span>
             </label>
@@ -238,33 +254,63 @@ function FurnitureAndHomeDecorCategory({
 
       {/* ====================== LOCATION & PRICE ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- LOCATION -------- */}
         {renderDropdown(
           "Location",
           "location",
           "furnitureAndHomeDecorLocation",
         )}
-        {/* -------- PRICE -------- */}
-        {renderInput("Price", "price", "number", otherDetails.price)}
+        {renderInput("Price", "price", "number", formData.price)}
       </div>
 
       {/* ====================== SELLER NAME & CONTACT ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- SELLER NAME -------- */}
-        {renderInput(
-          "Seller Name",
-          "sellerName",
-          "text",
-          otherDetails.sellerName,
-        )}
-        {/* -------- SELLER CONTACT -------- */}
+        {renderInput("Seller Name", "sellerName", "text", formData.sellerName)}
         {renderInput(
           "Seller Contact",
           "sellerContact",
           "tel",
-          otherDetails.sellerContact,
+          formData.sellerContact,
         )}
       </div>
+
+      <div className="flex gap-2 flex-wrap">
+        {formData.images.map((img, idx) => (
+          <div
+            key={idx}
+            className="relative w-20 h-20 border border-gray-300 rounded-md flex items-center justify-center overflow-hidden"
+          >
+            <img
+              src={URL.createObjectURL(img)}
+              alt={`upload-${idx}`}
+              className="object-cover w-full h-full"
+            />
+            <div
+              className="absolute top-0 right-0 p-1 cursor-pointer bg-white rounded-full"
+              onClick={() => removeImage(idx)}
+            >
+              <X size={16} />
+            </div>
+          </div>
+        ))}
+
+        {formData.images.length < 5 && (
+          <div
+            className="w-20 h-20 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <Plus size={24} />
+          </div>
+        )}
+      </div>
+
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        className="hidden"
+        ref={fileInputRef}
+        onChange={handleImageChange}
+      />
 
       <button
         type="submit"
