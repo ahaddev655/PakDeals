@@ -275,32 +275,37 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         </div>
 
         {/* ====================== IMAGE UPLOAD ====================== */}
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2">
           {formData.images.map((img, idx) => (
-            <div
-              key={idx}
-              className="relative w-20 h-20 border border-gray-300 rounded-md flex items-center justify-center overflow-hidden"
-            >
-              <img
-                src={URL.createObjectURL(img)}
-                alt={`upload-${idx}`}
-                className="object-cover w-full h-full"
-              />
-              <div
-                className="absolute top-0 right-0 p-1 cursor-pointer bg-white rounded-full"
-                onClick={() => removeImage(idx)}
-              >
-                <X size={16} />
+            <div key={idx} className="relative w-[25%]">
+              <div className="border border-gray-300 rounded-md rounded-t-lg p-1">
+                <img
+                  src={URL.createObjectURL(img)}
+                  alt={`upload-${idx}`}
+                  className="object-cover w-full h-full rounded-t-lg"
+                />
+                <div className="p-2 rounded-b-md text-center">
+                  <h1 className="font-medium text-gray-700">{img.name}</h1>
+                </div>
+                <div
+                  className="absolute top-3 right-3 p-1 cursor-pointer bg-white rounded-full"
+                  onClick={() => removeImage(idx)}
+                >
+                  <X size={16} />
+                </div>
               </div>
             </div>
           ))}
 
           {formData.images.length < 5 && (
             <div
-              className="w-20 h-20 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800"
+              className="w-[25%] h-42.25 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800 group"
               onClick={() => fileInputRef.current.click()}
             >
-              <Plus size={24} />
+              <Plus
+                size={34}
+                className="group-hover:rotate-180 transition-transform duration-300 ease-in-out"
+              />
             </div>
           )}
         </div>
@@ -313,6 +318,11 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
           ref={fileInputRef}
           onChange={handleImageChange}
         />
+      </div>
+      <div>
+        <p className="text-gray-700 font-medium mt-12">
+          Thumbnail will be the first image...
+        </p>
       </div>
 
       {/* ====================== SUBMIT BUTTON ====================== */}

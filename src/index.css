@@ -25,7 +25,7 @@ body {
 
 /* The checkmark icon */
 .checkbox:checked::after {
-  content: '';
+  content: "";
   @apply absolute inset-0;
   background-color: white;
   mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWljb24gbHVjaWRlLWNoZWNrIj48cGF0aCBkPSJNMjAgNiA5IDE3bC01LTUiLz48L3N2Zz4=");
@@ -34,7 +34,7 @@ body {
   mask-size: 80%;
 }
 
-input[type=radio] {
+input[type="radio"] {
   -moz-appearance: none;
   appearance: none;
   -webkit-appearance: none;
@@ -42,15 +42,15 @@ input[type=radio] {
   height: 20px;
   border: 2px solid #3a4fc4;
   border-radius: 50%;
-  cursor: pointer
+  cursor: pointer;
 }
 
-input[type=radio]:checked {
+input[type="radio"]:checked {
   background: #526cff;
   border: 3px solid #fff;
 }
 
-.radio-div:has(input[type=radio]:checked) {
+.radio-div:has(input[type="radio"]:checked) {
   background: linear-gradient(#c7dcff, #fff) !important;
-  border: 1px solid #4879f6
+  border: 1px solid #4879f6;
 }

@@ -96,7 +96,11 @@ function UserSecuritySettingsComponent() {
           newPassword: "",
           confirmPassword: "",
         });
-        toast.success(response?.response?.data?.message || response?.data?.message || "Form submitted successfully...");
+        toast.success(
+          response?.response?.data?.message ||
+            response?.data?.message ||
+            "Form submitted successfully...",
+        );
         console.log("PASSWORD UPDATED SUCCESSFULLY: ", payload);
       })
       .catch((error) => {

@@ -9,14 +9,14 @@ function UserDashboardPage() {
   const userToken = localStorage.getItem("userToken");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
-    useEffect(() => {
-      if (userToken && userId) {
-        return;
-      }
-      setTimeout(() => {
-        navigate("/signup");
-      }, 500);
-    }, []);
+  useEffect(() => {
+    if (userToken && userId) {
+      return;
+    }
+    setTimeout(() => {
+      navigate("/signup");
+    }, 500);
+  }, []);
   const [totalListings, setTotalListings] = useState(Number(1024));
   const [activeListings, setActiveListings] = useState(Number(1024));
   const [pendingListings, setPendingListings] = useState(Number(1024));
