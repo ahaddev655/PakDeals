@@ -8,15 +8,11 @@ function UserBuisnessSettingsComponent() {
   const defaultData = {
     company: "" || null,
     description: "" || null,
-  };
-
-  const defaultFilters = {
     buisnessCategory: "" || null,
     buisnessType: "" || null,
   };
 
   const [data, setData] = useState(defaultData);
-  const [filters, setFilters] = useState(defaultFilters);
 
   const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -67,13 +63,13 @@ function UserBuisnessSettingsComponent() {
           <button
             type="button"
             className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-              filters[fieldKey] ? "text-black" : "text-gray-400"
+              data[fieldKey] ? "text-black" : "text-gray-400"
             }`}
             onClick={() =>
               setOpenDropdown(openDropdown === fieldKey ? null : fieldKey)
             }
           >
-            {filters[fieldKey] || defaultLabel}
+            {data[fieldKey] || defaultLabel}
             <ChevronDown />
           </button>
 
@@ -107,7 +103,7 @@ function UserBuisnessSettingsComponent() {
   };
 
   const handleSelect = (key, value) => {
-    setFilters((prev) => ({
+    setData((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -120,11 +116,23 @@ function UserBuisnessSettingsComponent() {
 
     const payload = {
       ...data,
-      buisnessCategory: filters.buisnessCategory,
-      buisnessType: filters.buisnessType,
     };
-    toast.success("Form submitted successfully...");
-    console.log("BUISNESS DATA FOR SUBMITTED: ", payload);
+
+    // -------------------- API CONFIGURATION --------------------
+    const userId = localStorage.getItem("userId");
+    axios
+      .put(
+        `http://localhost:5000/api/users/update-buisness-profile/${userId}`,
+        payload,
+      )
+      .then((response) => {
+        toast.success(response?.data?.message || "Form Successful...");
+        console.log(response.data);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.error || "Internal Server Error");
+        console.log("UPDATE PERSONAL DATA API ERROR: ", error);
+      });
   };
 
   // ==================== USER BUISNESS DATA API CONFIGURATION JS ====================
@@ -134,7 +142,6 @@ function UserBuisnessSettingsComponent() {
       .get(`http://localhost:5000/api/users/user/${userId}`)
       .then((response) => {
         setData(response.data.user);
-        setFilters(response.data.user);
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
@@ -222,7 +229,6 @@ function UserBuisnessSettingsComponent() {
             className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
             onClick={() => {
               setPersonlData(defaultPersonalData);
-              setFilters(defaultFilters);
             }}
           >
             <RefreshCw />

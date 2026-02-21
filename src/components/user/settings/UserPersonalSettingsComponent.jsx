@@ -143,27 +143,32 @@ function UserPersonalSettingsComponent() {
       return;
     }
 
-    if (!personalData.firstName?.trim()) {
+    if (!String(personalData.firstName || "")?.trim()) {
       toast.error("First name is required...");
       return;
     }
 
-    if (!personalData.lastName?.trim()) {
+    if (!String(personalData.lastName || "")?.trim()) {
       toast.error("Last name is required...");
       return;
     }
 
-    if (!personalData.email?.trim()) {
+    if (!String(personalData.email || "")?.trim()) {
       toast.error("Email address is required...");
       return;
     }
 
-    if (!personalData.mobileNumber?.trim()) {
+    if (!String(personalData.mobileNumber || "")?.trim()) {
       toast.error("Mobile Number is required...");
       return;
     }
 
-    if (!personalData.country?.trim()) {
+    if (!String(personalData.mobileNumber || "")?.trim().length !== 9) {
+      toast.error("Mobile Number is invalid...");
+      return;
+    }
+
+    if (!String(personalData.country || "")?.trim()) {
       toast.error("Country is required...");
       return;
     }
@@ -172,17 +177,21 @@ function UserPersonalSettingsComponent() {
       ...personalData,
     };
 
-    setPersonalData({
-      firstName: "" || null,
-      lastName: "" || null,
-      email: "" || "",
-      mobileNumber: "" || null,
-      city: "" || null,
-      address: "" || null,
-      country: "" || null,
-    });
-    toast.success("Form submitted successfully...");
-    console.log("PERSONAL DATA FOR SUBMITTED: ", payload);
+    // -------------------- API CONFIGURATION --------------------
+    const userId = localStorage.getItem("userId");
+    axios
+      .put(
+        `http://localhost:5000/api/users/update-personal-profile/${userId}`,
+        payload,
+      )
+      .then((response) => {
+        toast.success(response?.data?.message || "Form Successful...");
+        console.log(response.data);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.error || "Internal Server Error");
+        console.log("UPDATE PERSONAL DATA API ERROR: ", error);
+      });
   };
 
   // ==================== USER PERSONAL DATA API CONFIGURATION JS ====================

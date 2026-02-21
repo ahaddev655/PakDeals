@@ -1,29 +1,49 @@
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, Plus, X } from "lucide-react";
+import { useState, useRef } from "react";
 
 function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const [filters, setFilters] = useState({
+
+  const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     brand: DEFAULT_FILTER("Select Brand"),
     condition: DEFAULT_FILTER("Select Condition"),
     location: DEFAULT_FILTER("Select Location"),
-  });
-
-  const [otherDetails, setOtherDetails] = useState({
     adTitle: "",
     description: "",
     price: "",
     sellerName: "",
     sellerContact: "",
+    images: [],
   });
 
+  const fileInputRef = useRef(null);
+
   const handleDetailChange = (e) =>
-    setOtherDetails((p) => ({ ...p, [e.target.name]: e.target.value }));
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSelect = (key, item) => {
-    setFilters((p) => ({ ...p, [key]: { id: item.id, label: item.text } }));
+    setFormData((p) => ({
+      ...p,
+      [key]: { id: item.id, label: item.text },
+    }));
     setOpenDropdown("");
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => {
+      const updatedImages = [...prev.images, ...files].slice(0, 5);
+      return { ...prev, images: updatedImages };
+    });
+  };
+
+  const removeImage = (index) => {
+    setFormData((prev) => {
+      const updatedImages = [...prev.images];
+      updatedImages.splice(index, 1);
+      return { ...prev, images: updatedImages };
+    });
   };
 
   const renderDropdown = (label, key, dataKey, scrollable = false) => (
@@ -32,13 +52,13 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       <div className="relative mt-1">
         <button
           type="button"
-          className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
-        transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          filters[key]?.id ? "text-black" : "text-gray-400"
-        }`}
+          className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg
+         transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
+           formData[key]?.id ? "text-black" : "text-gray-400"
+         }`}
           onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
         >
-          {filters[key]?.label}
+          {formData[key]?.label}
           <ChevronDown />
         </button>
 
@@ -87,28 +107,26 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
     const payload = {
       category: "mobiles",
-      ...otherDetails,
-      subCategory: filters.subCategory.label,
-      brand: filters.brand.label,
-      condition: filters.condition.label,
-      location: filters.location.label,
+      ...formData,
+      subCategory: formData.subCategory.label,
+      brand: formData.brand.label,
+      condition: formData.condition.label,
+      location: formData.location.label,
     };
 
     console.log("MOBILE FORM SUBMITTED:", payload);
 
-    setOtherDetails({
+    setFormData({
+      subCategory: DEFAULT_FILTER("Select Sub Category"),
+      brand: DEFAULT_FILTER("Select Brand"),
+      condition: DEFAULT_FILTER("Select Condition"),
+      location: DEFAULT_FILTER("Select Location"),
       adTitle: "",
       description: "",
       price: "",
       sellerName: "",
       sellerContact: "",
-    });
-
-    setFilters({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      brand: DEFAULT_FILTER("Select Brand"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
+      images: [],
     });
   };
 
@@ -116,50 +134,69 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     <form className="space-y-4" onSubmit={handleSubmit}>
       {/* ====================== SUB CATEGORY & BRAND ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- SUB CATEGORY -------- */}
         {renderDropdown("Sub Category", "subCategory", "mobileSubCategories")}
-        {/* -------- BRAND -------- */}
         {renderDropdown("Brand", "brand", "mobileBrands", true)}
       </div>
-      {/* ====================== AD TITLE ====================== */}
-      {renderInput("Ad Title", "adTitle", "text", otherDetails.adTitle)}
-      {/* ====================== DESCRIPTION ====================== */}
+      {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
       <textarea
         name="description"
         rows={6}
-        value={otherDetails.description}
+        value={formData.description}
         onChange={handleDetailChange}
         className="w-full border-2 rounded-lg px-3 py-2 border-gray-300 transition-colors duration-300 focus:ring-2 focus:ring-blue-800 resize-none"
       ></textarea>
-
-      {/* ====================== CONDITION ====================== */}
       {renderDropdown("Condition", "condition", "mobileCondition")}
-
-      {/* ====================== LOCATION & PRICE ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- LOCATION -------- */}
         {renderDropdown("Location", "location", "mobileLocation")}
-        {/* -------- PRICE -------- */}
-        {renderInput("Price", "price", "number", otherDetails.price)}
+        {renderInput("Price", "price", "number", formData.price)}
       </div>
-
-      {/* ====================== SELLER NAME & CONTACT ====================== */}
       <div className="sm:flex gap-6">
-        {/* -------- SELLER NAME -------- */}
-        {renderInput(
-          "Seller Name",
-          "sellerName",
-          "text",
-          otherDetails.sellerName,
-        )}
-        {/* -------- SELLER CONTACT -------- */}
+        {renderInput("Seller Name", "sellerName", "text", formData.sellerName)}
         {renderInput(
           "Seller Contact",
           "sellerContact",
           "tel",
-          otherDetails.sellerContact,
+          formData.sellerContact,
         )}
       </div>
+
+      <div className="flex gap-2 flex-wrap">
+        {formData.images.map((img, idx) => (
+          <div
+            key={idx}
+            className="relative w-20 h-20 border border-gray-300 rounded-md flex items-center justify-center overflow-hidden"
+          >
+            <img
+              src={URL.createObjectURL(img)}
+              alt={`upload-${idx}`}
+              className="object-cover w-full h-full"
+            />
+            <div
+              className="absolute top-0 right-0 p-1 cursor-pointer bg-white rounded-full"
+              onClick={() => removeImage(idx)}
+            >
+              <X size={16} />
+            </div>
+          </div>
+        ))}
+        {formData.images.length < 5 && (
+          <div
+            className="w-20 h-20 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <Plus size={24} />
+          </div>
+        )}
+      </div>
+
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        className="hidden"
+        ref={fileInputRef}
+        onChange={handleImageChange}
+      />
 
       <button
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
