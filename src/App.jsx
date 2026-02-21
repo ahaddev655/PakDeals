@@ -16,9 +16,6 @@ import UserAdsPage from "./pages/user/UserAdsPage";
 import UserAdAdsPage from "./pages/user/UserAdAdsPage";
 import UserFavoritesPage from "./pages/user/UserFavoritesPage";
 import UserPaymentsPage from "./pages/user/UserPaymentsPage";
-import UserChatsPage from "./pages/user/chats/UserChatsPage";
-import ChatsMainComponent from "./components/user/chats/ChatsMainComponent";
-import UserProfilePage from "./pages/user/chats/UserProfilePage";
 import UserProfileSettingsPage from "./pages/user/UserProfileSettingsPage";
 import PersonalProfilePage from "./pages/user/PersonalProfilePage";
 import AllAdsPage from "./pages/main/AllAdsPage";
@@ -119,20 +116,6 @@ function App() {
         {
           path: "payments",
           element: <UserPaymentsPage />,
-        },
-        {
-          path: "chats",
-          element: <UserChatsPage />,
-          children: [
-            {
-              path: ":id",
-              element: <ChatsMainComponent />,
-            },
-          ],
-        },
-        {
-          path: "profile/:id",
-          element: <UserProfilePage />,
         },
         {
           path: "profile-settings",

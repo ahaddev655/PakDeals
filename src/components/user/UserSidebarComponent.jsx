@@ -19,7 +19,6 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     { icon: Heart, text: "My Favorites", link: "/user-dashboard/favorites" },
     { icon: Plus, text: "Add Ads", link: "/user-dashboard/add-ad" },
     { icon: CreditCard, text: "Payments", link: "/user-dashboard/payments" },
-    { icon: MessageCircle, text: "Chats", link: "/user-dashboard/chats" },
     {
       icon: CircleUserRound,
       text: "Profile Settings",
@@ -58,7 +57,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
               <li key={i}>
                 <NavLink
                   to={link.link}
-                  end={link.link !== "/user-dashboard/chats"}
+                  end
                   className={({ isActive }) =>
                     `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
                       isActive
@@ -130,7 +129,7 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
                   <NavLink
                     to={link.link}
                     onClick={() => setOffCanvasToggle(false)}
-                    end={link.link !== "/user-dashboard/chats"}
+                    end
                     className={({ isActive }) =>
                       `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
                         isActive
