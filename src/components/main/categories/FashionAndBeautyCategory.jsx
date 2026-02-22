@@ -146,7 +146,7 @@ function FashionAndBeautyCategory({
     const payload = {
       category: "fashion-and-beauty",
       ...formData,
-      features: JSON.stringify(formData.features),
+
       subCategory: formData.subCategory?.label,
       brand: formData.brand?.label,
       gender: formData.gender?.label,

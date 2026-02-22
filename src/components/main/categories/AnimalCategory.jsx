@@ -88,7 +88,6 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       sex: formData.sex?.label || "",
       vaccinationStatus: formData.vaccinationStatus?.label || "",
       location: formData.location?.label || "",
-      features: JSON.stringify(formData.features),
     };
     console.log("ANIMALS FORM SUBMITTED:", payload);
 
@@ -221,7 +220,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
                   value={feature}
                   checked={formData.features.includes(feature)}
                   onChange={() => handleFeatureChange(feature)}
-                  className="w-5 h-5 appearance-none border-2 focus:border-[#3a4fc4] border-gray-300 rounded-sm checked:bg-[#3a4fc4] checked:border-[#3a4fc4] checked:shadow-[inset_0_0_0_2px_white] focus:ring-2 focus:ring-[#3a4fc4]/30 focus:outline-none cursor-pointer"
+                  className="checkbox"
                 />
                 <span className="font-medium text-gray-700">{feature}</span>
               </label>

@@ -28,9 +28,11 @@ function UserProfileSettingsPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId");
   // ==================== API CONFIGURATION ====================
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`http://localhost:5000/api/users/user/${userId}`)
       .then((response) => {
@@ -42,6 +44,9 @@ function UserProfileSettingsPage() {
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
         console.log("PERSONAL PROFILE API ERROR: ", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
   return (
@@ -50,25 +55,33 @@ function UserProfileSettingsPage() {
         <div className="lg:w-[30%] w-full rounded-lg space-y-6">
           {/* -------------------- PROFILE -------------------- */}
           <div className="w-full bg-white shadow-md rounded-lg p-3.75">
-            {/* -------------------- PROFILE IMAGE -------------------- */}
-            <div className="w-28 h-28 mx-auto mb-3">
-              <div className="w-full h-full object-cover rounded-full border-4 border-blue-500 shadow-md grid place-items-center text-4xl font-semibold text-white bg-blue-900 text-clip [text-shadow:2px_2px_6px_rgba(0,0,0,0.7)]">
-                {firstName?.charAt(0)}
-              </div>
-            </div>
-            {/* -------------------- PROFILE NAME -------------------- */}
-            <div className="text-center space-y-1 mt-4">
-              <h3 className="text-2xl font-semibold">
-                {firstName + " " + lastName}
-              </h3>
-              <p className="text-gray-500 font-light">{email}</p>
-            </div>
-            {/* -------------------- VERIFIED -------------------- */}
-            <div className="bg-green-700 text-center py-1 px-1 rounded-full w-21 text-xs mx-auto mt-3">
-              <span className="text-white font-semibold uppercase tracking-wide">
-                verified
-              </span>
-            </div>
+            {loading ? (
+              <p className="text-center font-semibold text-xl text-gray-600">
+                Loading...
+              </p>
+            ) : (
+              <>
+                {/* -------------------- PROFILE IMAGE -------------------- */}
+                <div className="w-28 h-28 mx-auto mb-3">
+                  <div className="w-full h-full object-cover rounded-full border-4 border-blue-500 shadow-md grid place-items-center text-4xl font-semibold text-white bg-blue-900 text-clip [text-shadow:2px_2px_6px_rgba(0,0,0,0.7)]">
+                    {firstName?.charAt(0)}
+                  </div>
+                </div>
+                {/* -------------------- PROFILE NAME -------------------- */}
+                <div className="text-center space-y-1 mt-4">
+                  <h3 className="text-2xl font-semibold">
+                    {firstName + " " + lastName}
+                  </h3>
+                  <p className="text-gray-500 font-light">{email}</p>
+                </div>
+                {/* -------------------- VERIFIED -------------------- */}
+                <div className="bg-green-700 text-center py-1 px-1 rounded-full w-21 text-xs mx-auto mt-3">
+                  <span className="text-white font-semibold uppercase tracking-wide">
+                    verified
+                  </span>
+                </div>
+              </>
+            )}
           </div>
           {/* -------------------- NAVIGATION TABS -------------------- */}
           <div className="w-full bg-white shadow-md rounded-lg p-3.75 space-y-0.75">

@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 function UserBuisnessSettingsComponent() {
-  // ==================== USE STATES ====================
+  // ==================== USE STATES & VARIABLES ====================
+  const userId = localStorage.getItem("userId");
+
   const defaultData = {
     company: "" || null,
     description: "" || null,
@@ -26,6 +28,7 @@ function UserBuisnessSettingsComponent() {
     ],
     buisnessType: ["Individual", "Small Buisness", "Corporation", "Non-Profit"],
   };
+  const [loading, setLoading] = useState(true);
 
   // ==================== REUSABLE COMPONENTS ====================
   const inputComponent = (label, value, name, inputType, placeholder) => {
@@ -119,7 +122,6 @@ function UserBuisnessSettingsComponent() {
     };
 
     // -------------------- API CONFIGURATION --------------------
-    const userId = localStorage.getItem("userId");
     axios
       .put(
         `http://localhost:5000/api/users/update-buisness-profile/${userId}`,
@@ -136,8 +138,8 @@ function UserBuisnessSettingsComponent() {
   };
 
   // ==================== USER BUISNESS DATA API CONFIGURATION JS ====================
-  const userId = localStorage.getItem("userId");
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`http://localhost:5000/api/users/user/${userId}`)
       .then((response) => {
@@ -146,6 +148,9 @@ function UserBuisnessSettingsComponent() {
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
         console.log("PERSONAL PROFILE API ERROR: ", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
   return (
@@ -161,81 +166,92 @@ function UserBuisnessSettingsComponent() {
       </div>
 
       <div className="h-[1.5px] bg-gray-200 w-full rounded-full my-7.5" />
+      {loading ? (
+        <p className="text-center font-semibold text-xl text-gray-600">
+          Loading...
+        </p>
+      ) : (
+        <>
+          {/* ==================== FORM ==================== */}
+          <form onSubmit={handlePersonalSubmit} className="space-y-5">
+            {/* ==================== TOAST CONTAINER ==================== */}
+            <ToastContainer
+              position="top-right"
+              autoClose={2500}
+              theme="light"
+            />
+            {/* ==================== COMPANY NAME ==================== */}
+            {inputComponent(
+              "Company/Business Name",
+              data.company,
+              "company",
+              "text",
+              "Enter Your Company Name",
+            )}
 
-      {/* ==================== FORM ==================== */}
-      <form onSubmit={handlePersonalSubmit} className="space-y-5">
-        {/* ==================== TOAST CONTAINER ==================== */}
-        <ToastContainer position="top-right" autoClose={2500} theme="light" />
-        {/* ==================== COMPANY NAME ==================== */}
-        {inputComponent(
-          "Company/Business Name",
-          data.company,
-          "company",
-          "text",
-          "Enter Your Company Name",
-        )}
-
-        {/* ==================== COMPANY DESCRIPTION ==================== */}
-        <div className="flex flex-col w-full">
-          <label
-            htmlFor="companyDescription"
-            className="font-medium text-gray-700"
-          >
-            Company Description
-          </label>
-          <textarea
-            name="description"
-            value={data.description}
-            placeholder="Describe Your Company"
-            className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800
+            {/* ==================== COMPANY DESCRIPTION ==================== */}
+            <div className="flex flex-col w-full">
+              <label
+                htmlFor="companyDescription"
+                className="font-medium text-gray-700"
+              >
+                Company Description
+              </label>
+              <textarea
+                name="description"
+                value={data.description}
+                placeholder="Describe Your Company"
+                className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800
             transition-colors ease-in-out duration-300 resize-none"
-            rows={5}
-            onChange={handleInputChange}
-          ></textarea>
-        </div>
+                rows={5}
+                onChange={handleInputChange}
+              ></textarea>
+            </div>
 
-        {/* ==================== BUISNESS CATEGORY & TYPE ==================== */}
-        <div className="flex items-center justify-center gap-5">
-          {/* -------------------- BUISNESS CATEGORY -------------------- */}
-          {selectComponent(
-            "Select Buisness Category",
-            "Buisness Category",
-            "buisnessCategory",
-            selectOptions.buisnessCategory,
-            true,
-          )}
-          {/* -------------------- BUISNESS TYPE -------------------- */}
-          {selectComponent(
-            "Select Buisness Type",
-            "Buisness Type",
-            "buisnessType",
-            selectOptions.buisnessType,
-            true,
-          )}
-        </div>
+            {/* ==================== BUISNESS CATEGORY & TYPE ==================== */}
+            <div className="flex items-center justify-center gap-5">
+              {/* -------------------- BUISNESS CATEGORY -------------------- */}
+              {selectComponent(
+                "Select Buisness Category",
+                "Buisness Category",
+                "buisnessCategory",
+                selectOptions.buisnessCategory,
+                true,
+              )}
+              {/* -------------------- BUISNESS TYPE -------------------- */}
+              {selectComponent(
+                "Select Buisness Type",
+                "Buisness Type",
+                "buisnessType",
+                selectOptions.buisnessType,
+                true,
+              )}
+            </div>
 
-        {/* -------------------- SUBMIT BUTTONS -------------------- */}
-        <div className="flex items-center justify-center gap-3">
-          <button
-            type="submit"
-            className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"
-          >
-            <Save />
-            Submit changes
-          </button>
+            {/* -------------------- SUBMIT BUTTONS -------------------- */}
+            <div className="flex items-center justify-center gap-3">
+              <button
+                type="submit"
+                className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"
+              >
+                <Save />
+                Submit changes
+              </button>
 
-          <button
-            type="button"
-            className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
-            onClick={() => {
-              setPersonlData(defaultPersonalData);
-            }}
-          >
-            <RefreshCw />
-            Reset settings
-          </button>
-        </div>
-      </form>
+              <button
+                type="button"
+                className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
+                onClick={() => {
+                  setPersonlData(defaultPersonalData);
+                }}
+              >
+                <RefreshCw />
+                Reset settings
+              </button>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 }

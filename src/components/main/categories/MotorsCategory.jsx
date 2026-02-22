@@ -66,7 +66,7 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       documentStatus: formData.documentStatus?.label || "",
       assembly: formData.assembly?.label || "",
       location: formData.location?.label || "",
-      features: JSON.stringify(formData.features),
+
     };
     console.log("MOTORS FORM SUBMITTED:", payload);
 

@@ -4,8 +4,9 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
 function UserPersonalSettingsComponent() {
-  // ==================== USE STATES ====================
+  // ==================== USE STATES & VARIABLES ====================
 
+  const userId = localStorage.getItem("userId");
   const [personalData, setPersonalData] = useState({
     firstName: "" || null,
     lastName: "" || null,
@@ -17,6 +18,7 @@ function UserPersonalSettingsComponent() {
   });
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const selectOptions = {
     countries: [
@@ -31,7 +33,6 @@ function UserPersonalSettingsComponent() {
       "Bangladesh",
     ],
   };
-
   // ==================== REUSABLE COMPONENTS ====================
   const inputComponent = (
     label,
@@ -178,7 +179,6 @@ function UserPersonalSettingsComponent() {
     };
 
     // -------------------- API CONFIGURATION --------------------
-    const userId = localStorage.getItem("userId");
     axios
       .put(
         `http://localhost:5000/api/users/update-personal-profile/${userId}`,
@@ -195,8 +195,8 @@ function UserPersonalSettingsComponent() {
   };
 
   // ==================== USER PERSONAL DATA API CONFIGURATION JS ====================
-  const userId = localStorage.getItem("userId");
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`http://localhost:5000/api/users/user/${userId}`)
       .then((response) => {
@@ -205,6 +205,9 @@ function UserPersonalSettingsComponent() {
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
         console.log("PERSONAL PROFILE API ERROR: ", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
   return (
@@ -220,115 +223,126 @@ function UserPersonalSettingsComponent() {
       </div>
 
       <div className="h-[1.5px] bg-gray-200 w-full rounded-full my-7.5" />
+      {loading ? (
+        <p className="text-center font-semibold text-xl text-gray-600">
+          Loading...
+        </p>
+      ) : (
+        <>
+          {/* ==================== FORM ==================== */}
+          <form onSubmit={handlePersonalSubmit} className="space-y-5">
+            {/* ==================== TOAST CONTAINER ==================== */}
+            <ToastContainer
+              position="top-right"
+              autoClose={2500}
+              theme="light"
+            />
+            {/* ==================== FIRST & LAST NAME ==================== */}
+            <div className="flex items-center justify-center gap-5">
+              {/* -------------------- FIRST NAME -------------------- */}
+              {inputComponent(
+                "First Name",
+                personalData.firstName,
+                "firstName",
+                "text",
+                "Enter Your First Name",
+                true,
+              )}
+              {/* -------------------- LAST NAME -------------------- */}
+              {inputComponent(
+                "Last Name",
+                personalData.lastName,
+                "lastName",
+                "text",
+                "Enter Your Last Name",
+                true,
+              )}
+            </div>
 
-      {/* ==================== FORM ==================== */}
-      <form onSubmit={handlePersonalSubmit} className="space-y-5">
-        {/* ==================== TOAST CONTAINER ==================== */}
-        <ToastContainer position="top-right" autoClose={2500} theme="light" />
-        {/* ==================== FIRST & LAST NAME ==================== */}
-        <div className="flex items-center justify-center gap-5">
-          {/* -------------------- FIRST NAME -------------------- */}
-          {inputComponent(
-            "First Name",
-            personalData.firstName,
-            "firstName",
-            "text",
-            "Enter Your First Name",
-            true,
-          )}
-          {/* -------------------- LAST NAME -------------------- */}
-          {inputComponent(
-            "Last Name",
-            personalData.lastName,
-            "lastName",
-            "text",
-            "Enter Your Last Name",
-            true,
-          )}
-        </div>
+            {/* ==================== EMAIL & MOBILE NUMBER ==================== */}
+            <div className="flex items-center justify-center gap-5">
+              {/* -------------------- EMAIL -------------------- */}
+              {inputComponent(
+                "Email Address",
+                personalData.email,
+                "email",
+                "text",
+                "Enter Your Email Address",
+                true,
+              )}
+              {/* -------------------- MOBILE NUMBER -------------------- */}
+              {inputComponent(
+                "Mobile Number",
+                personalData.mobileNumber,
+                "mobileNumber",
+                "tel",
+                "Enter Your Mobile Number",
+                true,
+              )}
+            </div>
 
-        {/* ==================== EMAIL & MOBILE NUMBER ==================== */}
-        <div className="flex items-center justify-center gap-5">
-          {/* -------------------- EMAIL -------------------- */}
-          {inputComponent(
-            "Email Address",
-            personalData.email,
-            "email",
-            "text",
-            "Enter Your Email Address",
-            true,
-          )}
-          {/* -------------------- MOBILE NUMBER -------------------- */}
-          {inputComponent(
-            "Mobile Number",
-            personalData.mobileNumber,
-            "mobileNumber",
-            "tel",
-            "Enter Your Mobile Number",
-            true,
-          )}
-        </div>
+            {/* ==================== COUNTRY & CITY ==================== */}
+            <div className="flex items-center justify-center gap-5">
+              {/* -------------------- COUNTRY -------------------- */}
+              {selectComponent(
+                "Select Country",
+                "Country",
+                "country",
+                selectOptions.countries,
+                true,
+                true,
+              )}
+              {/* -------------------- CITY -------------------- */}
+              {inputComponent(
+                "City",
+                personalData.city,
+                "city",
+                "text",
+                "Enter Your City Name",
+              )}
+            </div>
 
-        {/* ==================== COUNTRY & CITY ==================== */}
-        <div className="flex items-center justify-center gap-5">
-          {/* -------------------- COUNTRY -------------------- */}
-          {selectComponent(
-            "Select Country",
-            "Country",
-            "country",
-            selectOptions.countries,
-            true,
-            true,
-          )}
-          {/* -------------------- CITY -------------------- */}
-          {inputComponent(
-            "City",
-            personalData.city,
-            "city",
-            "text",
-            "Enter Your City Name",
-          )}
-        </div>
+            {/* ==================== ADDRESS ==================== */}
+            {inputComponent(
+              "Address",
+              personalData.address,
+              "address",
+              "text",
+              "Enter Your Address",
+            )}
 
-        {/* ==================== ADDRESS ==================== */}
-        {inputComponent(
-          "Address",
-          personalData.address,
-          "address",
-          "text",
-          "Enter Your Address",
-        )}
+            {/* -------------------- SUBMIT BUTTONS -------------------- */}
+            <div className="flex items-center justify-center gap-3">
+              <button
+                type="submit"
+                className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"
+              >
+                <Save />
+                Submit changes
+              </button>
 
-        {/* -------------------- SUBMIT BUTTONS -------------------- */}
-        <div className="flex items-center justify-center gap-3">
-          <button
-            type="submit"
-            className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"
-          >
-            <Save />
-            Submit changes
-          </button>
-
-          <button
-            type="button"
-            className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
-            onClick={() =>
-              setPersonalData({
-                firstName: "" || null,
-                lastName: "" || null,
-                email: "" || "",
-                mobileNumber: "" || null,
-                city: "" || null,
-                address: "" || null,
-                country: "" || null,
-              })
-            }
-          >
-            <RefreshCw />
-            Reset settings
-          </button>
-        </div>
-      </form>
+              <button
+                type="button"
+                className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
+                onClick={() =>
+                  setPersonalData({
+                    firstName: "" || null,
+                    lastName: "" || null,
+                    email: "" || "",
+                    mobileNumber: "" || null,
+                    city: "" || null,
+                    address: "" || null,
+                    country: "" || null,
+                  })
+                }
+              >
+                <RefreshCw />
+                Reset settings
+              </button>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 }

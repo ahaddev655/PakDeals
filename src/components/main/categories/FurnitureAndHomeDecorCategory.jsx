@@ -150,7 +150,7 @@ function FurnitureAndHomeDecorCategory({
       material: formData.material.label,
       condition: formData.condition.label,
       location: formData.location.label,
-      features: JSON.stringify(formData.features),
+
     };
 
     console.log("FURNITURE AND HOME DECOR FORM SUBMITTED:", payload);

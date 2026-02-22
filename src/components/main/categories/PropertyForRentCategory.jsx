@@ -54,7 +54,7 @@ function PropertyForRentCategory({
     const payload = {
       category: "property-for-rent",
       ...formData,
-      features: JSON.stringify(formData.features),
+
       subCategory: formData.subCategory?.label || "",
       areaUnit: formData.areaUnit?.label || "",
       furnishedStatus: formData.furnishedStatus?.label || "",

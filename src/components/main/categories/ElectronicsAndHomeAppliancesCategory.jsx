@@ -53,7 +53,7 @@ function ElectronicsAndHomeAppliancesCategory({
       condition: formData.condition?.label || "",
       warranty: formData.warranty?.label || "",
       location: formData.location?.label || "",
-      features: JSON.stringify(formData.features),
+
     };
 
     console.log("PROPERTY FOR RENT FORM SUBMITTED:", payload);

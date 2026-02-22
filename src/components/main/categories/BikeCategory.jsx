@@ -47,7 +47,6 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     const payload = {
       category: "bike",
       ...formData,
-      features: JSON.stringify(formData.features),
       subCategory: formData.subCategory?.label || "",
       make: formData.make?.label || "",
       engineType: formData.engineType?.label || "",
