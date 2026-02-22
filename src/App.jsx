@@ -24,6 +24,7 @@ import BlogsPages from "./pages/main/BlogsPages";
 import ContactPage from "./pages/main/ContactPage";
 import CategoryPage from "./pages/main/CategoryPage";
 import AdsDetailPage from "./pages/main/AdsDetailPage";
+import AdminLayout from './layouts/AdminLayout';
 // ==================== ADMIN PAGES ====================
 
 function App() {
@@ -126,6 +127,11 @@ function App() {
           element: <PersonalProfilePage />,
         },
       ],
+    },
+    // ==================== ADMIN ROUTES ====================
+    {
+      path: "/87b27389",
+      element: <AdminLayout />
     },
   ]);
   return <RouterProvider router={router} />;
