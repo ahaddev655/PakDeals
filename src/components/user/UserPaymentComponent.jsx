@@ -8,7 +8,6 @@ function UserPaymentComponent() {
   const sortTabs = [
     { key: "by-date", label: "Sort By Date" },
     { key: "by-amount", label: "Sort By Amount" },
-    { key: "by-status", label: "Sort By Status" },
   ];
   // ==================== PAYMENT JS ====================
   const [payments, setPayments] = useState([
@@ -16,14 +15,12 @@ function UserPaymentComponent() {
       id: 1,
       type: "Direct Bank Transfer",
       amount: "200000",
-      status: "pending",
       date: "2/01/2010",
     },
     {
       id: 2,
       type: "EasyPaisa Transfer",
       amount: "100000",
-      status: "pending",
       date: "2/01/2009",
     },
   ]);
@@ -81,7 +78,7 @@ function UserPaymentComponent() {
             <table className="w-full">
               <thead className="bg-gray-200 border-b border-gray-300">
                 <tr>
-                  {["ID", "Type", "Amount", "Status", "Date"].map((h, i) => (
+                  {["ID", "Type", "Amount", "Date"].map((h, i) => (
                     <th
                       key={i}
                       className={`font-semibold text-[#495057] py-3 px-6 ${
@@ -132,14 +129,6 @@ function UserPaymentComponent() {
 
                       <td className="py-4 px-6 text-[15px] text-gray-700">
                         PKR {Number(payment.amount).toLocaleString()}
-                      </td>
-
-                      <td className="text-center py-4 px-6">
-                        <span
-                          className={`text-xs uppercase font-semibold tracking-wider px-3 py-1 rounded-full ${payment.status === "pending" ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-600"}`}
-                        >
-                          {payment.status}
-                        </span>
                       </td>
 
                       <td className="py-4 px-6 text-[15px] text-gray-700 text-center">

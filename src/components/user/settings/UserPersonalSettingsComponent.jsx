@@ -163,7 +163,7 @@ function UserPersonalSettingsComponent() {
       return;
     }
 
-    if (!String(personalData.mobileNumber || "")?.trim().length !== 9) {
+    if (!String(personalData.mobileNumber || "")?.trim().length > 11) {
       toast.error("Mobile Number is invalid...");
       return;
     }

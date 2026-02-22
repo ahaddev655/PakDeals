@@ -30,6 +30,7 @@ function PropertyForRentCategory({
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     areaUnit: DEFAULT_FILTER("Select Area Unit"),
+    areaSize: "",
     furnishedStatus: DEFAULT_FILTER("Select Furnished Status"),
     bedrooms: DEFAULT_FILTER("Select Bedrooms"),
     bathrooms: DEFAULT_FILTER("Select Bathrooms"),
@@ -42,7 +43,6 @@ function PropertyForRentCategory({
     sellerName: "",
     sellerContact: "",
     features: [],
-    areaSize: "",
     images: [],
   });
 
