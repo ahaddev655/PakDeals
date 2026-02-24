@@ -6,6 +6,7 @@ function UserDataChartComponent({
   expiredListings,
   pendingListings,
   totalListings,
+  loading,
 }) {
   const options = {
     chart: {
@@ -85,13 +86,19 @@ function UserDataChartComponent({
       </div>
       <div className="relative w-full h-112.5 flex justify-center items-center shadow-sm rounded-lg overflow-hidden">
         <div className="absolute inset-0 w-auto h-auto overflow-hidden">
-          <Chart
-            options={options}
-            series={series}
-            type="pie"
-            width="100%"
-            height="100%"
-          />
+          {loading ? (
+            <p className="text-center font-semibold text-xl text-gray-600">
+              Loading...
+            </p>
+          ) : (
+            <Chart
+              options={options}
+              series={series}
+              type="pie"
+              width="100%"
+              height="100%"
+            />
+          )}
         </div>
       </div>
     </div>

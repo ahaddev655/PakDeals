@@ -6,6 +6,7 @@ function UserDataCardsComponent({
   expiredListings,
   pendingListings,
   totalListings,
+  loading,
 }) {
   const dataCards = [
     {
@@ -49,7 +50,13 @@ function UserDataCardsComponent({
                 {card.text}
               </p>
               <h3 className="mt-3 text-3xl font-semibold text-gray-700">
-                {(card.value || 0).toLocaleString()}
+                {loading ? (
+                  <p className="text-center font-semibold text-xl text-gray-600">
+                    Loading...
+                  </p>
+                ) : (
+                  (card.value || 0).toLocaleString()
+                )}
               </h3>
             </div>
 

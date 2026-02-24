@@ -25,7 +25,7 @@ function PersonalProfilePage() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/api/users/user/${userId}`)
+      .get(`http://localhost:5000/api/users/fetch-user/${userId}`)
       .then((response) => {
         setUserData(response.data.user);
       })

@@ -3,6 +3,7 @@ import UserDataCardsComponent from "../../components/user/UserDataCardsComponent
 import UserDataChartComponent from "../../components/user/UserDataChartComponent";
 import UserRecentActivitiesComponent from "../../components/user/UserRecentActivitiesComponent";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function UserDashboardPage() {
   // ==================== AUTH CHECK ====================
@@ -17,10 +18,33 @@ function UserDashboardPage() {
       navigate("/signup");
     }, 500);
   }, []);
-  const [totalListings, setTotalListings] = useState(Number(1024));
-  const [activeListings, setActiveListings] = useState(Number(1024));
-  const [pendingListings, setPendingListings] = useState(Number(1024));
-  const [expiredListings, setExpiredListings] = useState(Number(1024));
+  const [totalListings, setTotalListings] = useState(Number(null));
+  const [activeListings, setActiveListings] = useState(Number(null));
+  const [pendingListings, setPendingListings] = useState(Number(null));
+  const [expiredListings, setExpiredListings] = useState(Number(null));
+  const [loading, setLoading] = useState(true);
+
+  // ==================== API CONFIGURATION ====================
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get("http://localhost:5000/api/ads/all-ads")
+      .then((response) => {
+        console.log(response.data);
+        const data = response.data;
+        setActiveListings(data.active_ads);
+        setExpiredListings(data.expired_ads);
+        setPendingListings(data.pending_ads);
+        setTotalListings(data.all_ads);
+      })
+      .catch((error) => {
+        console.log("ADS FETCH API ERROR:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div className="space-y-8 sm:px-6 px-2.5 py-6">
       {/* -------------------- HEADING -------------------- */}
@@ -38,6 +62,7 @@ function UserDashboardPage() {
         setActiveListings={setActiveListings}
         setPendingListings={setPendingListings}
         setExpiredListings={setExpiredListings}
+        loading={loading}
       />
       {/* -------------------- DATA CHARTS & RECENT ACTIVITIES -------------------- */}
       <div className="md:grid grid-cols-3 gap-5 md:space-y-0 space-y-5">
@@ -46,6 +71,7 @@ function UserDashboardPage() {
           activeListings={activeListings}
           pendingListings={pendingListings}
           expiredListings={expiredListings}
+          loading={loading}
         />
         <UserRecentActivitiesComponent />
       </div>
