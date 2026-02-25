@@ -19,6 +19,7 @@ function UserAdsComponent() {
     { key: "all-ads", label: "All Ads" },
     { key: "featured", label: "Featured" },
     { key: "active", label: "Active" },
+    { key: "inactive", label: "Inactive" },
     { key: "pending", label: "Pending " },
     { key: "sold", label: "Sold" },
     { key: "expired", label: "Expired" },
@@ -31,6 +32,7 @@ function UserAdsComponent() {
   const statusStyles = {
     featured: "text-yellow-600 bg-yellow-100",
     active: "bg-green-100 text-green-600",
+    inactive: "bg-red-100 text-red-600",
     pending: "bg-red-100 text-red-600",
     sold: "bg-gray-100 text-gray-600",
     expired: "bg-red-100 text-red-600",
@@ -38,15 +40,16 @@ function UserAdsComponent() {
 
   // ==================== REMOVE AD FUNCTION ====================
   const removeAd = (id) => {
+    const formatedId = Number(id)
     axios
-      .get(`http://localhost:5000/api/ads/delete-user-ad/${id}`)
+      .delete(`http://localhost:5000/api/ads/delete-user-ad/${formatedId}`)
       .then((response) => {
         console.log(response.data);
         toast.success(response?.data?.message || "Ad deleted successfully");
       })
       .catch((error) => {
-        toast.error(error?.data?.error || "Internal Server Error");
-        console.log("FETCH USER ADS API ERROR: ", error);
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.log("DELETE USER ADS API ERROR: ", error);
       });
   };
 
@@ -62,13 +65,21 @@ function UserAdsComponent() {
         const mergedAds = Object.values(allAdsObj).flat();
 
         const formattedAds = mergedAds.map((ad) => {
-          let status = "pending";
+          let status = "";
 
-          if (ad.isSold) status = "sold";
-          else if (ad.isExpired) status = "expired";
-          else if (ad.isFeatured) status = "featured";
-          else if (ad.isActive) status = "active";
-          else if (ad.isPending) status = "pending";
+          if (ad.isSold) {
+            status = "sold";
+          } else if (ad.isExpired) {
+            status = "expired";
+          } else if (ad.isFeatured) {
+            status = "featured";
+          } else if (ad.isActive) {
+            status = "active";
+          } else if (ad.isPending) {
+            status = "pending";
+          } else {
+            status = "inactive";
+          }
 
           return {
             id: ad.id,
@@ -142,7 +153,7 @@ function UserAdsComponent() {
         </div>
       </div>
       {/* ==================== NAVIGATION TABS ==================== */}
-      <div className="grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 px-6 md:w-200">
+      <div className="grid xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 grid-cols-2 gap-1 px-6 md:w-200">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -196,31 +207,11 @@ function UserAdsComponent() {
                       .toLowerCase()
                       .includes(searchQuery.toLowerCase());
 
-                    if (selectedNavTab === "all-ads") {
-                      return matchesSearch;
-                    }
-
-                    if (selectedNavTab === "featured") {
-                      return ad.isFeatured && matchesSearch;
-                    }
-
-                    if (selectedNavTab === "expired") {
-                      return ad.isExpired && matchesSearch;
-                    }
-
-                    if (selectedNavTab === "active") {
-                      return ad.isActive && matchesSearch;
-                    }
-
-                    if (selectedNavTab === "inactive") {
-                      return !ad.isActive && matchesSearch;
-                    }
-
-                    if (selectedNavTab === "sold") {
-                      return ad.isSold && matchesSearch;
-                    }
-
-                    return matchesSearch;
+                    return (
+                      (selectedNavTab === "all-ads" ||
+                        ad.status === selectedNavTab) &&
+                      matchesSearch
+                    );
                   })
                   .sort((a, b) => {
                     if (selectedSort === "by-name") {
@@ -360,13 +351,13 @@ function UserAdsComponent() {
                         setAds((prev) =>
                           prev.map((ad) =>
                             ad.id === selectedAd.id
-                              ? { ...ad, status: "pending" }
+                              ? { ...ad, status: "inactive" }
                               : ad,
                           ),
                         );
                         setSelectedAd((prev) => ({
                           ...prev,
-                          status: "pending",
+                          status: "inactive",
                         }));
                         setSelectedAd(null);
                       }}
@@ -375,7 +366,8 @@ function UserAdsComponent() {
                     </button>
                   )}
 
-                  {selectedAd.status === "pending" && (
+                  {(selectedAd.status === "pending" ||
+                    selectedAd.status === "inactive") && (
                     <button
                       type="button"
                       className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"

@@ -1,5 +1,7 @@
+import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import { toast } from "react-toastify";
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const FEATURES_LIST = [
@@ -16,6 +18,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -43,45 +46,73 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "bike",
-      ...formData,
-      subCategory: formData.subCategory?.label || "",
-      make: formData.make?.label || "",
-      engineType: formData.engineType?.label || "",
-      engineCapacity: formData.engineCapacity?.label || "",
-      ignitionType: formData.ignitionType?.label || "",
-      origin: formData.origin?.label || "",
-      registrationCity: formData.registrationCity?.label || "",
-      condition: formData.condition?.label || "",
-      location: formData.location?.label || "",
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    // FILTERS
-    console.log("BIKE FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      make: DEFAULT_FILTER("Select Make"),
-      engineType: DEFAULT_FILTER("Select Engine Type"),
-      engineCapacity: DEFAULT_FILTER("Select Engine Capacity"),
-      ignitionType: DEFAULT_FILTER("Select Ignition Type"),
-      origin: DEFAULT_FILTER("Select Origin"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      registrationCity: DEFAULT_FILTER("Select Registration City"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      model: "",
-      year: "",
-      kmDriven: "",
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("make", formData.make?.label || "");
+    form.append("engineType", formData.engineType?.label || "");
+    form.append("engineCapacity", formData.engineCapacity?.label || "");
+    form.append("ignitionType", formData.ignitionType?.label || "");
+    form.append("origin", formData.origin?.label || "");
+    form.append("condition", formData.condition?.label || "");
+    form.append("registrationCity", formData.registrationCity?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("features", formData.features.join(", "));
+    form.append("model", formData.model);
+    form.append("year", formData.year);
+    form.append("kmDriven", formData.kmDriven);
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post("http://localhost:5000/api/ads/add-bike-ad/1", form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          make: DEFAULT_FILTER("Select Make"),
+          engineType: DEFAULT_FILTER("Select Engine Type"),
+          engineCapacity: DEFAULT_FILTER("Select Engine Capacity"),
+          ignitionType: DEFAULT_FILTER("Select Ignition Type"),
+          origin: DEFAULT_FILTER("Select Origin"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          registrationCity: DEFAULT_FILTER("Select Registration City"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          features: [],
+          model: "",
+          year: "",
+          kmDriven: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error.response?.data || error.message);
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleFeatureChange = (feature) => {
@@ -342,7 +373,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Bike Ad
+        {loading ? "Submitting Bike Ad..." : "Submit Bike Ad"}
       </button>
     </form>
   );
