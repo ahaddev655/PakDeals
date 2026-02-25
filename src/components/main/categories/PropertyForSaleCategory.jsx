@@ -46,7 +46,6 @@ function PropertyForSaleCategory({
       areaType: formData.areaType?.label || "",
       areaUnit: formData.areaUnit?.label || "",
       location: formData.location?.label || "",
-
     };
 
     console.log("PROPERTY FOR SALE FORM SUBMITTED:", payload);

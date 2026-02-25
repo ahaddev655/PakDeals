@@ -51,7 +51,6 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       language: formData.language?.label || "",
       format: formData.format?.label || "",
       location: formData.location?.label || "",
-
     };
 
     console.log("BOOKS AND SPORTS FORM SUBMITTED:", payload);

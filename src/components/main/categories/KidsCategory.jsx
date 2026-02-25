@@ -84,7 +84,6 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       ageGroup: formData.ageGroup.label,
       condition: formData.condition.label,
       location: formData.location.label,
-
     };
 
     console.log("KIDS FORM SUBMITTED:", payload);

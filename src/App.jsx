@@ -6,10 +6,10 @@ import MainLayout from "./layouts/MainLayout";
 import FavoritesPage from "./pages/main/FavoritesPage";
 import AddAdPage from "./pages/main/AddAdPage";
 import ErrorPage from "./pages/ErrorPage";
-// ==================== AUTH ROUTES ====================
+// ==================== AUTH PAGES ====================
 import SignUpComponent from "./components/main/SignUpComponent";
 import LoginComponent from "./components/main/LoginComponent";
-// ==================== USER ROUTES ====================
+// ==================== USER PAGES ====================
 import UserLayout from "./layouts/UserLayout";
 import UserDashboardPage from "./pages/user/UserDashboardPage";
 import UserAdsPage from "./pages/user/UserAdsPage";
@@ -24,8 +24,16 @@ import BlogsPages from "./pages/main/BlogsPages";
 import ContactPage from "./pages/main/ContactPage";
 import CategoryPage from "./pages/main/CategoryPage";
 import AdsDetailPage from "./pages/main/AdsDetailPage";
-import AdminLayout from './layouts/AdminLayout';
 // ==================== ADMIN PAGES ====================
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminUserPage from "./pages/admin/AdminUserPage";
+import AdminAdsPage from "./pages/admin/AdminAdsPage";
+import AdminAdAdsPage from "./pages/admin/AdminAdAdsPage";
+import AdminFavoritesPage from "./pages/admin/AdminFavoritesPage";
+import AdminPaymentsPage from "./pages/admin/AdminPaymentsPage";
+import AdminProfileSettingsPage from "./pages/admin/AdminProfileSettingsPage";
+import AdminPersonalProfilePage from "./pages/admin/AdminPersonalProfilePage";
 
 function App() {
   const router = createBrowserRouter([
@@ -131,7 +139,41 @@ function App() {
     // ==================== ADMIN ROUTES ====================
     {
       path: "/87b27389",
-      element: <AdminLayout />
+      element: <AdminLayout />,
+      children: [
+        {
+          index: true,
+          element: <AdminDashboardPage />,
+        },
+        {
+          path: "users",
+          element: <AdminUserPage />,
+        },
+        {
+          path: "my-ads",
+          element: <AdminAdsPage />,
+        },
+        {
+          path: "add-ad",
+          element: <AdminAdAdsPage />,
+        },
+        {
+          path: "favorites",
+          element: <AdminFavoritesPage />,
+        },
+        {
+          path: "payments",
+          element: <AdminPaymentsPage />,
+        },
+        {
+          path: "profile-settings",
+          element: <AdminProfileSettingsPage />,
+        },
+        {
+          path: "profile",
+          element: <AdminPersonalProfilePage />,
+        },
+      ],
     },
   ]);
   return <RouterProvider router={router} />;

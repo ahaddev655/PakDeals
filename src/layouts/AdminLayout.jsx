@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import AdminSidebarComponent from '../components/admin/AdminSidebarComponent';
-import { Outlet } from 'react-router-dom';
+import React, { useState } from "react";
+import AdminSidebarComponent from "../components/admin/AdminSidebarComponent";
+import { Outlet } from "react-router-dom";
 
 function AdminLayout() {
   const [offCanvasToggle, setOffCanvasToggle] = useState(false);
@@ -17,4 +17,4 @@ function AdminLayout() {
   );
 }
 
-export default AdminLayout
+export default AdminLayout;

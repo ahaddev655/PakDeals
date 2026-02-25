@@ -1,24 +1,13 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
-  const FEATURES_LIST = [
-    "Trained",
-    "Friendly",
-    "Playful",
-    "Healthy",
-    "Pure Breed",
-    "Registered",
-    "Microchipped",
-    "Neutered/Spayed",
-    "Good with Kids",
-    "Good with Other Pets",
-    "Show Quality",
-    "Farm Raised",
-  ];
-
+  // ==================== VARIABLES ====================
   const DEFAULT_FILTER = (label) => ({ id: "", label });
 
+  // ==================== USESTATES ====================
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     type: DEFAULT_FILTER("Select Type"),
@@ -36,9 +25,28 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     color: "",
     images: [],
   });
+  const [loading, setLoading] = useState(false);
 
+  // ==================== ARRAYS ====================
+  const FEATURES_LIST = [
+    "Trained",
+    "Friendly",
+    "Playful",
+    "Healthy",
+    "Pure Breed",
+    "Registered",
+    "Microchipped",
+    "Neutered/Spayed",
+    "Good with Kids",
+    "Good with Other Pets",
+    "Show Quality",
+    "Farm Raised",
+  ];
+
+  // ==================== USEREFS ====================
   const fileInputRef = useRef(null);
 
+  // ==================== CHANGES ====================
   const handleDetailChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -70,6 +78,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
   };
 
+  // ==================== REMOVE AD ====================
   const removeImage = (index) => {
     setFormData((prev) => {
       const updatedImages = [...prev.images];
@@ -78,38 +87,71 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
   };
 
+  // ==================== ADD AD FUNCTION ====================
   const handleSubmit = (e) => {
     e.preventDefault();
-    const payload = {
-      category: "animals",
-      ...formData,
-      subCategory: formData.subCategory?.label || "",
-      type: formData.type?.label || "",
-      sex: formData.sex?.label || "",
-      vaccinationStatus: formData.vaccinationStatus?.label || "",
-      location: formData.location?.label || "",
-    };
-    console.log("ANIMALS FORM SUBMITTED:", payload);
+    setLoading(true);
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      type: DEFAULT_FILTER("Select Type"),
-      sex: DEFAULT_FILTER("Select Sex"),
-      vaccinationStatus: DEFAULT_FILTER("Select Vaccination Status"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      breed: "",
-      age: "",
-      color: "",
-      images: [],
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
+
+    const form = new FormData();
+
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("type", formData.type?.label || "");
+    form.append("sex", formData.sex?.label || "");
+    form.append("vaccinationStatus", formData.vaccinationStatus?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("features", formData.features.join(", "));
+    form.append("breed", formData.breed);
+    form.append("age", formData.age);
+    form.append("color", formData.color);
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post("http://localhost:5000/api/ads/add-animal-ad/1", form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          type: DEFAULT_FILTER("Select Type"),
+          sex: DEFAULT_FILTER("Select Sex"),
+          vaccinationStatus: DEFAULT_FILTER("Select Vaccination Status"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          features: [],
+          breed: "",
+          age: "",
+          color: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error.response?.data || error.message);
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
+  // ==================== REUSABLE COMPONENTS ====================
   const renderDropdown = (label, key, dataKey, scrollable = false) => (
     <div className="w-full">
       <label className="font-semibold text-slate-600">{label}</label>
@@ -194,11 +236,20 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
           {renderDropdown("Sex", "sex", "animalSex")}
-          {renderInput("Age", "age", "number", formData.age)}
+          {renderInput("Age", "age", "text", formData.age)}
         </div>
 
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderInput("Color", "color", "text", formData.color)}
+          <div className="w-full flex flex-col">
+            <label className="font-semibold text-slate-600">Color</label>
+            <input
+              type="color"
+              name="color"
+              className="w-full border-2 border-gray-300 rounded-lg px-3 h-10.75 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
+              value={formData.color}
+              onChange={handleDetailChange}
+            />
+          </div>
           {renderDropdown(
             "Vaccination Status",
             "vaccinationStatus",
@@ -304,7 +355,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Animals Ad
+        {loading ? "Submitting Animals Ad..." : "Submit Animals Ad"}
       </button>
     </form>
   );

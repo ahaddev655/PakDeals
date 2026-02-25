@@ -12,13 +12,14 @@ function UserAdsComponent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [ads, setAds] = useState([]);
+  const userId = localStorage.getItem("userId");
 
   // ==================== ARRAYS ====================
   const tabs = [
     { key: "all-ads", label: "All Ads" },
     { key: "featured", label: "Featured" },
     { key: "active", label: "Active" },
-    { key: "inactive", label: "Inactive" },
+    { key: "pending", label: "Pending " },
     { key: "sold", label: "Sold" },
     { key: "expired", label: "Expired" },
   ];
@@ -30,7 +31,7 @@ function UserAdsComponent() {
   const statusStyles = {
     featured: "text-yellow-600 bg-yellow-100",
     active: "bg-green-100 text-green-600",
-    inactive: "bg-red-100 text-red-600",
+    pending: "bg-red-100 text-red-600",
     sold: "bg-gray-100 text-gray-600",
     expired: "bg-red-100 text-red-600",
   };
@@ -52,10 +53,39 @@ function UserAdsComponent() {
   // ==================== API CONFIGURATION ====================
   useEffect(() => {
     setLoading(true);
+
     axios
       .get(`http://localhost:5000/api/ads/all-user-ads/${userId}`)
       .then((response) => {
-        console.log(response.data);
+        const allAdsObj = response?.data?.all_ads || {};
+
+        const mergedAds = Object.values(allAdsObj).flat();
+
+        const formattedAds = mergedAds.map((ad) => {
+          let status = "pending";
+
+          if (ad.isSold) status = "sold";
+          else if (ad.isExpired) status = "expired";
+          else if (ad.isFeatured) status = "featured";
+          else if (ad.isActive) status = "active";
+          else if (ad.isPending) status = "pending";
+
+          return {
+            id: ad.id,
+            title: ad.adTitle,
+            category: ad.subCategory,
+            price: ad.price,
+            createdAt: ad.created_at.slice(5, 16).replaceAll(" ", "/"),
+            status: status,
+            img: JSON.parse(ad.images || "[]")[0] || "",
+            isActive: ad.isActive,
+            isExpired: ad.isExpired,
+            isFeatured: ad.isFeatured,
+            isSold: ad.isSold,
+          };
+        });
+
+        setAds(formattedAds);
       })
       .catch((error) => {
         console.log("FETCH USER ADS API ERROR: ", error);
@@ -111,7 +141,7 @@ function UserAdsComponent() {
           </div>
         </div>
       </div>
-      {/* -------------------- NAVIGATION TABS -------------------- */}
+      {/* ==================== NAVIGATION TABS ==================== */}
       <div className="grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 px-6 md:w-200">
         {tabs.map((tab) => (
           <button
@@ -127,7 +157,9 @@ function UserAdsComponent() {
           </button>
         ))}
       </div>
+
       <hr className="border-b border-gray-200 my-4" />
+
       {/* ==================== ADS CONTAINER ==================== */}
       <div className="bg-white">
         {/* -------------------- LOADER -------------------- */}
@@ -159,14 +191,37 @@ function UserAdsComponent() {
               </thead>
               <tbody>
                 {ads
-                  .filter(
-                    (ad) =>
-                      (selectedNavTab === "all-ads" ||
-                        ad.status === selectedNavTab) &&
-                      ad.title
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                  )
+                  .filter((ad) => {
+                    const matchesSearch = ad.title
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase());
+
+                    if (selectedNavTab === "all-ads") {
+                      return matchesSearch;
+                    }
+
+                    if (selectedNavTab === "featured") {
+                      return ad.isFeatured && matchesSearch;
+                    }
+
+                    if (selectedNavTab === "expired") {
+                      return ad.isExpired && matchesSearch;
+                    }
+
+                    if (selectedNavTab === "active") {
+                      return ad.isActive && matchesSearch;
+                    }
+
+                    if (selectedNavTab === "inactive") {
+                      return !ad.isActive && matchesSearch;
+                    }
+
+                    if (selectedNavTab === "sold") {
+                      return ad.isSold && matchesSearch;
+                    }
+
+                    return matchesSearch;
+                  })
                   .sort((a, b) => {
                     if (selectedSort === "by-name") {
                       return a.title.localeCompare(b.title);
@@ -305,13 +360,13 @@ function UserAdsComponent() {
                         setAds((prev) =>
                           prev.map((ad) =>
                             ad.id === selectedAd.id
-                              ? { ...ad, status: "inactive" }
+                              ? { ...ad, status: "pending" }
                               : ad,
                           ),
                         );
                         setSelectedAd((prev) => ({
                           ...prev,
-                          status: "inactive",
+                          status: "pending",
                         }));
                         setSelectedAd(null);
                       }}
@@ -320,7 +375,7 @@ function UserAdsComponent() {
                     </button>
                   )}
 
-                  {selectedAd.status === "inactive" && (
+                  {selectedAd.status === "pending" && (
                     <button
                       type="button"
                       className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"

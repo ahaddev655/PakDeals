@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-function PersonalProfilePage() {
+function AdminPersonalProfilePage() {
   const [userData, setUserData] = useState({
     // ==================== PERSONAL DATA ====================
     firstName: "" || null,
@@ -104,4 +104,4 @@ function PersonalProfilePage() {
   );
 }
 
-export default PersonalProfilePage;
+export default AdminPersonalProfilePage;
