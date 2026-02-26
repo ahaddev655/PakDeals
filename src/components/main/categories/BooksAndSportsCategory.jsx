@@ -1,7 +1,10 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import axios from "axios";
 
 function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const userId = localStorage.getItem("userId");
+  const [loading, setLoading] = useState(false);
   const FEATURES_LIST = [
     "Original",
     "Reprint",
@@ -41,37 +44,65 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "books-and-sports",
-      ...formData,
-      subCategory: formData.subCategory?.label || "",
-      itemType: formData.itemType?.label || "",
-      condition: formData.condition?.label || "",
-      language: formData.language?.label || "",
-      format: formData.format?.label || "",
-      location: formData.location?.label || "",
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    console.log("BOOKS AND SPORTS FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      itemType: DEFAULT_FILTER("Select Item Type"),
-      language: DEFAULT_FILTER("Select Language"),
-      format: DEFAULT_FILTER("Select Format"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      genre: "",
-      author: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("itemType", formData.itemType?.label || "");
+    form.append("language", formData.language?.label || "");
+    form.append("format", formData.format?.label || "");
+    form.append("condition", formData.condition?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("genre", formData.genre);
+    form.append("author", formData.author);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("features", formData.features.join(", "));
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(`http://localhost:5000/api/ads/add-book-ad/${userId}`, form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          itemType: DEFAULT_FILTER("Select Item Type"),
+          language: DEFAULT_FILTER("Select Language"),
+          format: DEFAULT_FILTER("Select Format"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          genre: "",
+          author: "",
+          sellerName: "",
+          sellerContact: "",
+          features: [],
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error.response?.data || error.message);
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const renderDropdown = (label, key, dataKey, scrollable = false) => (
@@ -330,7 +361,7 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Books Ad
+        {loading ? "Submitting Books Ad..." : "Submit Books Ad"}
       </button>
     </form>
   );

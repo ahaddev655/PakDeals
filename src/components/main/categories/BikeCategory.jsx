@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { toast } from "react-toastify";
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const userId = localStorage.getItem("userId");
   const FEATURES_LIST = [
     "Disc Brakes",
     "Alloy Rims",
@@ -79,7 +80,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post("http://localhost:5000/api/ads/add-bike-ad/1", form)
+      .post(`http://localhost:5000/api/ads/add-bike-ad/${userId}`, form)
       .then((response) => {
         console.log("Server Response:", response.data);
         toast.success(response?.data?.message || "Ad Submitted...");

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   // ==================== VARIABLES ====================
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const userId = localStorage.getItem("userId");
 
   // ==================== USESTATES ====================
   const [formData, setFormData] = useState({
@@ -119,7 +120,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post("http://localhost:5000/api/ads/add-animal-ad/1", form)
+      .post(`http://localhost:5000/api/ads/add-animal-ad/${userId}`, form)
       .then((response) => {
         console.log("Server Response:", response.data);
         toast.success(response?.data?.message || "Ad Submitted...");
