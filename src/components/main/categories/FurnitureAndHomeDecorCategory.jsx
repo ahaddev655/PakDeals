@@ -1,5 +1,6 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import axios from 'axios';
 
 function FurnitureAndHomeDecorCategory({
   openDropdown,
@@ -22,6 +23,8 @@ function FurnitureAndHomeDecorCategory({
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem("userId");
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -141,35 +144,66 @@ function FurnitureAndHomeDecorCategory({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "furnitureAndHomeDecor",
-      ...formData,
-      subCategory: formData.subCategory.label,
-      itemType: formData.itemType.label,
-      material: formData.material.label,
-      condition: formData.condition.label,
-      location: formData.location.label,
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    console.log("FURNITURE AND HOME DECOR FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      itemType: DEFAULT_FILTER("Select Item Type"),
-      material: DEFAULT_FILTER("Select Material"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      brand: "",
-      dimensions: "",
-      features: [],
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("itemType", formData.itemType?.label || "");
+    form.append("material", formData.material?.label || "");
+    form.append("condition", formData.condition?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("brand", formData.brand);
+    form.append("dimensions", formData.dimensions);
+    form.append("features", formData.features.join(", "));
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(`http://localhost:5000/api/ads/add-furniture-ad/${userId}`, form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          itemType: DEFAULT_FILTER("Select Item Type"),
+          material: DEFAULT_FILTER("Select Material"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          brand: "",
+          dimensions: "",
+          features: [],
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -327,7 +361,7 @@ function FurnitureAndHomeDecorCategory({
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Furniture Ad
+        {loading ? "Submitting Furniture Ad..." : "Submit Furniture Ad"}
       </button>
     </form>
   );

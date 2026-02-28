@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
 
@@ -16,6 +17,9 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     "Battery Operated",
     "Remote COntrol",
   ];
+
+  const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem("userId");
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
 
@@ -75,34 +79,64 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "kids",
-      ...formData,
-      subCategory: formData.subCategory.label,
-      itemType: formData.itemType.label,
-      ageGroup: formData.ageGroup.label,
-      condition: formData.condition.label,
-      location: formData.location.label,
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    console.log("KIDS FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      itemType: DEFAULT_FILTER("Select Item Type"),
-      ageGroup: DEFAULT_FILTER("Select Age Group"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      brand: "",
-      features: [],
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("itemType", formData.itemType?.label || "");
+    form.append("ageGroup", formData.ageGroup?.label || "");
+    form.append("condition", formData.condition?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("brand", formData.brand);
+    form.append("features", formData.features.join(", "));
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(`http://localhost:5000/api/ads/add-kids-ad/${userId}`, form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          itemType: DEFAULT_FILTER("Select Item Type"),
+          ageGroup: DEFAULT_FILTER("Select Age Group"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          brand: "",
+          features: [],
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const renderDropdown = (label, key, dataKey, scrollable = false) => (
@@ -281,7 +315,7 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Kids Ad
+        {loading ? "Submitting Kids Ad..." : "Submit Kids Ad"}
       </button>
     </form>
   );

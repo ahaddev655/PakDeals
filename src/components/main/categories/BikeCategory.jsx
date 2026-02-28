@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const userId = localStorage.getItem("userId");
@@ -108,7 +108,10 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         });
       })
       .catch((error) => {
-        console.error("Error:", error.response?.data || error.message);
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {
@@ -214,6 +217,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={1500} theme="light" />
       <div className="space-y-4">
         {/* ====================== SUB CATEGORY & MAKE ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">

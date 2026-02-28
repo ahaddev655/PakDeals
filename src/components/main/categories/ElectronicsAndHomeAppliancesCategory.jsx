@@ -1,11 +1,15 @@
+import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import { ToastContainer } from "react-toastify";
 
 function ElectronicsAndHomeAppliancesCategory({
   openDropdown,
   setOpenDropdown,
   addAd_data,
 }) {
+  const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem("userId");
   const FEATURES_LIST = [
     "Wifi Enabled",
     "Bluetooth",
@@ -44,35 +48,66 @@ function ElectronicsAndHomeAppliancesCategory({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "electronics-and-home-appliances",
-      ...formData,
-      subCategory: formData.subCategory?.label || "",
-      brand: formData.brand?.label || "",
-      condition: formData.condition?.label || "",
-      warranty: formData.warranty?.label || "",
-      location: formData.location?.label || "",
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    console.log("PROPERTY FOR RENT FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      brand: DEFAULT_FILTER("Select Brand"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      warranty: DEFAULT_FILTER("Select Warranty"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      type: "",
-      model: "",
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("brand", formData.brand?.label || "");
+    form.append("condition", formData.condition?.label || "");
+    form.append("warranty", formData.warranty?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("features", formData.features.join(", "));
+    form.append("type", formData.type);
+    form.append("model", formData.model);
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(`http://localhost:5000/api/ads/add-electronics-ad/${userId}`, form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          brand: DEFAULT_FILTER("Select Brand"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          warranty: DEFAULT_FILTER("Select Warranty"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          features: [],
+          type: "",
+          model: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const renderDropdown = (label, key, dataKey, scrollable = false) => (
@@ -175,6 +210,7 @@ function ElectronicsAndHomeAppliancesCategory({
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={1500} theme="light" />
       <div className="space-y-4">
         {/* ====================== SUB CATEGORY & AD TITLE ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
@@ -345,7 +381,7 @@ function ElectronicsAndHomeAppliancesCategory({
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Electronics Ad
+        {loading ? "Submitting Electronics Ad..." : "Submit Electronics Ad"}
       </button>
     </form>
   );

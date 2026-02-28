@@ -1,7 +1,7 @@
 import { Eye, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 function UserAdsComponent() {
   // ==================== USESTATES ====================
@@ -38,23 +38,152 @@ function UserAdsComponent() {
     expired: "bg-red-100 text-red-600",
   };
 
+  // ==================== COMPREHENSIVE CATEGORY TO TABLE MAPPING ====================
+  const categoryToTableMap = {
+    // Mobile Subcategories
+    "Mobile Phones": "mobile_ads",
+    Tablets: "mobile_ads",
+    Accessories: "mobile_ads",
+
+    // Motors Subcategories
+    Cars: "motors_ads",
+    "Car Accessories": "motors_ads",
+    "Spare Parts": "motors_ads",
+    "Buses, Vans & Trucks": "motors_ads",
+    "Rickshaw & Chingchi": "motors_ads",
+    "Tractors & Trailers": "motors_ads",
+    Boats: "motors_ads",
+    "Other Vehicles": "motors_ads",
+
+    // Property for Sale Subcategories
+    Houses: "property_sale_ads",
+    Plots: "property_sale_ads",
+    Flats: "property_sale_ads",
+    Commercial: "property_sale_ads",
+    "Farm Houses": "property_sale_ads",
+    Rooms: "property_sale_ads",
+    "Other Property": "property_sale_ads",
+
+    // Property for Rent Subcategories
+    Houses: "property_rent_ads",
+    Flats: "property_rent_ads",
+    Commercial: "property_rent_ads",
+    Rooms: "property_rent_ads",
+    "Portions & Floors": "property_rent_ads",
+    "Vacation Rentals": "property_rent_ads",
+
+    // Electronics & Home Appliances Subcategories
+    "Computers & Accessories": "electronics_ads",
+    "TV - Home Audio & Video": "electronics_ads",
+    "Cameras & Accessories": "electronics_ads",
+    "Games & Entertainment": "electronics_ads",
+    "Other Home Appliances": "electronics_ads",
+    "Kitchen Appliances": "electronics_ads",
+    "AC & Coolers": "electronics_ads",
+    "Washing Machines & Dryers": "electronics_ads",
+    "Generators, UPS & Power Solutions": "electronics_ads",
+    "Solar Panels & Inverters": "electronics_ads",
+
+    // Bike Subcategories
+    Motorcycles: "bikes_ads",
+    Scooters: "bikes_ads",
+    "Spare Parts": "bikes_ads",
+    Bicycles: "bikes_ads",
+    "ATV & Quads": "bikes_ads",
+
+    // Animals Subcategories
+    Birds: "animal_ads",
+    Cats: "animal_ads",
+    Dogs: "animal_ads",
+    "Fishs & Aquariums": "animal_ads",
+    Horses: "animal_ads",
+    Livestock: "animal_ads",
+
+    // Furniture & Home Decor Subcategories
+    "Sofa & Chairs": "furniture_ads",
+    "Beds & Wardrobes": "furniture_ads",
+    "Home Decor": "furniture_ads",
+    "Table & Dining": "furniture_ads",
+    "Office Furniture": "furniture_ads",
+    "Other Household Items": "furniture_ads",
+
+    // Fashion & Beauty Subcategories
+    Clothes: "fashion_ads",
+    Footwear: "fashion_ads",
+    Watches: "fashion_ads",
+    Jewellery: "fashion_ads",
+    Sunglasses: "fashion_ads",
+    "Bags & Luggages": "fashion_ads",
+    Wedding: "fashion_ads",
+    "Skin & Care": "fashion_ads",
+    Makeup: "fashion_ads",
+    Perfumes: "fashion_ads",
+    "Other Fashion": "fashion_ads",
+
+    // Books & Sports Subcategories
+    "Books & Magazines": "books_ads",
+    "Musical Instruments": "books_ads",
+    "Sports Equipments": "books_ads",
+    "Gym & Fitness": "books_ads",
+
+    // Kids Subcategories
+    "Kids Furniture": "kids_ads",
+    "Toys & Games": "kids_ads",
+    "Prams & Walkers": "kids_ads",
+    "Swings & Bouncers": "kids_ads",
+    "Car Seats": "kids_ads",
+    "Kids Bikes & Scooters": "kids_ads",
+    "Kids Accessories": "kids_ads",
+    "Kids Clothing": "kids_ads",
+    "Other Kids Items": "kids_ads",
+  };
+
   // ==================== REMOVE AD FUNCTION ====================
-  const removeAd = (id) => {
-    const formatedId = Number(id)
+  const removeAd = (id, category) => {
+    const formattedId = Number(id);
+
+    const tableName = categoryToTableMap[category];
+
+    if (!tableName) {
+      toast.error(`Invalid category: ${category}. Cannot delete ad.`);
+      console.error("No table mapping found for category:", category);
+      return;
+    }
+
+    const loadingToast = toast.loading("Deleting ad...");
+
+    const url = `http://localhost:5000/api/ads/delete-user-ad/${formattedId}/${tableName}`;
+
     axios
-      .delete(`http://localhost:5000/api/ads/delete-user-ad/${formatedId}`)
+      .delete(url)
       .then((response) => {
-        console.log(response.data);
-        toast.success(response?.data?.message || "Ad deleted successfully");
+        toast.update(loadingToast, {
+          render: response?.data?.message || "Ad deleted successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
+
+        setAds((prevAds) => prevAds.filter((ad) => ad.id !== id));
+
+        if (selectedAd?.id === id) {
+          setSelectedAd(null);
+        }
       })
       .catch((error) => {
-        toast.error(error?.response?.data?.error || "Internal Server Error");
+        // Update the loading toast to error
+        toast.update(loadingToast, {
+          render: error?.response?.data?.error || "Internal Server Error",
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
         console.log("DELETE USER ADS API ERROR: ", error);
       });
   };
 
   // ==================== API CONFIGURATION ====================
-  useEffect(() => {
+  const fetchUserAds = () => {
     setLoading(true);
 
     axios
@@ -97,17 +226,23 @@ function UserAdsComponent() {
         });
 
         setAds(formattedAds);
+        toast.success(response?.data?.message || "Ads Fetched Successfully");
       })
       .catch((error) => {
         console.log("FETCH USER ADS API ERROR: ", error);
+        toast.error(error?.data?.error || "Internal Server Error");
       })
       .finally(() => {
         setLoading(false);
       });
+  };
+  useEffect(() => {
+    fetchUserAds();
   }, []);
 
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
+      <ToastContainer position="top-right" autoClose={1500} theme="light" />
       {/* ==================== ADS HEADER ==================== */}
       <div className="p-6 lg:flex md:justify-between md:space-y-0 space-y-5 items-center">
         {/* -------------------- SEARCHBAR -------------------- */}
@@ -266,7 +401,7 @@ function UserAdsComponent() {
                         </div>
                         <div
                           className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-red-800 transition-all duration-300 ease-in-out cursor-pointer"
-                          onClick={() => removeAd(ad.id)}
+                          onClick={() => removeAd(ad.id, ad.category)}
                         >
                           <Trash2 strokeWidth={1.9} size={18} />
                         </div>
@@ -348,6 +483,7 @@ function UserAdsComponent() {
                       type="button"
                       className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
+                        // Update local state
                         setAds((prev) =>
                           prev.map((ad) =>
                             ad.id === selectedAd.id
@@ -359,6 +495,10 @@ function UserAdsComponent() {
                           ...prev,
                           status: "inactive",
                         }));
+
+                        // Here you would also call an API to update the status in the database
+                        // updateAdStatus(selectedAd.id, selectedAd.category, "inactive");
+
                         setSelectedAd(null);
                       }}
                     >
@@ -372,6 +512,7 @@ function UserAdsComponent() {
                       type="button"
                       className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
+                        // Update local state
                         setAds((prev) =>
                           prev.map((ad) =>
                             ad.id === selectedAd.id
@@ -383,6 +524,10 @@ function UserAdsComponent() {
                           ...prev,
                           status: "active",
                         }));
+
+                        // Here you would also call an API to update the status in the database
+                        // updateAdStatus(selectedAd.id, selectedAd.category, "active");
+
                         setSelectedAd(null);
                       }}
                     >

@@ -166,7 +166,7 @@ function SignUpComponent() {
         </div>
         {/* -------------------- FORM -------------------- */}
         <form onSubmit={handleFormSubmit} className="space-y-4 mt-3">
-          <ToastContainer position="top-right" autoClose={2500} theme="light" />
+          <ToastContainer position="top-right" autoClose={1500} theme="light" />
           {/* -------------------- FIRSTNAME -------------------- */}
           <div className="flex flex-col gap-1">
             <label htmlFor="firstName" className="font-medium text-gray-700">

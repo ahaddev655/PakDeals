@@ -133,7 +133,7 @@ function LoginComponent() {
           </h2>
         </div>
         <form onSubmit={handleFormSubmit} className="space-y-4 mt-3">
-          <ToastContainer position="top-right" autoClose={2500} theme="light" />
+          <ToastContainer position="top-right" autoClose={1500} theme="light" />
           {/* -------------------- EMAIL -------------------- */}
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="font-medium text-blue-800">
