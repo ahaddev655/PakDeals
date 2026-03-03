@@ -1,8 +1,12 @@
+import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import { toast } from 'react-toastify';
 
 function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const userId = localStorage.getItem("userId")
+  const [loading, setLoading] = useState(false)
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -104,30 +108,58 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "mobiles",
-      ...formData,
-      subCategory: formData.subCategory.label,
-      brand: formData.brand.label,
-      condition: formData.condition.label,
-      location: formData.location.label,
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    console.log("MOBILE FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      brand: DEFAULT_FILTER("Select Brand"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("brand", formData.brand);
+    form.append("condition", formData.condition?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(`http://localhost:5000/api/ads/add-mobiles-ad/${userId}`, form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          brand: DEFAULT_FILTER("Select Brand"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -138,13 +170,16 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         {renderDropdown("Brand", "brand", "mobileBrands", true)}
       </div>
       {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
-      <textarea
-        name="description"
-        rows={6}
-        value={formData.description}
-        onChange={handleDetailChange}
-        className="w-full border-2 rounded-lg px-3 py-2 border-gray-300 transition-colors duration-300 focus:ring-2 focus:ring-blue-800 resize-none"
-      ></textarea>
+      <div className="w-full">
+        <label className="font-semibold text-slate-600">Description</label>
+        <textarea
+          name="description"
+          rows={6}
+          value={formData.description}
+          onChange={handleDetailChange}
+          className="w-full border-2 rounded-lg px-3 py-2 mt-1 border-gray-300 transition-colors duration-300 focus:ring-2 focus:ring-blue-800 resize-none"
+        ></textarea>
+      </div>
       {renderDropdown("Condition", "condition", "mobileCondition")}
       <div className="sm:flex gap-6">
         {renderDropdown("Location", "location", "mobileLocation")}
@@ -214,7 +249,7 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Mobile Ad
+        {loading ? "Submitting Mobile Ad..." : "Submit Mobile Ad"}
       </button>
     </form>
   );

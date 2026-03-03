@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
 
@@ -18,6 +19,8 @@ function PropertyForSaleCategory({
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const userId = localStorage.getItem("userId");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -38,32 +41,65 @@ function PropertyForSaleCategory({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "property-for-sale",
-      ...formData,
-      subCategory: formData.subCategory?.label || "",
-      areaType: formData.areaType?.label || "",
-      areaUnit: formData.areaUnit?.label || "",
-      location: formData.location?.label || "",
-    };
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    console.log("PROPERTY FOR SALE FORM SUBMITTED:", payload);
+    const form = new FormData();
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      areaType: DEFAULT_FILTER("Select Area Type"),
-      areaUnit: DEFAULT_FILTER("Select Area Unit"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      area: "",
-      images: [],
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("areaType", formData.areaType?.label || "");
+    form.append("areaUnit", formData.areaUnit?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("features", formData.features.join(", "));
+    form.append("area", formData.area || "");
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(
+        `http://localhost:5000/api/ads/add-property-sale-ad/${userId}`,
+        form,
+      )
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          areaType: DEFAULT_FILTER("Select Area Type"),
+          areaUnit: DEFAULT_FILTER("Select Area Unit"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          features: [],
+          area: "",
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleSelect = (key, item) => {
@@ -295,7 +331,7 @@ function PropertyForSaleCategory({
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Property Sale Ad
+        {loading ? "Submitting Property Sale Ad..." : "Submit Property Sale Ad"}
       </button>
     </form>
   );

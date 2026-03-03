@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
 
@@ -17,6 +18,8 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     "Rear Camera",
   ];
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const userId = localStorage.getItem("userId");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -53,44 +56,78 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "motors",
-      ...formData,
-      subCategory: formData.subCategory?.label || "",
-      make: formData.make?.label || "",
-      condition: formData.condition?.label || "",
-      bodyFuel: formData.bodyFuel?.label || "",
-      transmission: formData.transmission?.label || "",
-      bodyType: formData.bodyType?.label || "",
-      documentStatus: formData.documentStatus?.label || "",
-      assembly: formData.assembly?.label || "",
-      location: formData.location?.label || "",
-    };
-    console.log("MOTORS FORM SUBMITTED:", payload);
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      make: DEFAULT_FILTER("Select Make"),
-      condition: DEFAULT_FILTER("Select Condition"),
-      bodyFuel: DEFAULT_FILTER("Select Fuel"),
-      transmission: DEFAULT_FILTER("Select Transmission"),
-      bodyType: DEFAULT_FILTER("Select Body Type"),
-      documentStatus: DEFAULT_FILTER("Select Document Status"),
-      assembly: DEFAULT_FILTER("Select Assembly"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      carColor: "",
-      carYear: "",
-      owners: "",
-      seats: "",
-      features: [],
-      images: [],
+    const form = new FormData();
+
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("make", formData.make?.label || "");
+    form.append("condition", formData.condition?.label || "");
+    form.append("bodyFuel", formData.bodyFuel?.label || "");
+    form.append("transmission", formData.transmission?.label || "");
+    form.append("bodyType", formData.bodyType?.label || "");
+    form.append("documentStatus", formData.documentStatus?.label || "");
+    form.append("assembly", formData.assembly?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("carColor", formData.carColor);
+    form.append("carYear", formData.carYear);
+    form.append("owners", formData.owners);
+    form.append("seats", formData.seats);
+    form.append("features", formData.features.join(", "));
+
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(`http://localhost:5000/api/ads/add-motors-ad/${userId}`, form)
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          make: DEFAULT_FILTER("Select Make"),
+          condition: DEFAULT_FILTER("Select Condition"),
+          bodyFuel: DEFAULT_FILTER("Select Fuel"),
+          transmission: DEFAULT_FILTER("Select Transmission"),
+          bodyType: DEFAULT_FILTER("Select Body Type"),
+          documentStatus: DEFAULT_FILTER("Select Document Status"),
+          assembly: DEFAULT_FILTER("Select Assembly"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          carColor: "",
+          carYear: "",
+          owners: "",
+          seats: "",
+          features: [],
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleFeatureChange = (feature) => {
@@ -240,8 +277,22 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
         {/* ====================== NUMBER OF SEATS & OWNERS ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderInput("Number Of Seats", "seats", "number", formData.seats)}
-          {renderInput("Number Of Owners", "owners", "number", formData.owners)}
+          {renderInput(
+            "Number Of Seats",
+            "seats",
+            "number",
+            formData.seats > 9 ? 9 : formData.seats < 1 ? 1 : formData.seats,
+          )}
+          {renderInput(
+            "Number Of Owners",
+            "owners",
+            "number",
+            formData.owners > 30
+              ? 30
+              : formData.owners < 1
+                ? 1
+                : formData.owners,
+          )}
         </div>
 
         {/* ====================== FEATURES ====================== */}
@@ -351,7 +402,7 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Motors Ad
+        {loading ? "Submitting Motors Ad..." : "Submit Motors Ad"}
       </button>
     </form>
   );

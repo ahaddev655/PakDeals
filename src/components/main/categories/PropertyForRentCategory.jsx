@@ -1,5 +1,6 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
+import axios from 'axios';
 
 function PropertyForRentCategory({
   openDropdown,
@@ -26,6 +27,8 @@ function PropertyForRentCategory({
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
+  const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem("userId");
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -50,42 +53,74 @@ function PropertyForRentCategory({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const payload = {
-      category: "property-for-rent",
-      ...formData,
+    if (formData.images.length !== 5) {
+      alert("Please upload exactly 5 images");
+      return;
+    }
 
-      subCategory: formData.subCategory?.label || "",
-      areaUnit: formData.areaUnit?.label || "",
-      furnishedStatus: formData.furnishedStatus?.label || "",
-      bedrooms: formData.bedrooms?.label || "",
-      bathrooms: formData.bathrooms?.label || "",
-      numberOfStoreys: formData.numberOfStoreys?.label || "",
-      constructionState: formData.constructionState?.label || "",
-      location: formData.location?.label || "",
-    };
-    // FILTERS
+    const form = new FormData();
 
-    console.log("PROPERTY FOR RENT FORM SUBMITTED:", payload);
+    form.append("subCategory", formData.subCategory?.label || "");
+    form.append("areaUnit", formData.areaUnit?.label || "");
+    form.append("areaSize", formData.areaSize || "");
+    form.append("furnishedStatus", formData.furnishedStatus?.label || "");
+    form.append("bedrooms", formData.bedrooms?.label || "");
+    form.append("bathrooms", formData.bathrooms?.label || "");
+    form.append("bathrooms", formData.bathrooms?.label || "");
+    form.append("numberOfStoreys", formData.numberOfStoreys?.label || "");
+    form.append("constructionState", formData.constructionState?.label || "");
+    form.append("location", formData.location?.label || "");
+    form.append("adTitle", formData.adTitle);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("sellerName", formData.sellerName);
+    form.append("sellerContact", formData.sellerContact);
+    form.append("features", formData.features.join(", "));
 
-    setFormData({
-      subCategory: DEFAULT_FILTER("Select Sub Category"),
-      areaUnit: DEFAULT_FILTER("Select Area Unit"),
-      furnishedStatus: DEFAULT_FILTER("Select Furnished Status"),
-      bedrooms: DEFAULT_FILTER("Select Bedrooms"),
-      bathrooms: DEFAULT_FILTER("Select Bathrooms"),
-      numberOfStoreys: DEFAULT_FILTER("Select No. of Storeys"),
-      constructionState: DEFAULT_FILTER("Select Construction State"),
-      location: DEFAULT_FILTER("Select Location"),
-      adTitle: "",
-      description: "",
-      price: "",
-      sellerName: "",
-      sellerContact: "",
-      features: [],
-      areaSize: "",
-      images: [],
+    formData.images.forEach((image) => {
+      form.append("images", image);
     });
+    // -------------------- API CONFIGURATION --------------------
+    axios
+      .post(
+        `http://localhost:5000/api/ads/add-property-rent-ad/${userId}`,
+        form,
+      )
+      .then((response) => {
+        console.log("Server Response:", response.data);
+        toast.success(response?.data?.message || "Ad Submitted...");
+
+        setFormData({
+          subCategory: DEFAULT_FILTER("Select Sub Category"),
+          areaUnit: DEFAULT_FILTER("Select Area Unit"),
+          areaSize: "",
+          furnishedStatus: DEFAULT_FILTER("Select Furnished Status"),
+          bedrooms: DEFAULT_FILTER("Select Bedrooms"),
+          bathrooms: DEFAULT_FILTER("Select Bathrooms"),
+          numberOfStoreys: DEFAULT_FILTER("Select No. of Storeys"),
+          constructionState: DEFAULT_FILTER("Select Construction State"),
+          location: DEFAULT_FILTER("Select Location"),
+          adTitle: "",
+          description: "",
+          price: "",
+          sellerName: "",
+          sellerContact: "",
+          features: [],
+          images: [],
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response?.details || error.response?.error,
+        );
+        toast.error(error?.response?.error || "Something went wrong");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleDetailChange = (e) =>
@@ -342,7 +377,7 @@ function PropertyForRentCategory({
         className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
         transition-all duration-300 font-medium rounded-lg"
       >
-        Submit Property Rent Ad
+        {loading ? "Submitting Property Rent Ad..." : "Submit Property Rent Ad"}
       </button>
     </form>
   );
