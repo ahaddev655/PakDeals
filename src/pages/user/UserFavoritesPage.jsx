@@ -229,7 +229,7 @@ function UserFavoritesPage() {
                   </button>
 
                   <Link
-                    to={`/${formatCategory(selectedAd.category)}/${selectedAd.id}`}
+                    to={`/ad/${formatCategory(selectedAd.category)}/${selectedAd.id}`}
                     className="flex-1"
                   >
                     <button

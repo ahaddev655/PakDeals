@@ -1,6 +1,7 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
 import axios from 'axios';
+import { toast, ToastContainer } from "react-toastify";
 
 function PropertyForRentCategory({
   openDropdown,
@@ -55,11 +56,6 @@ function PropertyForRentCategory({
     e.preventDefault();
     setLoading(true);
 
-    if (formData.images.length !== 5) {
-      alert("Please upload exactly 5 images");
-      return;
-    }
-
     const form = new FormData();
 
     form.append("subCategory", formData.subCategory?.label || "");
@@ -85,7 +81,7 @@ function PropertyForRentCategory({
     // -------------------- API CONFIGURATION --------------------
     axios
       .post(
-        `http://localhost:5000/api/ads/add-property-rent-ad/${userId}`,
+        `https://pak-deals-backend.vercel.app/api/ads/add-property-rent-ad/${userId}`,
         form,
       )
       .then((response) => {
@@ -218,6 +214,7 @@ function PropertyForRentCategory({
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={1500} theme="light" />
       <div className="space-y-4">
         {/* ====================== SUB CATEGORY & AD TITLE ====================== */}
         <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">

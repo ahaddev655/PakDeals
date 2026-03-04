@@ -93,11 +93,6 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     e.preventDefault();
     setLoading(true);
 
-    if (formData.images.length !== 5) {
-      alert("Please upload exactly 5 images");
-      return;
-    }
-
     const form = new FormData();
 
     form.append("subCategory", formData.subCategory?.label || "");
@@ -120,7 +115,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`http://localhost:5000/api/ads/add-animal-ad/${userId}`, form)
+      .post(`https://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`, form)
       .then((response) => {
         console.log("Server Response:", response.data);
         toast.success(response?.data?.message || "Ad Submitted...");
@@ -148,7 +143,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
           "Error:",
           error.response?.details || error.response?.error,
         );
-        toast.error(error?.response?.error || "Something went wrong");
+        toast.error(error?.response?.data?.error || "Something went wrong");
       })
       .finally(() => {
         setLoading(false);

@@ -1,6 +1,7 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
 import axios from 'axios';
+import { toast, ToastContainer } from "react-toastify";
 
 function FurnitureAndHomeDecorCategory({
   openDropdown,
@@ -146,11 +147,6 @@ function FurnitureAndHomeDecorCategory({
     e.preventDefault();
     setLoading(true);
 
-    if (formData.images.length !== 5) {
-      alert("Please upload exactly 5 images");
-      return;
-    }
-
     const form = new FormData();
 
     form.append("subCategory", formData.subCategory?.label || "");
@@ -172,7 +168,7 @@ function FurnitureAndHomeDecorCategory({
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`http://localhost:5000/api/ads/add-furniture-ad/${userId}`, form)
+      .post(`https://pak-deals-backend.vercel.app/api/ads/add-furniture-ad/${userId}`, form)
       .then((response) => {
         console.log("Server Response:", response.data);
         toast.success(response?.data?.message || "Ad Submitted...");
@@ -208,6 +204,7 @@ function FurnitureAndHomeDecorCategory({
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={1500} theme="light" />
       {/* ====================== SUB CATEGORY & ITEM TYPE ====================== */}
       <div className="sm:flex gap-6">
         {renderDropdown(

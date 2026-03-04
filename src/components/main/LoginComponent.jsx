@@ -42,7 +42,7 @@ function LoginComponent() {
     }
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post("http://localhost:5000/api/auth/login", formData)
+      .post("https://pak-deals-backend.vercel.app/api/auth/login", formData)
       .then((response) => {
         console.log(response.data.user);
         const user = response.data.user;
@@ -85,7 +85,7 @@ function LoginComponent() {
 
           // -------------------- API CONFIGURATION --------------------
           axios
-            .post("http://localhost:5000/api/auth/google-login", googleFormData)
+            .post("https://pak-deals-backend.vercel.app/api/auth/google-login", googleFormData)
 
             .then((response) => {
               console.log(response.data.user);

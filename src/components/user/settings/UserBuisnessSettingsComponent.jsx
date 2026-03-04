@@ -124,7 +124,7 @@ function UserBuisnessSettingsComponent() {
     // -------------------- API CONFIGURATION --------------------
     axios
       .put(
-        `http://localhost:5000/api/users/update-buisness-profile/${userId}`,
+        `https://pak-deals-backend.vercel.app/api/users/update-buisness-profile/${userId}`,
         payload,
       )
       .then((response) => {
@@ -141,7 +141,7 @@ function UserBuisnessSettingsComponent() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/api/users/fetch-user/${userId}`)
+      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
       .then((response) => {
         setData(response.data.user);
       })

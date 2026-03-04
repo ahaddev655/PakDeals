@@ -67,7 +67,7 @@ function SignUpComponent() {
     }
     // -------------------- INSERT USER API --------------------
     axios
-      .post("http://localhost:5000/api/auth/register", formData)
+      .post("https://pak-deals-backend.vercel.app/api/auth/register", formData)
       .then((response) => {
         console.log(response.data);
         const user = response.data;
@@ -113,7 +113,7 @@ function SignUpComponent() {
           // -------------------- INSERT USER API --------------------
           axios
             .post(
-              "http://localhost:5000/api/auth/google-register",
+              "https://pak-deals-backend.vercel.app/api/auth/google-register",
               googleData,
               { headers: { "Content-Type": "application/json" } },
             )

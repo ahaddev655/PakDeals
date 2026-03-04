@@ -181,7 +181,7 @@ function UserPersonalSettingsComponent() {
     // -------------------- API CONFIGURATION --------------------
     axios
       .put(
-        `http://localhost:5000/api/users/update-personal-profile/${userId}`,
+        `https://pak-deals-backend.vercel.app/api/users/update-personal-profile/${userId}`,
         payload,
       )
       .then((response) => {
@@ -198,7 +198,7 @@ function UserPersonalSettingsComponent() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/api/users/fetch-user/${userId}`)
+      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
       .then((response) => {
         setPersonalData(response.data.user);
       })

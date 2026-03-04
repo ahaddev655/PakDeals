@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 function ElectronicsAndHomeAppliancesCategory({
   openDropdown,
@@ -50,11 +50,6 @@ function ElectronicsAndHomeAppliancesCategory({
     e.preventDefault();
     setLoading(true);
 
-    if (formData.images.length !== 5) {
-      alert("Please upload exactly 5 images");
-      return;
-    }
-
     const form = new FormData();
 
     form.append("subCategory", formData.subCategory?.label || "");
@@ -76,7 +71,7 @@ function ElectronicsAndHomeAppliancesCategory({
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`http://localhost:5000/api/ads/add-electronics-ad/${userId}`, form)
+      .post(`https://pak-deals-backend.vercel.app/api/ads/add-electronics-ad/${userId}`, form)
       .then((response) => {
         console.log("Server Response:", response.data);
         toast.success(response?.data?.message || "Ad Submitted...");

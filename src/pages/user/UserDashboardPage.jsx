@@ -28,7 +28,7 @@ function UserDashboardPage() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/ads/all-ads")
+      .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
       .then((response) => {
         console.log(response.data);
         const data = response.data;

@@ -19,7 +19,7 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   // -------------------- API CONFIGURATION --------------------
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/users/fetch-user/${userId}`)
+      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
       .then((response) => {
         setFirstName(response.data.user.firstName);
       })

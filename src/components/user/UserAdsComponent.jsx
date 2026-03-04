@@ -152,7 +152,7 @@ function UserAdsComponent() {
 
     const loadingToast = toast.loading("Deleting ad...");
 
-    const url = `http://localhost:5000/api/ads/delete-user-ad/${formattedId}/${tableName}`;
+    const url = `https://pak-deals-backend.vercel.app/api/ads/delete-user-ad/${formattedId}/${tableName}`;
 
     axios
       .delete(url)
@@ -187,7 +187,7 @@ function UserAdsComponent() {
     setLoading(true);
 
     axios
-      .get(`http://localhost:5000/api/ads/all-user-ads/${userId}`)
+      .get(`https://pak-deals-backend.vercel.app/api/ads/all-user-ads/${userId}`)
       .then((response) => {
         const allAdsObj = response?.data?.all_ads || {};
 
