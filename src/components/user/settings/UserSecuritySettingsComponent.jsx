@@ -101,10 +101,8 @@ function UserSecuritySettingsComponent() {
             response?.data?.message ||
             "Form submitted successfully...",
         );
-        console.log("PASSWORD UPDATED SUCCESSFULLY: ", payload);
       })
       .catch((error) => {
-        console.log("UPDATE PASSWORD API ERROR: ", error);
         toast.error(
           error?.response?.data?.error ||
             error?.response?.error ||

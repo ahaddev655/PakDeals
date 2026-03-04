@@ -69,7 +69,6 @@ function SignUpComponent() {
     axios
       .post("https://pak-deals-backend.vercel.app/api/auth/register", formData)
       .then((response) => {
-        console.log(response.data);
         const user = response.data;
         localStorage.setItem("token", user.token);
         localStorage.setItem("id", user.id);

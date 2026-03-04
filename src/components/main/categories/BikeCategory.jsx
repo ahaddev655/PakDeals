@@ -77,7 +77,6 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     axios
       .post(`https://pak-deals-backend.vercel.app/api/ads/add-bike-ad/${userId}`, form)
       .then((response) => {
-        console.log("Server Response:", response.data);
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -103,10 +102,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         });
       })
       .catch((error) => {
-        console.error(
-          "Error:",
-          error.response?.details || error.response?.error,
-        );
+
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {

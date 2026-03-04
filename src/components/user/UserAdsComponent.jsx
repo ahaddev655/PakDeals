@@ -178,7 +178,6 @@ function UserAdsComponent() {
           isLoading: false,
           autoClose: 1500,
         });
-        console.log("DELETE USER ADS API ERROR: ", error);
       });
   };
 
@@ -229,8 +228,7 @@ function UserAdsComponent() {
         toast.success(response?.data?.message || "Ads Fetched Successfully");
       })
       .catch((error) => {
-        console.log("FETCH USER ADS API ERROR: ", error);
-        toast.error(error?.data?.error || "Internal Server Error");
+        toast.error(error?.response?.data?.error || "Internal Server Error");
       })
       .finally(() => {
         setLoading(false);

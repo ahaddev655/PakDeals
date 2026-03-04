@@ -189,8 +189,7 @@ function UserPersonalSettingsComponent() {
         console.log(response.data);
       })
       .catch((error) => {
-        toast.error(error?.response?.error || "Internal Server Error");
-        console.log("UPDATE PERSONAL DATA API ERROR: ", error);
+        toast.error(error?.response?.data?.error || "Internal Server Error");
       });
   };
 
@@ -204,7 +203,6 @@ function UserPersonalSettingsComponent() {
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
-        console.log("PERSONAL PROFILE API ERROR: ", error);
       })
       .finally(() => {
         setLoading(false);

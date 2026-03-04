@@ -73,7 +73,7 @@ function ElectronicsAndHomeAppliancesCategory({
     axios
       .post(`https://pak-deals-backend.vercel.app/api/ads/add-electronics-ad/${userId}`, form)
       .then((response) => {
-        console.log("Server Response:", response.data);
+
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -94,10 +94,7 @@ function ElectronicsAndHomeAppliancesCategory({
         });
       })
       .catch((error) => {
-        console.error(
-          "Error:",
-          error.response?.details || error.response?.error,
-        );
+
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {

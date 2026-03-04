@@ -25,7 +25,6 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
-        console.log("PERSONAL PROFILE API ERROR: ", error);
       });
   }, []);
 
