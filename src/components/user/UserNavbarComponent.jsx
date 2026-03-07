@@ -1,7 +1,8 @@
 import axios from "axios";
-import { Menu, MoveLeft, MoveRight, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Menu, MoveRight, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 
 function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const [navbarToggle, setNavbarToggle] = useState(false);

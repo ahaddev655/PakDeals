@@ -1,21 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MapPin, CalendarDays, Phone, Check } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { MapPin, CalendarDays, Phone, Check, MoveRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function AdsDetailPage() {
   const imageRef = useRef(null);
-  const location = useLocation();
-  const hideFeatures = location.pathname.startsWith("/ad/mobile/");
-  const images = [
-    "/assets/profile.jpg",
-    "/assets/profile.jpg",
-    "/assets/profile.jpg",
-    "/assets/profile.jpg",
-    "/assets/k5lf638szuebxt02cpab.jpg",
-  ];
 
   const handleImageChange = (index) => {
-    imageRef.current.src = images[index];
+    imageRef.current.src = adDetails.images[index];
   };
 
   const [toggleNumber, setToggleNumber] = useState(false);
@@ -40,6 +31,13 @@ function AdsDetailPage() {
       "Boundary Wall",
       "Corner Plot",
       "Park Facing",
+    ],
+    images: [
+      "/assets/profile.jpg",
+      "/assets/k5lf638szuebxt02cpab.jpg",
+      "/assets/profile.jpg",
+      "/assets/k5lf638szuebxt02cpab.jpg",
+      "/assets/profile.jpg",
     ],
     description: "5 Marla plot on main GT Road Rawat is available for sale.",
     amount: 500000,
@@ -117,7 +115,7 @@ function AdsDetailPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 mt-3.5 gap-3.5">
-              {images.map((img, index) => (
+              {adDetails.images.map((img, index) => (
                 <img
                   key={index}
                   src={img}
@@ -159,7 +157,7 @@ function AdsDetailPage() {
             </div>
           </div>
           {/* -------------------- AMENITIES -------------------- */}
-          {!hideFeatures && (
+          {adDetails.features && (
             <div className="mt-6 p-3 bg-white shadow-lg w-full rounded-lg">
               <div className="mb-4">
                 <h1 className="text-xl font-semibold text-gray-700">
@@ -173,7 +171,7 @@ function AdsDetailPage() {
                     className="flex items-center gap-2 text-gray-500 mb-3"
                   >
                     <Check
-                      strokeWidth={1.4}
+                      strokeWidth={2.3}
                       size={18}
                       className="text-blue-800"
                     />
@@ -201,8 +199,10 @@ function AdsDetailPage() {
         <div className="w-full lg:w-1/4 relative">
           <div
             ref={sidebarRef}
-            className={`p-3 bg-white shadow-lg w-full rounded-lg h-fit ${
-              isFixed ? "lg:fixed lg:top-5 lg:w-75.25" : "relative mt-6"
+            className={`p-3 bg-white shadow-lg w-full rounded-lg ${
+              isFixed
+                ? "lg:fixed lg:top-5 lg:w-[calc(25%-1.25rem)] max-h-[calc(100vh-2.5rem)]"
+                : "relative mt-6 h-fit"
             }`}
           >
             {/* -------------------- NAME & DATE -------------------- */}
@@ -212,13 +212,11 @@ function AdsDetailPage() {
                 Posted on {adDetails.postDate}
               </h1>
             </div>
-
             {/* -------------------- LOCATION -------------------- */}
             <div className="flex items-center gap-1 mt-2">
               <MapPin strokeWidth={2.4} size={16} className="text-gray-500" />
               <h6 className="text-gray-500 text-sm">{adDetails.location}</h6>
             </div>
-
             {/* -------------------- NUMBER -------------------- */}
             <div className="flex items-center gap-1 mt-2">
               <Phone strokeWidth={2.4} size={16} className="text-gray-500" />
@@ -226,8 +224,6 @@ function AdsDetailPage() {
                 {toggleNumber ? adDetails.number : encryptedNumber}
               </h6>
             </div>
-
-            {/* -------------------- BUTTON -------------------- */}
             <div className="text-center">
               <button
                 className="mt-4 text-gray-500 text-sm font-medium"
@@ -236,6 +232,19 @@ function AdsDetailPage() {
                 {toggleNumber ? "Hide Number" : "Show Number"}
               </button>
             </div>
+            {/* -------------------- BUTTON -------------------- */}
+            <Link
+              to={`https://api.whatsapp.com/send/?phone=${adDetails.number}&text&app_absent=0&lang=en`}
+              target="_blank"
+            >
+              <button
+                type="button"
+                className="flex group items-center w-full gap-1 justify-center py-3 bg-blue-900 rounded-md text-white mt-3"
+              >
+                Let's Chat
+                <MoveRight className="group-hover:translate-x-1 transition-all" />
+              </button>
+            </Link>
           </div>
         </div>
       </div>
