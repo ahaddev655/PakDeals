@@ -72,6 +72,7 @@ function SignUpComponent() {
         const user = response.data;
         localStorage.setItem("token", user.token);
         localStorage.setItem("id", user.id);
+        localStorage.setItem("role", user.role);
         toast.success(response?.data?.message);
         setFormData({
           firstName: "",
@@ -118,8 +119,9 @@ function SignUpComponent() {
             )
             .then((response) => {
               const user = response.data;
-              localStorage.setItem("userToken", user.token);
-              localStorage.setItem("userId", user.id);
+              localStorage.setItem("token", user.token);
+              localStorage.setItem("id", user.id);
+              localStorage.setItem("role", user.role);
               toast.success(response?.data?.message);
 
               setTimeout(() => {

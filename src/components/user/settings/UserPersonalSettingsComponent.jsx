@@ -197,7 +197,9 @@ function UserPersonalSettingsComponent() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
       .then((response) => {
         setPersonalData(response.data.user);
       })

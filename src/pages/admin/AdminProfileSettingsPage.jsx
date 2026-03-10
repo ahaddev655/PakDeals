@@ -4,6 +4,7 @@ import UserPersonalSettingsComponent from "../../components/user/settings/UserPe
 import UserBuisnessSettingsComponent from "../../components/user/settings/UserBuisnessSettingsComponent";
 import UserSecuritySettingsComponent from "../../components/user/settings/UserSecuritySettingsComponent";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AdminProfileSettingsPage() {
   // ==================== NAVIGATION TABS JS ====================
@@ -29,12 +30,14 @@ function AdminProfileSettingsPage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   // ==================== API CONFIGURATION ====================
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
       .then((response) => {
         const user = response.data.user;
         setFirstName(user.firstName);
@@ -48,6 +51,18 @@ function AdminProfileSettingsPage() {
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+
+  const userToken = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userToken && userId && userRole === "admin") {
+      return;
+    }
+    setTimeout(() => {
+      navigate("/user-dashboard");
+    }, 500);
   }, []);
   return (
     <div className="sm:px-6 px-2.5 py-6">

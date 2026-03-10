@@ -30,8 +30,8 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
 
   const userLogOut = (e) => {
     e.preventDefault();
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
     navigate("/login");
   };
 

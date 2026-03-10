@@ -43,7 +43,10 @@ function FavoritesPage() {
       ) : (
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
           {favorites.map((ad) => (
-            <Link key={ad.id} to={`/ad/${formatCategory(ad.category)}/${ad.id}`}>
+            <Link
+              key={ad.id}
+              to={`/ad/${formatCategory(ad.category)}/${ad.id}`}
+            >
               <div className="border-2 border-blue-800 rounded-lg p-1">
                 <div className="relative">
                   <img src={ad.image} alt="IMG" className="w-full rounded-md" />

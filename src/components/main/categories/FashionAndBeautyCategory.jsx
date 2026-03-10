@@ -173,9 +173,11 @@ function FashionAndBeautyCategory({
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`https://pak-deals-backend.vercel.app/api/ads/add-fashion-ad/${userId}`, form)
+      .post(
+        `https://pak-deals-backend.vercel.app/api/ads/add-fashion-ad/${userId}`,
+        form,
+      )
       .then((response) => {
-
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -198,7 +200,6 @@ function FashionAndBeautyCategory({
         });
       })
       .catch((error) => {
-
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {

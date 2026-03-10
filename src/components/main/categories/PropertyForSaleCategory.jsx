@@ -68,7 +68,6 @@ function PropertyForSaleCategory({
         form,
       )
       .then((response) => {
-
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -87,7 +86,6 @@ function PropertyForSaleCategory({
         });
       })
       .catch((error) => {
-
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {

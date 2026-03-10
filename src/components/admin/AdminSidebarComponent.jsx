@@ -9,14 +9,19 @@ import {
   Megaphone,
   MessageCircle,
   Plus,
+  UserIcon,
   X,
 } from "lucide-react";
 
 function AdminSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const links = [
     { icon: LayoutDashboard, text: "Dashboard", link: "/87b27389/" },
-    { icon: Megaphone, text: "User Management", link: "/87b27389/users" },
-    { icon: Megaphone, text: "My Ads", link: "/87b27389/my-ads" },
+    { icon: UserIcon, text: "Users Management", link: "/87b27389/users" },
+    {
+      icon: Megaphone,
+      text: "Ads Management",
+      link: "/87b27389/payments",
+    },
     {
       icon: Heart,
       text: "My Favorites",
@@ -39,8 +44,9 @@ function AdminSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
 
   const userLogOut = (e) => {
     e.preventDefault();
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
     navigate("/login");
   };
   return (

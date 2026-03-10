@@ -1,6 +1,6 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 function PropertyForRentCategory({
@@ -85,7 +85,6 @@ function PropertyForRentCategory({
         form,
       )
       .then((response) => {
-
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -108,7 +107,6 @@ function PropertyForRentCategory({
         });
       })
       .catch((error) => {
-
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {

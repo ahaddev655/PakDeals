@@ -18,7 +18,7 @@ function PersonalProfilePage() {
     buisnessCategory: "" || null,
     buisnessType: "" || null,
   });
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(true);
 
   // -------------------- API CONFIGURATION --------------------

@@ -47,6 +47,7 @@ function LoginComponent() {
         const user = response.data.user;
         localStorage.setItem("token", user.token);
         localStorage.setItem("id", user.id);
+        localStorage.setItem("role", user.role);
         toast.success(response?.data?.message);
         setFormData({
           email: "",
@@ -90,8 +91,9 @@ function LoginComponent() {
 
             .then((response) => {
               const user = response.data.user;
-              localStorage.setItem("userToken", user.token);
-              localStorage.setItem("userId", user.id);
+              localStorage.setItem("token", user.token);
+              localStorage.setItem("id", user.id);
+              localStorage.setItem("role", user.role);
               toast.success(response?.data?.message);
 
               setTimeout(() => {

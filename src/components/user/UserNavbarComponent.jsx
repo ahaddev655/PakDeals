@@ -2,7 +2,6 @@ import axios from "axios";
 import { Menu, MoveRight, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
 
 function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const [navbarToggle, setNavbarToggle] = useState(false);
@@ -15,17 +14,19 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   ];
 
   const [firstName, setFirstName] = useState("");
-  const userId = localStorage.getItem("userId");
-
+  const userId = localStorage.getItem("id");
+  const userRole = localStorage.getItem("role");
   // -------------------- API CONFIGURATION --------------------
   useEffect(() => {
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
       .then((response) => {
         setFirstName(response.data.user.firstName);
       })
       .catch((error) => {
-        toast.error(error?.response?.data?.error || "Internal Server Error");
+        console.error(error?.response?.data?.error || "Internal Server Error");
       });
   }, []);
 
@@ -48,6 +49,22 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
             </NavLink>
           </li>
         ))}
+
+        {userRole === "admin" && (
+          <li>
+            <NavLink
+              to="/87b27389"
+              end
+              className={({ isActive }) =>
+                `font-medium transition-colors duration-300 ease-in-out ${
+                  isActive ? "text-black" : "text-gray-500 hover:text-black"
+                }`
+              }
+            >
+              Admin
+            </NavLink>
+          </li>
+        )}
       </ul>
 
       {/* TOGGLE BUTTONS */}
@@ -83,7 +100,6 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
               <NavLink
                 to={link.link}
                 end
-                onClick={() => setNavbarToggle(false)}
                 className={({ isActive }) =>
                   `font-medium transition-colors duration-300 ease-in-out ${
                     isActive ? "text-black" : "text-gray-500 hover:text-black"
@@ -94,6 +110,22 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
               </NavLink>
             </li>
           ))}
+
+          {userRole === "admin" && (
+            <li>
+              <NavLink
+                to="/87b27389"
+                end
+                className={({ isActive }) =>
+                  `font-medium transition-colors duration-300 ease-in-out ${
+                    isActive ? "text-black" : "text-gray-500 hover:text-black"
+                  }`
+                }
+              >
+                Admin
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
 

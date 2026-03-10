@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function AdminPersonalProfilePage() {
@@ -18,14 +19,28 @@ function AdminPersonalProfilePage() {
     buisnessCategory: "" || null,
     buisnessType: "" || null,
   });
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(true);
+
+  const userToken = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userToken && userId && userRole === "admin") {
+      return;
+    }
+    setTimeout(() => {
+      navigate("/user-dashboard");
+    }, 500);
+  }, []);
 
   // -------------------- API CONFIGURATION --------------------
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
       .then((response) => {
         setUserData(response.data.user);
       })

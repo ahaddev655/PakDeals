@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 function AdminAdsPage() {
   // ==================== AUTH CHECK ====================
-  const userToken = localStorage.getItem("userToken");
-  const userId = localStorage.getItem("userId");
+  const userToken = localStorage.getItem("token");
+  const userId = localStorage.getItem("id");
+  const userRole = localStorage.getItem("role");
   const navigate = useNavigate();
   useEffect(() => {
-    if (userToken && userId) {
+    if (userToken && userId && userRole === "admin") {
       return;
     }
     setTimeout(() => {
-      navigate("/signup");
+      navigate("/user-dashboard");
     }, 500);
   }, []);
   return (

@@ -140,7 +140,9 @@ function UserBuisnessSettingsComponent() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
       .then((response) => {
         setData(response.data.user);
       })

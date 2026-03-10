@@ -16,8 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 function UserAdAdsPage() {
   // ====================== AUTH CHECK ======================
-  const userToken = localStorage.getItem("userToken");
-  const userId = localStorage.getItem("userId");
+  const userToken = localStorage.getItem("token");
+  const userId = localStorage.getItem("id");
   const navigate = useNavigate();
   useEffect(() => {
     if (userToken && userId) {

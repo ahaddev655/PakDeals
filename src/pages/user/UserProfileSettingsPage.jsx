@@ -29,12 +29,14 @@ function UserProfileSettingsPage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   // ==================== API CONFIGURATION ====================
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
       .then((response) => {
         const user = response.data.user;
         setFirstName(user.firstName);

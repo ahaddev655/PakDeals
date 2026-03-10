@@ -115,7 +115,10 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`https://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`, form)
+      .post(
+        `https://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`,
+        form,
+      )
       .then((response) => {
         toast.success(response?.data?.message || "Ad Submitted...");
 
@@ -138,7 +141,6 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         });
       })
       .catch((error) => {
-
         toast.error(error?.response?.data?.error || "Something went wrong");
       })
       .finally(() => {

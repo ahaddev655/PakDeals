@@ -86,9 +86,11 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`https://pak-deals-backend.vercel.app/api/ads/add-motors-ad/${userId}`, form)
+      .post(
+        `https://pak-deals-backend.vercel.app/api/ads/add-motors-ad/${userId}`,
+        form,
+      )
       .then((response) => {
-
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -115,7 +117,6 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         });
       })
       .catch((error) => {
-
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {

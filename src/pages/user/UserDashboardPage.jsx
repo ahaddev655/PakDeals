@@ -7,8 +7,8 @@ import axios from "axios";
 
 function UserDashboardPage() {
   // ==================== AUTH CHECK ====================
-  const userToken = localStorage.getItem("userToken");
-  const userId = localStorage.getItem("userId");
+  const userToken = localStorage.getItem("token");
+  const userId = localStorage.getItem("id");
   const navigate = useNavigate();
   useEffect(() => {
     if (userToken && userId) {

@@ -12,7 +12,7 @@ function UserAdsComponent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [ads, setAds] = useState([]);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
 
   // ==================== PAGINATION STATES ====================
   const [currentPage, setCurrentPage] = useState(1);

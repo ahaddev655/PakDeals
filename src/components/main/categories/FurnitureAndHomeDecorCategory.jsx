@@ -1,6 +1,6 @@
 import { ChevronDown, Plus, X } from "lucide-react";
 import { useState, useRef } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 function FurnitureAndHomeDecorCategory({
@@ -168,9 +168,11 @@ function FurnitureAndHomeDecorCategory({
     });
     // -------------------- API CONFIGURATION --------------------
     axios
-      .post(`https://pak-deals-backend.vercel.app/api/ads/add-furniture-ad/${userId}`, form)
+      .post(
+        `https://pak-deals-backend.vercel.app/api/ads/add-furniture-ad/${userId}`,
+        form,
+      )
       .then((response) => {
-
         toast.success(response?.data?.message || "Ad Submitted...");
 
         setFormData({
@@ -191,7 +193,6 @@ function FurnitureAndHomeDecorCategory({
         });
       })
       .catch((error) => {
-
         toast.error(error?.response?.error || "Something went wrong");
       })
       .finally(() => {
