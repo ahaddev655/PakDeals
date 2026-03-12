@@ -20,7 +20,7 @@ function PropertyForSaleCategory({
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({

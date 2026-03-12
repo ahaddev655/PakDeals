@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const FEATURES_LIST = [
     "Original",

@@ -20,7 +20,7 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   ];
 
   const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
 

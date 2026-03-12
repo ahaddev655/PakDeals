@@ -150,7 +150,7 @@ function App() {
           element: <AdminUserPage />,
         },
         {
-          path: "my-ads",
+          path: "ads",
           element: <AdminAdsPage />,
         },
         {

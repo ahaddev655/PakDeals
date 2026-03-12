@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   // ==================== VARIABLES ====================
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
 
   // ==================== USESTATES ====================
   const [formData, setFormData] = useState({

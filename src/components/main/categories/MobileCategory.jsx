@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({

@@ -6,7 +6,7 @@ import axios from "axios";
 function UserPersonalSettingsComponent() {
   // ==================== USE STATES & VARIABLES ====================
 
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const [personalData, setPersonalData] = useState({
     firstName: "" || null,
     lastName: "" || null,

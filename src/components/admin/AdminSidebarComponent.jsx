@@ -20,7 +20,7 @@ function AdminSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     {
       icon: Megaphone,
       text: "Ads Management",
-      link: "/87b27389/payments",
+      link: "/87b27389/ads",
     },
     {
       icon: Heart,

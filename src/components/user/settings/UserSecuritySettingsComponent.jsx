@@ -87,7 +87,7 @@ function UserSecuritySettingsComponent() {
       ...data,
     };
     // -------------------- API CONFIGURATION --------------------
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("id");
     axios
       .put(
         `https://pak-deals-backend.vercel.app/api/users/update-password/${userId}`,

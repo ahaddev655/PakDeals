@@ -29,7 +29,7 @@ function PropertyForRentCategory({
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
   const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),

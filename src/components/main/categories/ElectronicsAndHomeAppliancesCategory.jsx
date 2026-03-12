@@ -9,7 +9,7 @@ function ElectronicsAndHomeAppliancesCategory({
   addAd_data,
 }) {
   const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const FEATURES_LIST = [
     "Wifi Enabled",
     "Bluetooth",

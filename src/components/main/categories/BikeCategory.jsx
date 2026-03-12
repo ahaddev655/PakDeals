@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
   const FEATURES_LIST = [
     "Disc Brakes",
     "Alloy Rims",

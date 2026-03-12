@@ -53,7 +53,7 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
         {userRole === "admin" && (
           <li>
             <NavLink
-              to="/87b27389"
+              to="/87b27389/"
               end
               className={({ isActive }) =>
                 `font-medium transition-colors duration-300 ease-in-out ${
@@ -114,7 +114,7 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
           {userRole === "admin" && (
             <li>
               <NavLink
-                to="/87b27389"
+                to="/87b27389/"
                 end
                 className={({ isActive }) =>
                   `font-medium transition-colors duration-300 ease-in-out ${

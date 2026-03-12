@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminDataCardsComponent from "../../components/admin/AdminDataCardsComponent";
+import axios from "axios";
 
 function AdminDashboardPage() {
   const userToken = localStorage.getItem("token");
@@ -21,6 +22,28 @@ function AdminDashboardPage() {
   const [blogs, setBlogs] = useState(Number(null));
   const [users, setUsers] = useState(Number(null));
   const [loading, setLoading] = useState(true);
+
+  // ==================== API CONFIGURATION ====================
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get("http://localhost:5000/api/admin/fetch-count")
+      .then((response) => {
+        console.log(response.data);
+        const data = response.data;
+        setActiveListings(data.active_listings);
+        setUsers(data.total_users);
+        setBlogs(data.total_blogs);
+        setTotalListings(data.total_listings);
+      })
+      .catch((error) => {
+        console.log("ADS FETCH API ERROR:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div className="space-y-8 sm:px-6 px-2.5 py-6">
       <AdminDataCardsComponent

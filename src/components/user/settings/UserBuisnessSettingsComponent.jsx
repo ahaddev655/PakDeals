@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 function UserBuisnessSettingsComponent() {
   // ==================== USE STATES & VARIABLES ====================
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("id");
 
   const defaultData = {
     company: "" || null,
