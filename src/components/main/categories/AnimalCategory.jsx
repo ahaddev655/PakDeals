@@ -121,7 +121,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     // -------------------- API CONFIGURATION --------------------
     axios
       .post(
-        `http://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`,
+        `https://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`,
         form,
       )
       .then((response) => {
