@@ -53,86 +53,6 @@ function UserAdsComponent() {
     expired: "bg-red-100 text-red-600",
   };
 
-  // ==================== CATEGORY TO TABLE MAPPING ====================
-  const categoryToTableMap = {
-    // -------------------- MOBILE TABLES --------------------
-    "Mobile Phones": "mobile_ads",
-    Tablets: "mobile_ads",
-    Accessories: "mobile_ads",
-    // -------------------- MOTORS TABLES --------------------
-    Cars: "motors_ads",
-    "Car Accessories": "motors_ads",
-    "Spare Parts": "motors_ads",
-    "Buses, Vans & Trucks": "motors_ads",
-    "Rickshaw & Chingchi": "motors_ads",
-    "Tractors & Trailers": "motors_ads",
-    Boats: "motors_ads",
-    "Other Vehicles": "motors_ads",
-    // -------------------- PROPERTY SALE TABLES --------------------
-    Houses: "property_sale_ads",
-    Plots: "property_sale_ads",
-    Flats: "property_sale_ads",
-    Commercial: "property_sale_ads",
-    "Farm Houses": "property_sale_ads",
-    Rooms: "property_sale_ads",
-    "Other Property": "property_sale_ads",
-    // -------------------- PROPERTY RENT TABLES --------------------
-    Houses: "property_rent_ads",
-    Flats: "property_rent_ads",
-    Commercial: "property_rent_ads",
-    Rooms: "property_rent_ads",
-    "Portions & Floors": "property_rent_ads",
-    "Vacation Rentals": "property_rent_ads",
-    Other: "property_rent_ads",
-    // -------------------- ELECTRONICS TABLES --------------------
-    "Computers & Accessories": "electronics_ads",
-    "TV - Home Audio & Video": "electronics_ads",
-    "Cameras & Accessories": "electronics_ads",
-    "Games & Entertainment": "electronics_ads",
-    "Other Home Appliances": "electronics_ads",
-    "Kitchen Appliances": "electronics_ads",
-    "AC & Coolers": "electronics_ads",
-    "Washing Machines & Dryers": "electronics_ads",
-    "Generators, UPS & Power Solutions": "electronics_ads",
-    "Solar Panels & Inverters": "electronics_ads",
-    // -------------------- BIKES TABLES --------------------
-    Motorcycles: "bikes_ads",
-    Scooters: "bikes_ads",
-    Bicycles: "bikes_ads",
-    "ATV & Quads": "bikes_ads",
-    // -------------------- ANIMALS TABLES --------------------
-    Birds: "animal_ads",
-    Cats: "animal_ads",
-    Dogs: "animal_ads",
-    "Fishs & Aquariums": "animal_ads",
-    Horses: "animal_ads",
-    Livestock: "animal_ads",
-    // -------------------- FURNITURE TABLES --------------------
-    "Sofa & Chairs": "furniture_ads",
-    "Beds & Wardrobes": "furniture_ads",
-    "Home Decor": "furniture_ads",
-    "Table & Dining": "furniture_ads",
-    "Office Furniture": "furniture_ads",
-    "Other Household Items": "furniture_ads",
-    // -------------------- FASHION TABLES --------------------
-    Clothes: "fashion_ads",
-    Footwear: "fashion_ads",
-    Watches: "fashion_ads",
-    Jewellery: "fashion_ads",
-    Sunglasses: "fashion_ads",
-    "Bags & Luggages": "fashion_ads",
-    Wedding: "fashion_ads",
-    "Skin & Care": "fashion_ads",
-    Makeup: "fashion_ads",
-    Perfumes: "fashion_ads",
-    "Other Fashion": "fashion_ads",
-    // -------------------- BOOKS TABLES --------------------
-    "Books & Magazines": "books_ads",
-    "Musical Instruments": "books_ads",
-    "Sports Equipments": "books_ads",
-    "Gym & Fitness": "books_ads",
-  };
-
   const getStatus = (ad) =>
     ad.isSold
       ? "sold"
@@ -151,6 +71,7 @@ function UserAdsComponent() {
     title: ad.adTitle,
     category: ad.subCategory,
     price: ad.price,
+    table_name: ad.table_name || source_table,
     createdAt: ad.created_at
       ? ad.created_at.slice(5, 16).replaceAll(" ", "/")
       : "",
@@ -253,11 +174,6 @@ function UserAdsComponent() {
   useEffect(() => {
     if (userId) fetchUserAds(1);
   }, [userId]);
-
-  const formatLink = (category, id) => {
-    const tableName = categoryToTableMap[category] || "all-ads";
-    return `/ad/${tableName}/${id}`;
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
@@ -564,7 +480,7 @@ function UserAdsComponent() {
                 {/* BUTTONS */}
                 <div className="flex gap-3 pt-2">
                   <Link
-                    to={formatLink(selectedAd.category, selectedAd.id)}
+                    to={`/ad/${selectedAd.table_name}/${selectedAd.id}`}
                     className="w-1/2"
                   >
                     <button

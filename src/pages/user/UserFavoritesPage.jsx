@@ -6,85 +6,6 @@ function UserFavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [selectedAd, setSelectedAd] = useState(null);
 
-  const categoryToTableMap = {
-    // -------------------- MOBILE TABLES --------------------
-    "Mobile Phones": "mobile_ads",
-    Tablets: "mobile_ads",
-    Accessories: "mobile_ads",
-    // -------------------- MOTORS TABLES --------------------
-    Cars: "motors_ads",
-    "Car Accessories": "motors_ads",
-    "Spare Parts": "motors_ads",
-    "Buses, Vans & Trucks": "motors_ads",
-    "Rickshaw & Chingchi": "motors_ads",
-    "Tractors & Trailers": "motors_ads",
-    Boats: "motors_ads",
-    "Other Vehicles": "motors_ads",
-    // -------------------- PROPERTY SALE TABLES --------------------
-    Houses: "property_sale_ads",
-    Plots: "property_sale_ads",
-    Flats: "property_sale_ads",
-    Commercial: "property_sale_ads",
-    "Farm Houses": "property_sale_ads",
-    Rooms: "property_sale_ads",
-    "Other Property": "property_sale_ads",
-    // -------------------- PROPERTY RENT TABLES --------------------
-    Houses: "property_rent_ads",
-    Flats: "property_rent_ads",
-    Commercial: "property_rent_ads",
-    Rooms: "property_rent_ads",
-    "Portions & Floors": "property_rent_ads",
-    "Vacation Rentals": "property_rent_ads",
-    Other: "property_rent_ads",
-    // -------------------- ELECTRONICS TABLES --------------------
-    "Computers & Accessories": "electronics_ads",
-    "TV - Home Audio & Video": "electronics_ads",
-    "Cameras & Accessories": "electronics_ads",
-    "Games & Entertainment": "electronics_ads",
-    "Other Home Appliances": "electronics_ads",
-    "Kitchen Appliances": "electronics_ads",
-    "AC & Coolers": "electronics_ads",
-    "Washing Machines & Dryers": "electronics_ads",
-    "Generators, UPS & Power Solutions": "electronics_ads",
-    "Solar Panels & Inverters": "electronics_ads",
-    // -------------------- BIKES TABLES --------------------
-    Motorcycles: "bikes_ads",
-    Scooters: "bikes_ads",
-    Bicycles: "bikes_ads",
-    "ATV & Quads": "bikes_ads",
-    // -------------------- ANIMALS TABLES --------------------
-    Birds: "animal_ads",
-    Cats: "animal_ads",
-    Dogs: "animal_ads",
-    "Fishs & Aquariums": "animal_ads",
-    Horses: "animal_ads",
-    Livestock: "animal_ads",
-    // -------------------- FURNITURE TABLES --------------------
-    "Sofa & Chairs": "furniture_ads",
-    "Beds & Wardrobes": "furniture_ads",
-    "Home Decor": "furniture_ads",
-    "Table & Dining": "furniture_ads",
-    "Office Furniture": "furniture_ads",
-    "Other Household Items": "furniture_ads",
-    // -------------------- FASHION TABLES --------------------
-    Clothes: "fashion_ads",
-    Footwear: "fashion_ads",
-    Watches: "fashion_ads",
-    Jewellery: "fashion_ads",
-    Sunglasses: "fashion_ads",
-    "Bags & Luggages": "fashion_ads",
-    Wedding: "fashion_ads",
-    "Skin & Care": "fashion_ads",
-    Makeup: "fashion_ads",
-    Perfumes: "fashion_ads",
-    "Other Fashion": "fashion_ads",
-    // -------------------- BOOKS TABLES --------------------
-    "Books & Magazines": "books_ads",
-    "Musical Instruments": "books_ads",
-    "Sports Equipments": "books_ads",
-    "Gym & Fitness": "books_ads",
-  };
-
   // ==================== AUTH CHECK ====================
   const userToken = localStorage.getItem("token");
   const userId = localStorage.getItem("id");
@@ -102,12 +23,6 @@ function UserFavoritesPage() {
     const raw = localStorage.getItem("favoriteAds");
     setFavorites(raw ? JSON.parse(raw) : []);
   }, []);
-
-  // ==================== CATEGORY FORMAT ====================
-  const formatLink = (category, id) => {
-    const tableName = categoryToTableMap[category] || "all-ads";
-    return `/ad/${tableName}/${id}`;
-  };
 
   // ==================== HANDLE FAVORITES ====================
   const handleFavorite = (ad) => {
@@ -182,7 +97,7 @@ function UserFavoritesPage() {
                       </td>
 
                       <td className="py-4 px-6 text-[15px] text-gray-700 text-center">
-                        {favorite.price}
+                        PKR {favorite.price}
                       </td>
 
                       <td className="py-4 px-6 flex items-center justify-center gap-4">
@@ -246,7 +161,7 @@ function UserFavoritesPage() {
                 {/* -------------------- AD IMAGE -------------------- */}
                 <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gray-200 shadow-lg group">
                   <img
-                    src={selectedAd.image}
+                    src={selectedAd.img}
                     alt="IMG"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -281,7 +196,7 @@ function UserFavoritesPage() {
                       Price
                     </h5>
                     <p className="text-3xl font-extrabold text-green-600 mt-1">
-                      {selectedAd.price}
+                      PKR {selectedAd.price}
                     </p>
                   </div>
 
@@ -310,7 +225,7 @@ function UserFavoritesPage() {
                   </button>
 
                   <Link
-                    to={formatLink(selectedAd.category, selectedAd.id)}
+                    to={`/ad/${selectedAd.source_table || selectedAd.table_name}/${selectedAd.id}`}
                     className="flex-1"
                   >
                     <button

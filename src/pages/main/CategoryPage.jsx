@@ -198,7 +198,7 @@ function CategoryPage() {
     <div className="page">
       <div className="flex items-center justify-between gap-3.5 mb-6">
         <h1 className="text-[32px] font-semibold text-gray-700 capitalize">
-          {ads.find((ad) => getSlug(ad.category) === currentCategorySlug) 
+          {ads.find((ad) => getSlug(ad.category) === currentCategorySlug)
             ?.category || "All Ads"}
         </h1>
 
