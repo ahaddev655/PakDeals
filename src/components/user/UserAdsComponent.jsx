@@ -1,7 +1,15 @@
-import { Eye, Search, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Eye,
+  Search,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  X,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 
 function UserAdsComponent() {
   // ==================== USESTATES ====================
@@ -47,9 +55,11 @@ function UserAdsComponent() {
 
   // ==================== CATEGORY TO TABLE MAPPING ====================
   const categoryToTableMap = {
+    // -------------------- MOBILE TABLES --------------------
     "Mobile Phones": "mobile_ads",
     Tablets: "mobile_ads",
     Accessories: "mobile_ads",
+    // -------------------- MOTORS TABLES --------------------
     Cars: "motors_ads",
     "Car Accessories": "motors_ads",
     "Spare Parts": "motors_ads",
@@ -58,6 +68,7 @@ function UserAdsComponent() {
     "Tractors & Trailers": "motors_ads",
     Boats: "motors_ads",
     "Other Vehicles": "motors_ads",
+    // -------------------- PROPERTY SALE TABLES --------------------
     Houses: "property_sale_ads",
     Plots: "property_sale_ads",
     Flats: "property_sale_ads",
@@ -65,6 +76,15 @@ function UserAdsComponent() {
     "Farm Houses": "property_sale_ads",
     Rooms: "property_sale_ads",
     "Other Property": "property_sale_ads",
+    // -------------------- PROPERTY RENT TABLES --------------------
+    Houses: "property_rent_ads",
+    Flats: "property_rent_ads",
+    Commercial: "property_rent_ads",
+    Rooms: "property_rent_ads",
+    "Portions & Floors": "property_rent_ads",
+    "Vacation Rentals": "property_rent_ads",
+    Other: "property_rent_ads",
+    // -------------------- ELECTRONICS TABLES --------------------
     "Computers & Accessories": "electronics_ads",
     "TV - Home Audio & Video": "electronics_ads",
     "Cameras & Accessories": "electronics_ads",
@@ -75,22 +95,26 @@ function UserAdsComponent() {
     "Washing Machines & Dryers": "electronics_ads",
     "Generators, UPS & Power Solutions": "electronics_ads",
     "Solar Panels & Inverters": "electronics_ads",
+    // -------------------- BIKES TABLES --------------------
     Motorcycles: "bikes_ads",
     Scooters: "bikes_ads",
     Bicycles: "bikes_ads",
     "ATV & Quads": "bikes_ads",
+    // -------------------- ANIMALS TABLES --------------------
     Birds: "animal_ads",
     Cats: "animal_ads",
     Dogs: "animal_ads",
     "Fishs & Aquariums": "animal_ads",
     Horses: "animal_ads",
     Livestock: "animal_ads",
+    // -------------------- FURNITURE TABLES --------------------
     "Sofa & Chairs": "furniture_ads",
     "Beds & Wardrobes": "furniture_ads",
     "Home Decor": "furniture_ads",
     "Table & Dining": "furniture_ads",
     "Office Furniture": "furniture_ads",
     "Other Household Items": "furniture_ads",
+    // -------------------- FASHION TABLES --------------------
     Clothes: "fashion_ads",
     Footwear: "fashion_ads",
     Watches: "fashion_ads",
@@ -102,6 +126,7 @@ function UserAdsComponent() {
     Makeup: "fashion_ads",
     Perfumes: "fashion_ads",
     "Other Fashion": "fashion_ads",
+    // -------------------- BOOKS TABLES --------------------
     "Books & Magazines": "books_ads",
     "Musical Instruments": "books_ads",
     "Sports Equipments": "books_ads",
@@ -228,6 +253,11 @@ function UserAdsComponent() {
   useEffect(() => {
     if (userId) fetchUserAds(1);
   }, [userId]);
+
+  const formatLink = (category, id) => {
+    const tableName = categoryToTableMap[category] || "all-ads";
+    return `/ad/${tableName}/${id}`;
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
@@ -484,13 +514,19 @@ function UserAdsComponent() {
           onClick={() => setSelectedAd(null)}
         >
           <div
-            className={`bg-white w-full max-w-md rounded-2xl border border-gray-200 shadow-2xl p-6 transition-all duration-300 ${
+            className={`bg-white relative w-full max-w-md rounded-2xl border border-gray-200 shadow-2xl p-6 transition-all duration-300 ${
               selectedAd
                 ? "opacity-100 translate-y-0 scale-100"
                 : "opacity-0 translate-y-6 scale-95"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
+            <div
+              className="w-8 h-8 rounded-full bg-black grid place-items-center absolute -top-1 -right-2 cursor-pointer"
+              onClick={() => setSelectedAd(null)}
+            >
+              <X className="text-white" size={20} strokeWidth={3} />
+            </div>
             {selectedAd && (
               <div className="space-y-4">
                 {/* IMAGE */}
@@ -527,19 +563,23 @@ function UserAdsComponent() {
 
                 {/* BUTTONS */}
                 <div className="flex gap-3 pt-2">
-                  <button
-                    type="button"
-                    className="flex-1 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
-                    onClick={() => setSelectedAd(null)}
+                  <Link
+                    to={formatLink(selectedAd.category, selectedAd.id)}
+                    className="w-1/2"
                   >
-                    Cancel
-                  </button>
+                    <button
+                      type="button"
+                      className="flex-1 py-3 w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
+                    >
+                      View Ad
+                    </button>
+                  </Link>
 
                   {(selectedAd.status === "active" ||
                     selectedAd.status === "featured") && (
                     <button
                       type="button"
-                      className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
+                      className="flex-1 w-1/2 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
                         setAds((prev) =>
                           prev.map((ad) =>
@@ -563,7 +603,7 @@ function UserAdsComponent() {
                     selectedAd.status === "inactive") && (
                     <button
                       type="button"
-                      className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
+                      className="flex-1 py-3 w-1/2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
                         setAds((prev) =>
                           prev.map((ad) =>

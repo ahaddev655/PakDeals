@@ -48,8 +48,13 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const fileInputRef = useRef(null);
 
   // ==================== CHANGES ====================
-  const handleDetailChange = (e) =>
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleDetailChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "sellerContact" && value.length > 13) return;
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelect = (key, item) => {
     setFormData((prev) => ({
@@ -116,7 +121,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     // -------------------- API CONFIGURATION --------------------
     axios
       .post(
-        `https://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`,
+        `http://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`,
         form,
       )
       .then((response) => {

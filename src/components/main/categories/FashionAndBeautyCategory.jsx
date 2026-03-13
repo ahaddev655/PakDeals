@@ -48,8 +48,13 @@ function FashionAndBeautyCategory({
 
   const fileInputRef = useRef(null);
 
-  const handleDetailChange = (e) =>
-    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
+  const handleDetailChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "sellerContact" && value.length > 13) return;
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelect = (key, item) => {
     setFormData((p) => ({

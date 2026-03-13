@@ -5,34 +5,28 @@ import {
   MoveRight,
   Smartphone,
 } from "lucide-react";
-import React from "react";
 import { Link } from "react-router-dom";
 
 function PopularCategories() {
   const categories = [
-    {
-      icon: CarFront,
-      adCount: "5",
-      title: "Cars",
-      link: "/category/cars",
-    },
+    { icon: CarFront, adCount: "5", title: "Cars", link: "/category/cars" },
     {
       icon: Smartphone,
       adCount: "10",
       title: "Mobiles",
-      link: "/category/mobiles",
+      link: "/category/mobile-phones",
     },
     {
       icon: House,
       adCount: "15",
-      title: "Property For Sale",
-      link: "/category/property-for-sale",
+      title: "Property Sale",
+      link: "/category/property-sale-ads",
     },
     {
       icon: House,
       adCount: "15",
-      title: "Property For Rent",
-      link: "/category/property-for-rent",
+      title: "Property Rent",
+      link: "/category/property-rent-ads",
     },
     {
       icon: Motorbike,
@@ -41,6 +35,7 @@ function PopularCategories() {
       link: "/category/motorcycles",
     },
   ];
+
   return (
     <section className="section">
       <div className="mb-6">
@@ -54,7 +49,7 @@ function PopularCategories() {
           return (
             <Link to={cats.link} key={i}>
               <div className="bg-white group rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-blue-800 py-3 px-4">
-                <div className="flex items-center gap-2" key={i}>
+                <div className="flex items-center gap-2">
                   <div className="bg-orange-100/40 grid place-items-center w-13 h-13 rounded-full group-hover:bg-blue-900 group-hover:text-white transition-colors duration-300">
                     <Icon />
                   </div>
@@ -65,14 +60,12 @@ function PopularCategories() {
                     <h4 className="text-gray-700 font-medium">{cats.title}</h4>
                   </div>
                 </div>
-                <div>
-                  <button
-                    type="button"
-                    className="mt-2 text-sm font-medium flex items-center justify-center gap-1 group-hover:gap-2 transition-all duration-300"
-                  >
-                    See More <MoveRight />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="mt-2 text-sm font-medium flex items-center justify-center gap-1 group-hover:gap-2 transition-all duration-300"
+                >
+                  See More <MoveRight />
+                </button>
               </div>
             </Link>
           );

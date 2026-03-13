@@ -158,15 +158,12 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     </div>
   );
 
-  const handleDetailChange = (e) =>
-    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
+  const handleDetailChange = (e) => {
+    const { name, value } = e.target;
 
-  const handleSelect = (key, item) => {
-    setFormData((p) => ({
-      ...p,
-      [key]: { id: item.id, label: item.text },
-    }));
-    setOpenDropdown("");
+    if (name === "sellerContact" && value.length > 13) return;
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFeatureChange = (feature) => {
