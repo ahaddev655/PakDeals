@@ -16,7 +16,7 @@ function RecentAds() {
     setLoading(true);
 
     axios
-      .get(`http://localhost:5000/api/ads/all-user-ads/${userId}`)
+      .get(`https://pak-deals-backend.vercel.app/api/ads/all-user-ads/${userId}`)
       .then((response) => {
         const data = response?.data;
         const res = data?.data || {};
@@ -34,7 +34,13 @@ function RecentAds() {
           img: JSON.parse(ad.images || "[]")[0] || "",
         });
 
-        setAds((res.ads || []).map(formatAd));
+        const formattedAds = (res.ads || []).map(formatAd);
+
+        const latestAds = formattedAds
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 5);
+
+        setAds(latestAds);
       })
       .catch((error) => {
         console.error(error);
@@ -82,6 +88,7 @@ function RecentAds() {
 
     return true;
   });
+
   return (
     <section className="section">
       <div className="mb-6">
@@ -205,6 +212,12 @@ function RecentAds() {
             );
           })}
         </div>
+      )}
+
+      {!loading && filteredAds.length === 0 && (
+        <p className="text-center text-gray-500 py-8">
+          No recent ads found in this location.
+        </p>
       )}
     </section>
   );

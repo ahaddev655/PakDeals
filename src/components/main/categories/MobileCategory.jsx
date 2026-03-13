@@ -118,7 +118,7 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     const form = new FormData();
 
     form.append("subCategory", formData.subCategory?.label || "");
-    form.append("brand", formData.brand);
+    form.append("brand", formData.brand?.label || "");
     form.append("condition", formData.condition?.label || "");
     form.append("location", formData.location?.label || "");
     form.append("adTitle", formData.adTitle);

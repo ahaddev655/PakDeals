@@ -77,7 +77,6 @@ function UserAdsComponent() {
 
   // ==================== REMOVE AD FUNCTION ====================
   const removeAd = (id, table_name) => {
-
     const loadingToast = toast.loading("Deleting ad...");
 
     axios
@@ -165,7 +164,7 @@ function UserAdsComponent() {
 
   const setStatusActive = (table_name, ad_id) => {
     axios
-      .put(`http://localhost:5000/api/status/active/${table_name}/${ad_id}`)
+      .put(`https://pak-deals-backend.vercel.app/api/status/active/${table_name}/${ad_id}`)
       .then((response) => {
         toast.success(
           response?.data?.message || "Status changed successfully...",
@@ -175,14 +174,6 @@ function UserAdsComponent() {
             ad.id === selectedAd.id ? { ...ad, status: "active" } : ad,
           ),
         );
-        setSelectedAd((prev) => ({
-          ...prev,
-          status: "active",
-        }));
-        setStatusSold(
-          selectedAd.source_table || selectedAd.table_name,
-          selectedAd.id,
-        );
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
@@ -191,7 +182,7 @@ function UserAdsComponent() {
 
   const setStatusInActive = (table_name, ad_id) => {
     axios
-      .put(`http://localhost:5000/api/status/inactive/${table_name}/${ad_id}`)
+      .put(`https://pak-deals-backend.vercel.app/api/status/inactive/${table_name}/${ad_id}`)
       .then((response) => {
         toast.success(
           response?.data?.message || "Status changed successfully...",
@@ -201,14 +192,6 @@ function UserAdsComponent() {
             ad.id === selectedAd.id ? { ...ad, status: "inactive" } : ad,
           ),
         );
-        setSelectedAd((prev) => ({
-          ...prev,
-          status: "inactive",
-        }));
-        setStatusSold(
-          selectedAd.source_table || selectedAd.table_name,
-          selectedAd.id,
-        );
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
@@ -217,24 +200,16 @@ function UserAdsComponent() {
 
   const setStatusSold = (table_name, ad_id) => {
     axios
-      .put(`http://localhost:5000/api/status/sold/${table_name}/${ad_id}`)
+      .put(`https://pak-deals-backend.vercel.app/api/status/sold/${table_name}/${ad_id}`)
       .then((response) => {
         toast.success(
           response?.data?.message || "Status changed successfully...",
         );
+
         setAds((prev) =>
-          prev.map((ad) =>
-            ad.id === selectedAd.id ? { ...ad, status: "sold" } : ad,
-          ),
+          prev.map((ad) => (ad.id === ad_id ? { ...ad, status: "sold" } : ad)),
         );
-        setSelectedAd((prev) => ({
-          ...prev,
-          status: "sold",
-        }));
-        setStatusSold(
-          selectedAd.source_table || selectedAd.table_name,
-          selectedAd.id,
-        );
+        
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
@@ -544,7 +519,9 @@ function UserAdsComponent() {
                 <div className="flex gap-3 pt-2">
                   <Link
                     to={`/ad/${selectedAd.table_name}/${selectedAd.id}`}
-                    className={selectedAd.status === "sold" ? "hidden" : ""}
+                    className={
+                      selectedAd.status === "sold" ? "hidden" : "w-1/2"
+                    }
                   >
                     <button
                       type="button"
@@ -595,7 +572,10 @@ function UserAdsComponent() {
                       type="button"
                       className="flex-1 py-3 w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
-                        setStatusSold(selectedAd.source_table || selectedAd.table_name, selectedAd.id);
+                        setStatusSold(
+                          selectedAd.source_table || selectedAd.table_name,
+                          selectedAd.id,
+                        );
                         setSelectedAd(null);
                       }}
                     >
