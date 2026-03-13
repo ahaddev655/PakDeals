@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 function UserDataCardsComponent({
   activeListings,
-  expiredListings,
+  soldListings,
   pendingListings,
   totalListings,
   loading,
@@ -22,8 +22,8 @@ function UserDataCardsComponent({
       color: "#4f46e5",
     },
     {
-      text: "Expired Listings",
-      value: expiredListings,
+      text: "Sold Listings",
+      value: soldListings,
       icon: Clock4,
       color: "#dc3545",
     },

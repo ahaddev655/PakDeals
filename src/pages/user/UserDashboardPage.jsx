@@ -21,7 +21,7 @@ function UserDashboardPage() {
   const [totalListings, setTotalListings] = useState(Number(null));
   const [activeListings, setActiveListings] = useState(Number(null));
   const [pendingListings, setPendingListings] = useState(Number(null));
-  const [expiredListings, setExpiredListings] = useState(Number(null));
+  const [soldListings, setSoldListings] = useState(Number(null));
   const [loading, setLoading] = useState(true);
 
   // ==================== API CONFIGURATION ====================
@@ -33,7 +33,7 @@ function UserDashboardPage() {
         console.log(response.data);
         const data = response.data;
         setActiveListings(data.active_ads);
-        setExpiredListings(data.expired_ads);
+        setSoldListings(data.sold_ads);
         setPendingListings(data.pending_ads);
         setTotalListings(data.all_ads);
       })
@@ -57,11 +57,11 @@ function UserDashboardPage() {
         totalListings={totalListings}
         activeListings={activeListings}
         pendingListings={pendingListings}
-        expiredListings={expiredListings}
+        soldListings={soldListings}
         setTotalListings={setTotalListings}
         setActiveListings={setActiveListings}
         setPendingListings={setPendingListings}
-        setExpiredListings={setExpiredListings}
+        setSoldListings={setSoldListings}
         loading={loading}
       />
       {/* -------------------- DATA CHARTS & RECENT ACTIVITIES -------------------- */}
@@ -70,7 +70,7 @@ function UserDashboardPage() {
           totalListings={totalListings}
           activeListings={activeListings}
           pendingListings={pendingListings}
-          expiredListings={expiredListings}
+          soldListings={soldListings}
           loading={loading}
         />
         <UserRecentActivitiesComponent />

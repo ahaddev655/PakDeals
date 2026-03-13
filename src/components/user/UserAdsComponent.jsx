@@ -36,7 +36,6 @@ function UserAdsComponent() {
     { key: "inactive", label: "Inactive" },
     { key: "pending", label: "Pending " },
     { key: "sold", label: "Sold" },
-    { key: "expired", label: "Expired" },
   ];
 
   const sortTabs = [
@@ -49,22 +48,19 @@ function UserAdsComponent() {
     active: "bg-green-100 text-green-600",
     inactive: "bg-red-100 text-red-600",
     pending: "bg-red-100 text-red-600",
-    sold: "bg-gray-100 text-gray-600",
-    expired: "bg-red-100 text-red-600",
+    sold: "bg-gray-200 text-gray-600",
   };
 
   const getStatus = (ad) =>
     ad.isSold
       ? "sold"
-      : ad.isExpired
-        ? "expired"
-        : ad.isFeatured
-          ? "featured"
-          : ad.isActive
-            ? "active"
-            : ad.isPending
-              ? "pending"
-              : "inactive";
+      : ad.isFeatured
+        ? "featured"
+        : ad.isActive
+          ? "active"
+          : ad.isPending
+            ? "pending"
+            : "inactive";
 
   const formatAd = (ad) => ({
     id: ad.id,
@@ -80,19 +76,13 @@ function UserAdsComponent() {
   });
 
   // ==================== REMOVE AD FUNCTION ====================
-  const removeAd = (id, category) => {
-    const tableName = categoryToTableMap[category];
-
-    if (!tableName) {
-      toast.error(`Invalid category: ${category}. Cannot delete ad.`);
-      return;
-    }
+  const removeAd = (id, table_name) => {
 
     const loadingToast = toast.loading("Deleting ad...");
 
     axios
       .delete(
-        `https://pak-deals-backend.vercel.app/api/ads/delete-user-ad/${Number(id)}/${tableName}`,
+        `https://pak-deals-backend.vercel.app/api/ads/delete-user-ad/${Number(id)}/${table_name}`,
       )
       .then((response) => {
         const data = response?.data;
@@ -136,8 +126,6 @@ function UserAdsComponent() {
         setTotalPages(res.total_pages || 1);
         setTotalAds(res.total || 0);
         setCurrentPage(res.page || page);
-
-        toast.success(data?.message || "Ads Fetched Successfully");
       })
       .catch((error) => {
         toast.error(error?.response?.data?.error || "Internal Server Error");
@@ -174,6 +162,84 @@ function UserAdsComponent() {
   useEffect(() => {
     if (userId) fetchUserAds(1);
   }, [userId]);
+
+  const setStatusActive = (table_name, ad_id) => {
+    axios
+      .put(`http://localhost:5000/api/status/active/${table_name}/${ad_id}`)
+      .then((response) => {
+        toast.success(
+          response?.data?.message || "Status changed successfully...",
+        );
+        setAds((prev) =>
+          prev.map((ad) =>
+            ad.id === selectedAd.id ? { ...ad, status: "active" } : ad,
+          ),
+        );
+        setSelectedAd((prev) => ({
+          ...prev,
+          status: "active",
+        }));
+        setStatusSold(
+          selectedAd.source_table || selectedAd.table_name,
+          selectedAd.id,
+        );
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+      });
+  };
+
+  const setStatusInActive = (table_name, ad_id) => {
+    axios
+      .put(`http://localhost:5000/api/status/inactive/${table_name}/${ad_id}`)
+      .then((response) => {
+        toast.success(
+          response?.data?.message || "Status changed successfully...",
+        );
+        setAds((prev) =>
+          prev.map((ad) =>
+            ad.id === selectedAd.id ? { ...ad, status: "inactive" } : ad,
+          ),
+        );
+        setSelectedAd((prev) => ({
+          ...prev,
+          status: "inactive",
+        }));
+        setStatusSold(
+          selectedAd.source_table || selectedAd.table_name,
+          selectedAd.id,
+        );
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+      });
+  };
+
+  const setStatusSold = (table_name, ad_id) => {
+    axios
+      .put(`http://localhost:5000/api/status/sold/${table_name}/${ad_id}`)
+      .then((response) => {
+        toast.success(
+          response?.data?.message || "Status changed successfully...",
+        );
+        setAds((prev) =>
+          prev.map((ad) =>
+            ad.id === selectedAd.id ? { ...ad, status: "sold" } : ad,
+          ),
+        );
+        setSelectedAd((prev) => ({
+          ...prev,
+          status: "sold",
+        }));
+        setStatusSold(
+          selectedAd.source_table || selectedAd.table_name,
+          selectedAd.id,
+        );
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "Internal Server Error");
+      });
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200">
@@ -343,7 +409,7 @@ function UserAdsComponent() {
                           </div>
                           <div
                             className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-red-800 transition-all duration-300 ease-in-out cursor-pointer"
-                            onClick={() => removeAd(ad.id, ad.category)}
+                            onClick={() => removeAd(ad.id, ad.table_name)}
                           >
                             <Trash2 strokeWidth={1.9} size={18} />
                           </div>
@@ -362,11 +428,8 @@ function UserAdsComponent() {
                   <span className="font-medium">
                     {(currentPage - 1) * perPage + 1}
                   </span>{" "}
-                  to{" "}
-                  <span className="font-medium">
-                    {Math.min(currentPage * perPage, totalAds)}
-                  </span>{" "}
-                  of <span className="font-medium">{totalAds}</span> results
+                  out of <span className="font-medium">{totalAds}</span>{" "}
+                  {totalAds === 1 ? "result" : "results"}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -464,13 +527,13 @@ function UserAdsComponent() {
                       `PKR ${Number(selectedAd.price).toLocaleString()}`,
                     ],
                     ["Status", selectedAd.status],
-                    ["Created On", selectedAd.createdAt.replaceAll("-", "/")],
+                    ["Created On", selectedAd.createdAt],
                   ].map(([label, value], i) => (
                     <div key={i} className="flex justify-between items-center">
                       <h5 className="text-sm font-semibold text-gray-500 uppercase">
                         {label}
                       </h5>
-                      <p className="text-sm font-semibold text-blue-700 text-right">
+                      <p className="text-sm font-semibold text-blue-700 text-right capitalize">
                         {value}
                       </p>
                     </div>
@@ -481,7 +544,7 @@ function UserAdsComponent() {
                 <div className="flex gap-3 pt-2">
                   <Link
                     to={`/ad/${selectedAd.table_name}/${selectedAd.id}`}
-                    className="w-1/2"
+                    className={selectedAd.status === "sold" ? "hidden" : ""}
                   >
                     <button
                       type="button"
@@ -497,17 +560,10 @@ function UserAdsComponent() {
                       type="button"
                       className="flex-1 w-1/2 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
-                        setAds((prev) =>
-                          prev.map((ad) =>
-                            ad.id === selectedAd.id
-                              ? { ...ad, status: "inactive" }
-                              : ad,
-                          ),
+                        setStatusInActive(
+                          selectedAd.source_table || selectedAd.table_name,
+                          selectedAd.id,
                         );
-                        setSelectedAd((prev) => ({
-                          ...prev,
-                          status: "inactive",
-                        }));
                         setSelectedAd(null);
                       }}
                     >
@@ -521,17 +577,10 @@ function UserAdsComponent() {
                       type="button"
                       className="flex-1 py-3 w-1/2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
                       onClick={() => {
-                        setAds((prev) =>
-                          prev.map((ad) =>
-                            ad.id === selectedAd.id
-                              ? { ...ad, status: "active" }
-                              : ad,
-                          ),
+                        setStatusActive(
+                          selectedAd.source_table || selectedAd.table_name,
+                          selectedAd.id,
                         );
-                        setSelectedAd((prev) => ({
-                          ...prev,
-                          status: "active",
-                        }));
                         setSelectedAd(null);
                       }}
                     >
@@ -539,6 +588,21 @@ function UserAdsComponent() {
                     </button>
                   )}
                 </div>
+
+                {selectedAd.status !== "sold" && (
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      className="flex-1 py-3 w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold rounded-xl transition-all duration-200 shadow-md"
+                      onClick={() => {
+                        setStatusSold(selectedAd.source_table || selectedAd.table_name, selectedAd.id);
+                        setSelectedAd(null);
+                      }}
+                    >
+                      Ad Sold
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

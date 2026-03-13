@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 
 function UserDataChartComponent({
   activeListings,
-  expiredListings,
+  soldListings,
   pendingListings,
   totalListings,
   loading,
@@ -30,7 +30,7 @@ function UserDataChartComponent({
       },
     },
 
-    labels: ["Total", "Active", "Expired", "Pending"],
+    labels: ["Total", "Active", "Sold", "Pending"],
     legend: {
       position: "right",
       fontSize: "15px",
@@ -70,12 +70,7 @@ function UserDataChartComponent({
     ],
   };
 
-  const series = [
-    totalListings,
-    activeListings,
-    expiredListings,
-    pendingListings,
-  ];
+  const series = [totalListings, activeListings, soldListings, pendingListings];
 
   return (
     <div className="col-span-2 bg-white p-6 shadow-lg rounded-lg border border-gray-300">
