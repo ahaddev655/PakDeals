@@ -9,30 +9,30 @@ import { Link } from "react-router-dom";
 
 function PopularCategories() {
   const categories = [
-    { icon: CarFront, adCount: "5", title: "Cars", link: "/category/cars" },
+    { icon: CarFront, adCount: "5", title: "Cars", link: "/category/motors_ads" },
     {
       icon: Smartphone,
       adCount: "10",
       title: "Mobiles",
-      link: "/category/mobile-phones",
+      link: "/category/mobile_ads",
     },
     {
       icon: House,
       adCount: "15",
       title: "Property Sale",
-      link: "/category/property-sale-ads",
+      link: "/category/property_sale_ads",
     },
     {
       icon: House,
       adCount: "15",
       title: "Property Rent",
-      link: "/category/property-rent-ads",
+      link: "/category/property_rent_ads",
     },
     {
       icon: Motorbike,
       adCount: "20",
       title: "Motorcycles",
-      link: "/category/motorcycles",
+      link: "/category/bikes_ads",
     },
   ];
 
