@@ -21,6 +21,7 @@ function FavoritesPage() {
   // Helper to handle image source variety
   const getDisplayImage = (ad) => {
     if (ad.img) return ad.img;
+    if (ad.image) return ad.image;
     if (ad.images) {
       const parsed =
         typeof ad.images === "string" ? JSON.parse(ad.images) : ad.images;
@@ -73,7 +74,6 @@ function FavoritesPage() {
           {favorites.map((ad) => (
             <Link
               key={ad.id}
-              // Ensure we use the correct table name property
               to={`/ad/${ad.table_name || ad.source_table || "_tableName"}/${ad.id}`}
               className="group"
             >
@@ -122,7 +122,7 @@ function FavoritesPage() {
                     <div className="mt-4 pt-3 border-t border-gray-100">
                       <h2 className="text-blue-900 font-black text-xl">
                         <span className="text-sm font-medium mr-1 text-blue-400">
-                          PKR
+                          Rs
                         </span>
                         {ad.price ? ad.price : "0"}
                       </h2>

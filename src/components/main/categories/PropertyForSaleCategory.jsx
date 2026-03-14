@@ -224,7 +224,7 @@ function PropertyForSaleCategory({
           <Maximize2 size={14} />,
         )}
         {renderInput(
-          "Total Price (PKR)",
+          "Total Price (Rs)",
           "price",
           "number",
           formData.price,

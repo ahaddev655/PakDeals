@@ -320,7 +320,7 @@ function PropertyForRentCategory({
             type="number"
             value={formData.price}
             onChange={handleInputChange}
-            placeholder="PKR / Monthly"
+            placeholder="Rs / Monthly"
           />
         </div>
       </div>

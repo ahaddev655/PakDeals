@@ -299,7 +299,7 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         {renderDropdown("Assembly", "assembly", "motorsAssembly")}
         {renderDropdown("Location", "location", "motorsLocation")}
         {renderInput(
-          "Price (PKR)",
+          "Price (Rs)",
           "price",
           "number",
           formData.price,

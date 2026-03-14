@@ -182,7 +182,7 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {renderDropdown("Condition", "condition", "mobileCondition")}
           {renderInput(
-            "Price (PKR)",
+            "Price (Rs)",
             "price",
             "number",
             formData.price,

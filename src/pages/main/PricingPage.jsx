@@ -126,11 +126,11 @@ function PricingPage() {
                       <span
                         className={`text-xl font-black ${isSelected ? "text-blue-900" : "text-slate-800"}`}
                       >
-                        PKR {Number(offer.price).toLocaleString()}
+                        Rs {Number(offer.price).toLocaleString()}
                       </span>
                       {offer.discount && (
                         <span className="text-xs text-gray-400 line-through font-bold">
-                          PKR {offer.originalPrice.toLocaleString()}
+                          Rs {offer.originalPrice.toLocaleString()}
                         </span>
                       )}
                     </div>

@@ -105,7 +105,7 @@ function UserFavoritesPage() {
                     <td className="py-5 px-6">
                       <div className="text-sm font-black text-slate-900">
                         <span className="text-blue-600 text-[10px] mr-1">
-                          PKR
+                          Rs
                         </span>
                         {favorite.price.toLocaleString()}
                       </div>
@@ -198,7 +198,7 @@ function UserFavoritesPage() {
                         Price Tag
                       </span>
                       <p className="text-xl font-black text-blue-600">
-                        <span className="text-xs mr-1">PKR</span>
+                        <span className="text-xs mr-1">Rs</span>
                         {selectedAd.price.toLocaleString()}
                       </p>
                     </div>

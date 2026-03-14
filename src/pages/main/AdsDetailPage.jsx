@@ -69,8 +69,8 @@ function AdsDetailPage() {
           _tableName: tableName,
           title: ad.adTitle || "",
           amount: ad.price
-            ? `PKR ${Number(ad.price).toLocaleString()}`
-            : "PKR 0",
+            ? `Rs ${Number(ad.price).toLocaleString()}`
+            : "Rs 0",
           type: ad.subCategory || "",
           postDate: ad.created_at ? ad.created_at.slice(0, 10) : "",
           number: ad.sellerContact || "",
@@ -180,7 +180,7 @@ function AdsDetailPage() {
                     </span>
                     <span className="text-slate-900 font-bold text-sm">
                       {key === "price"
-                        ? `PKR ${Number(value).toLocaleString()}`
+                        ? `Rs ${Number(value).toLocaleString()}`
                         : value}
                     </span>
                   </div>

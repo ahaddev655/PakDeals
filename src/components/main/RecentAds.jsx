@@ -162,7 +162,7 @@ function RecentAds() {
                     <hr className="my-4 border-gray-100" />
 
                     <h2 className="text-center text-blue-800 font-extrabold text-2xl tracking-tight">
-                      PKR {ad.price}
+                      Rs {ad.price}
                     </h2>
                   </div>
                 </div>

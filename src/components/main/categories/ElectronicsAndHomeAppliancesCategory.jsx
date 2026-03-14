@@ -300,7 +300,7 @@ function ElectronicsAndHomeAppliancesCategory({
           "electronicsAndHomeAppliancesLocation",
         )}
         {renderInput(
-          "Price (PKR)",
+          "Price (Rs)",
           "price",
           "number",
           formData.price,

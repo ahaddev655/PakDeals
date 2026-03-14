@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 
 function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
+  const navigate = useNavigate();
+
   const links = [
     { icon: LayoutDashboard, text: "Dashboard", link: "/user-dashboard/" },
     { icon: Megaphone, text: "My Ads", link: "/user-dashboard/my-ads" },
@@ -25,8 +27,6 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     },
   ];
 
-  const navigate = useNavigate();
-
   const userLogOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("token");
@@ -34,80 +34,105 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     navigate("/login");
   };
 
-  const NavItem = ({ link, isMobile = false }) => {
-    const Icon = link.icon;
-    return (
-      <li>
-        <NavLink
-          to={link.link}
-          end
-          onClick={isMobile ? () => setOffCanvasToggle(false) : undefined}
-          className={({ isActive }) =>
-            `flex items-center gap-4 rounded-xl p-4 transition-all duration-300 ${
-              isActive
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40"
-                : "text-gray-400 hover:bg-white/5 hover:text-white group"
-            }`
-          }
-        >
-          <Icon
-            size={20}
-            className="group-hover:scale-110 transition-transform duration-300"
-            strokeWidth={2}
-          />
-          <span className="text-sm font-semibold tracking-wide">
-            {link.text}
+  // Shared Sidebar Content logic
+  const SidebarContent = ({ isMobile = false }) => (
+    <div className="flex flex-col h-full">
+      {/* Header Section */}
+      <div className="flex items-center justify-between py-10 px-8">
+        <Link to="/" className="group flex items-center gap-2">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
+            <span className="text-white font-black text-xl">P</span>
+          </div>
+          <span className="text-white text-2xl font-bold tracking-tight">
+            Pak<span className="text-blue-500">Deals</span>
           </span>
-        </NavLink>
-      </li>
-    );
-  };
+        </Link>
+        {isMobile && (
+          <button
+            onClick={() => setOffCanvasToggle(false)}
+            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+          >
+            <X size={20} className="text-gray-400" />
+          </button>
+        )}
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-2 space-y-1">
+        <ul className="space-y-1">
+          {links.map((item, i) => (
+            <li key={i}>
+              <NavLink
+                to={item.link}
+                end
+                onClick={() => isMobile && setOffCanvasToggle(false)}
+                className={({ isActive }) =>
+                  `relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group mx-2 ${
+                    isActive
+                      ? "bg-blue-600/10 text-blue-500 font-semibold"
+                      : "text-gray-400 hover:text-gray-100 hover:bg-white/5"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {/* Active Indicator Bar */}
+                    {isActive && (
+                      <div className="absolute -left-2 w-1 h-6 bg-blue-500 rounded-r-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
+                    )}
+
+                    <item.icon
+                      size={19}
+                      className={`transition-transform duration-300 group-hover:scale-110 ${
+                        isActive
+                          ? "text-blue-500"
+                          : "text-gray-500 group-hover:text-gray-300"
+                      }`}
+                    />
+                    <span className="text-[13.5px] leading-none">
+                      {item.text}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Footer / Logout */}
+      <div className="p-4 mt-auto">
+        <div className="bg-white/5 rounded-2xl p-2 border border-white/5">
+          <button
+            onClick={userLogOut}
+            className="flex items-center w-full gap-3 p-3 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/5 transition-all duration-300 group"
+          >
+            <div className="p-2 rounded-lg bg-black group-hover:bg-red-500/10 transition-colors">
+              <LogOut size={18} />
+            </div>
+            <span className="font-medium text-sm">Sign Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden lg:flex flex-col w-72 bg-black min-h-screen sticky top-0 overflow-y-auto border-r border-white/10">
-        <div className="p-8">
-          <Link
-            to="/"
-            className="text-white text-3xl font-black tracking-tighter"
-          >
-            PakDeals<span className="text-blue-600">.</span>
-          </Link>
-        </div>
-
-        <nav className="flex-1 px-4">
-          <ul className="space-y-2">
-            {links.map((link, i) => (
-              <NavItem key={i} link={link} />
-            ))}
-          </ul>
-        </nav>
-
-        {/* LOGOUT SECTION */}
-        <div className="p-6 border-t border-white/10">
-          <button
-            onClick={userLogOut}
-            className="flex items-center justify-center w-full gap-3 bg-white/5 p-4 rounded-xl text-gray-400 font-bold hover:bg-rose-600 hover:text-white transition-all duration-300 group"
-          >
-            <LogOut
-              size={20}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-            <span>Logout</span>
-          </button>
-        </div>
+      <aside className="hidden lg:flex flex-col w-64 bg-black h-screen border-r border-white/5 sticky top-0 overflow-y-auto no-scrollbar">
+        <SidebarContent />
       </aside>
 
       {/* MOBILE OFFCANVAS */}
       <div
-        className={`fixed inset-0 z-60 lg:hidden transition-all duration-500 ${
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-500 ${
           offCanvasToggle ? "visible" : "invisible"
         }`}
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-500 ${
             offCanvasToggle ? "opacity-100" : "opacity-0"
           }`}
           onClick={() => setOffCanvasToggle(false)}
@@ -115,39 +140,11 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
 
         {/* Drawer */}
         <div
-          className={`absolute top-0 left-0 w-full sm:w-80 h-full bg-black flex flex-col shadow-2xl transition-transform duration-500 ease-out ${
+          className={`absolute top-0 left-0 w-72 h-full bg-black border-r border-white/10 transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.07,1)] ${
             offCanvasToggle ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="flex items-center justify-between p-8">
-            <Link to="/" className="text-white text-2xl font-black">
-              PakDeals<span className="text-blue-600">.</span>
-            </Link>
-            <button
-              onClick={() => setOffCanvasToggle(false)}
-              className="p-2 bg-white/5 rounded-full text-white hover:bg-white/10"
-            >
-              <X size={24} />
-            </button>
-          </div>
-
-          <nav className="flex-1 px-6">
-            <ul className="space-y-2">
-              {links.map((link, i) => (
-                <NavItem key={i} link={link} isMobile />
-              ))}
-            </ul>
-          </nav>
-
-          <div className="p-8 border-t border-white/10">
-            <button
-              onClick={userLogOut}
-              className="flex items-center justify-center w-full gap-3 bg-white/5 p-4 rounded-xl text-gray-400 font-bold hover:bg-rose-600 hover:text-white transition-all duration-300"
-            >
-              <LogOut size={20} />
-              <span>Logout</span>
-            </button>
-          </div>
+          <SidebarContent isMobile />
         </div>
       </div>
     </>

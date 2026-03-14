@@ -117,7 +117,7 @@ function CategoryPage() {
                         Price
                       </span>
                       <span className="text-xl font-black text-blue-900">
-                        PKR {Number(ad.price).toLocaleString()}
+                        Rs {Number(ad.price).toLocaleString()}
                       </span>
                     </div>
                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all">

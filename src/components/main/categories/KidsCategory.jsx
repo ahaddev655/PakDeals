@@ -251,7 +251,7 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
         {renderDropdown("Location", "location", "kidsLocation")}
         {renderInput(
-          "Price (PKR)",
+          "Price (Rs)",
           "price",
           "number",
           formData.price,

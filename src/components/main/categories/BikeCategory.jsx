@@ -280,11 +280,11 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
         {renderDropdown("Location", "location", "bikeLocation")}
         {renderInput(
-          "Asking Price (PKR)",
+          "Asking Price (Rs)",
           "price",
           "number",
           formData.price,
-          "Price in PKR",
+          "Price in Rs",
         )}
         {renderInput(
           "Seller Name",

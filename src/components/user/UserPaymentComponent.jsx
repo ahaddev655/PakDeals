@@ -167,7 +167,7 @@ function UserPaymentComponent() {
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-sm font-black text-slate-900">
-                      PKR {Number(payment.amount).toLocaleString()}
+                      Rs {Number(payment.amount).toLocaleString()}
                     </span>
                   </td>
                   <td className="px-6 py-4">

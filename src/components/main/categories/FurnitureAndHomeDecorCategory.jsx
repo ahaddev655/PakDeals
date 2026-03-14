@@ -290,7 +290,7 @@ function FurnitureAndHomeDecorCategory({
           "furnitureAndHomeDecorLocation",
         )}
         {renderInput(
-          "Price (PKR)",
+          "Price (Rs)",
           "price",
           "number",
           formData.price,
