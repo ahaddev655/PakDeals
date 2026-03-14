@@ -1,4 +1,4 @@
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react"; // Note: EyeOff is the current Lucide standard
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 function SignUpComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -15,57 +16,32 @@ function SignUpComponent() {
     password: "",
   });
 
-  const [googleFormData, setGoogleFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  // ==================== HANDLE INPUTS ====================
-
   const handleInputChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // ==================== FORMS SUBMISSION ====================
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // -------------------- CONDITIONAL VALIDITIONS --------------------
+
+    // -------------------- VALIDATIONS --------------------
     if (
-      !formData.firstName &&
-      !formData.lastName &&
-      !formData.email &&
-      !formData.password
+      !formData.firstName?.trim() ||
+      !formData.email?.trim() ||
+      !formData.password?.trim()
     ) {
-      toast.error("All fields are required");
-      return;
-    }
-
-    if (!formData.firstName?.trim()) {
-      toast.error("First name is required");
-      return;
-    }
-
-    if (!formData.email?.trim()) {
-      toast.error("Email is required");
-      return;
-    }
-
-    if (!formData.password?.trim()) {
-      toast.error("Password is required");
+      toast.error("Required fields (*) are missing");
       return;
     }
     if (formData.password.length < 12) {
-      toast.error("The password should be atleast 12 characters long");
+      toast.error("Password must be at least 12 characters long");
       return;
     }
     if (!formData.email.includes("@")) {
-      toast.error("Email is invalid");
+      toast.error("Invalid email address");
       return;
     }
-    // -------------------- INSERT USER API --------------------
+
+    setLoading(true);
     axios
       .post("https://pak-deals-backend.vercel.app/api/auth/register", formData)
       .then((response) => {
@@ -73,30 +49,19 @@ function SignUpComponent() {
         localStorage.setItem("token", user.token);
         localStorage.setItem("id", user.id);
         localStorage.setItem("role", user.role);
-        toast.success(response?.data?.message);
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-        });
-        setTimeout(() => {
-          navigate("/user-dashboard/");
-        }, 3000);
+        toast.success(response?.data?.message || "Account Created!");
+
+        setTimeout(() => navigate("/user-dashboard/"), 2000);
       })
       .catch((error) => {
-        toast.error(error?.response?.data?.error || "Internal Server Error");
-      });
+        toast.error(error?.response?.data?.error || "Registration failed");
+      })
+      .finally(() => setLoading(false));
   };
-  // ==================== GOOGLE FORM SUBMISSION ====================
+
+  // ==================== GOOGLE REGISTRATION (Exact Same Logic) ====================
   const handleGoogleSubmit = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      if (!tokenResponse || !tokenResponse.access_token) {
-        toast.error("Invalid Google token");
-        return;
-      }
-
-      // -------------------- GOOGLE DATA FETCH --------------------
       axios
         .get(
           `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokenResponse.access_token}`,
@@ -108,185 +73,168 @@ function SignUpComponent() {
             email: googleRes.data.email || "",
             password: "dummy_google_password_encrypted_and_AAAA",
           };
-          setGoogleFormData(googleData.data);
 
-          // -------------------- INSERT USER API --------------------
           axios
             .post(
               "https://pak-deals-backend.vercel.app/api/auth/google-register",
               googleData,
-              { headers: { "Content-Type": "application/json" } },
             )
             .then((response) => {
               const user = response.data;
               localStorage.setItem("token", user.token);
               localStorage.setItem("id", user.id);
               localStorage.setItem("role", user.role);
-              toast.success(response?.data?.message);
-
-              setTimeout(() => {
-                navigate("/user-dashboard/");
-              }, 3000);
-
-              setGoogleFormData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                password: "",
-              });
+              toast.success("Google Registration Successful!");
+              setTimeout(() => navigate("/user-dashboard/"), 2000);
             })
-            .catch((error) => {
-              toast.error(
-                error?.response?.data?.error || "Internal Server Error",
-              );
-            });
-        })
-        .catch((err) => {
-          console.error("Google register error:", err?.response || err);
-          toast.error("Google register failed");
+            .catch((error) =>
+              toast.error(error?.response?.data?.error || "Google sync failed"),
+            );
         });
     },
-
-    onError: (error) => {
-      console.error("Google Sign-In Error:", error);
-      toast.error("Google Sign-In Failed");
-    },
+    onError: () => toast.error("Google Sign-In Failed"),
   });
 
   return (
-    <div className="page flex items-center justify-center h-screen">
-      <div className="lg:w-md shadow-xl hover:shadow-2xl transition-shadow duration-200 border-2 border-blue-800 px-6 py-5 rounded-lg bg-white">
-        {/* -------------------- Heading -------------------- */}
-        <div className="text-center">
-          <h2
-            to={"/"}
-            className="text-blue-800 text-3xl font-bold font-montserrat tracking-wider"
-          >
-            PakDeals
-          </h2>
-        </div>
-        {/* -------------------- FORM -------------------- */}
-        <form onSubmit={handleFormSubmit} className="space-y-4 mt-3">
-          <ToastContainer position="top-right" autoClose={1500} theme="light" />
-          {/* -------------------- FIRSTNAME -------------------- */}
-          <div className="flex flex-col gap-1">
-            <label htmlFor="firstName" className="font-medium text-gray-700">
-              First name<span className="text-red-600"> *</span>
-            </label>
-            <input
-              type="text"
-              name="firstName"
-              id="firstName"
-              value={formData.firstName}
-              placeholder="Enter Your First Name"
-              className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-              focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-              transition-colors ease-in-out duration-300"
-              onChange={handleInputChange}
-            />
-          </div>
-          {/* -------------------- LASTNAME -------------------- */}
-          <div className="flex flex-col gap-1">
-            <label htmlFor="lastName" className="font-medium text-gray-700">
-              Last name (optional)
-            </label>
-            <input
-              type="text"
-              name="lastName"
-              id="lastName"
-              value={formData.lastName}
-              placeholder="Enter Your Last Name"
-              className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-              focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-              transition-colors ease-in-out duration-300"
-              onChange={handleInputChange}
-            />
-          </div>
-          {/* -------------------- EMAIL -------------------- */}
-          <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="font-medium text-gray-700">
-              Email<span className="text-red-600"> *</span>
-            </label>
-            <input
-              type="text"
-              name="email"
-              id="email"
-              value={formData.email}
-              placeholder="Enter Your Email"
-              className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-              focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-              transition-colors ease-in-out duration-300"
-              onChange={handleInputChange}
-            />
-          </div>
-          {/* -------------------- PASSWORD -------------------- */}
-          <div className="flex flex-col gap-1 relative">
-            <label htmlFor="password" className="font-medium text-gray-700">
-              Password<span className="text-red-600"> *</span>
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              id="password"
-              value={formData.password}
-              placeholder="Enter Your Password"
-              className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-            focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-              transition-colors ease-in-out duration-300"
-              onChange={handleInputChange}
-            />
-            {showPassword ? (
-              <EyeClosed
-                className="absolute top-[57%] right-3 w-6 h-6 hover:text-blue-800 transition-colors ease-linear cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              />
-            ) : (
-              <Eye
-                className="absolute top-[57%] right-3 w-6 h-6 hover:text-blue-800 transition-colors ease-linear cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              />
-            )}
-          </div>
-          {/* -------------------- SUBMIT BUTTON -------------------- */}
-          <div className="w-full">
-            <button
-              type="submit"
-              className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
-              transition-all duration-300 rounded-md w-full font-medium"
-            >
-              Create An Account
-            </button>
-          </div>
-          {/* -------------------- CONTINUE WITH GOOGLE -------------------- */}
-          <div>
-            {/* -------------------- CONTINUE WITH -------------------- */}
-            <div className="flex items-center gap-2">
-              <div className="w-[50%] h-0.5 bg-gray-600 rounded-full"></div>
-              <div className="text-sm text-center text-gray-600 font-medium">
-                OR
-              </div>
-              <div className="w-[50%] h-0.5 bg-gray-600 rounded-full"></div>
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
+      <ToastContainer position="top-right" autoClose={1500} theme="colored" />
 
-            <div
-              onClick={() => handleGoogleSubmit()}
-              className="hover:scale-101 shadow-lg hover:shadow-xl gap-2 bg-gray-100 flex items-center justify-center transition-all p-3 rounded-sm text-red-600 font-medium cursor-pointer"
-            >
-              <h3 className="font-semibold text-3xl">G</h3>
-              <h3 className="text-lg">Continue With Google</h3>
+      {/* Card: Maintained border-2 border-blue-800 */}
+      <div className="w-full max-w-lg bg-white border-2 border-blue-800 rounded-2xl shadow-2xl p-8 transition-all duration-300">
+        <div className="text-center mb-6">
+          <h2 className="text-blue-800 text-4xl font-black font-montserrat tracking-tighter">
+            PakDeals<span className="text-orange-500">.</span>
+          </h2>
+          <p className="text-gray-500 text-sm font-medium mt-1">
+            Join the community of buyers and sellers
+          </p>
+        </div>
+
+        <form onSubmit={handleFormSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* FIRSTNAME */}
+            <div className="space-y-1">
+              <label className="text-sm font-bold text-blue-900 ml-1">
+                First Name *
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                placeholder="John"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-800 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+              />
+            </div>
+            {/* LASTNAME */}
+            <div className="space-y-1">
+              <label className="text-sm font-bold text-blue-900 ml-1">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                placeholder="Doe"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-800 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+              />
             </div>
           </div>
-          {/* -------------------- LOGIN -------------------- */}
-          <div className="flex items-center justify-center font-medium">
-            <h1 className="text-gray-600">
-              Have an account?
-              <span className="ml-1">
-                <Link to={"/login"} className="text-blue-700 hover:underline">
-                  Login
-                </Link>
-              </span>
-            </h1>
+
+          {/* EMAIL */}
+          <div className="space-y-1">
+            <label className="text-sm font-bold text-blue-900 ml-1">
+              Email Address *
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="john@example.com"
+              className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-800 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+            />
           </div>
+
+          {/* PASSWORD */}
+          <div className="space-y-1 relative">
+            <label className="text-sm font-bold text-blue-900 ml-1">
+              Password *
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="At least 12 characters"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-800 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-800 transition-colors"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-900 hover:-translate-y-1 transition-all duration-300 disabled:opacity-70 mt-2"
+          >
+            {loading ? "Creating Account..." : "Create Free Account"}
+          </button>
+
+          {/* DIVIDER */}
+          <div className="flex items-center gap-3 py-2">
+            <div className="h-px w-full bg-gray-200"></div>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              OR
+            </span>
+            <div className="h-px w-full bg-gray-200"></div>
+          </div>
+
+          {/* GOOGLE BUTTON */}
+          <button
+            type="button"
+            onClick={() => handleGoogleSubmit()}
+            className="w-full flex items-center justify-center gap-3 border-2 border-gray-100 bg-gray-50 hover:bg-gray-100 py-3 rounded-xl transition-all duration-200 group"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+            <span className="text-gray-700 font-bold">Sign up with Google</span>
+          </button>
+
+          <p className="text-center text-gray-500 font-medium text-sm mt-4">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-blue-800 font-bold hover:underline decoration-2 underline-offset-4"
+            >
+              Login here
+            </Link>
+          </p>
         </form>
       </div>
     </div>

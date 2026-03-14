@@ -1,56 +1,90 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { MoveLeft, Home } from "lucide-react";
 
 function ErrorPage() {
   const navigate = useNavigate();
+
   return (
-    <div className="flex items-center justify-center w-full h-screen page">
-      <section>
-        <div className="container min-h-screen px-6 py-12 mx-auto lg:flex lg:items-center lg:gap-12">
-          <div className="wf-ull lg:w-1/2">
-            <p className="text-sm font-medium text-blue-500">404 error</p>
-            <h1 className="mt-3 text-2xl font-semibold text-gray-800 md:text-3xl">
-              Page not found
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center sm:px-8 px-4 py-12">
+      <section className="max-w-7xl w-full">
+        <div className="container mx-auto lg:flex lg:items-center lg:gap-16">
+          <div className="w-full lg:w-1/2">
+            {/* -------------------- ERROR CODE -------------------- */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-6">
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">
+                Error 404
+              </span>
+            </div>
+
+            {/* -------------------- TEXT CONTENT -------------------- */}
+            <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight font-montserrat leading-tight">
+              Lost in <br />
+              <span className="text-blue-600">The Marketplace?</span>
             </h1>
-            <p className="mt-4 text-gray-500">
-              Sorry, the page you are looking for doesn't exist.Here are some
-              helpful links:
+
+            <p className="mt-6 text-lg text-slate-500 font-medium max-w-md leading-relaxed">
+              We couldn’t find the page you’re looking for. It might have been
+              moved, deleted, or never existed in the first place.
             </p>
 
-            <div className="flex items-center mt-6 gap-x-3">
-              <Link to={navigate(-1)}>
-                <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto hover:bg-gray-100">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5 rtl:rotate-180"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-                    />
-                  </svg>
+            {/* -------------------- ACTION BUTTONS -------------------- */}
+            <div className="flex flex-col sm:flex-row items-center mt-10 gap-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="group flex items-center justify-center w-full sm:w-auto px-8 py-4 text-sm font-bold text-slate-700 transition-all duration-300 bg-white border border-slate-200 rounded-2xl gap-x-2 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+              >
+                <MoveLeft
+                  size={18}
+                  className="group-hover:-translate-x-1 transition-transform"
+                />
+                <span>Go back</span>
+              </button>
 
-                  <span>Go back</span>
-                </button>
-              </Link>
-              <Link to="/">
-                <button className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600  ">
-                  Take me home
+              <Link to="/" className="w-full sm:w-auto">
+                <button className="flex items-center justify-center w-full px-8 py-4 text-sm font-bold tracking-wide text-white transition-all duration-300 bg-slate-900 rounded-2xl gap-x-2 hover:bg-blue-600 shadow-xl shadow-slate-200 hover:shadow-blue-200">
+                  <Home size={18} />
+                  <span>Take me home</span>
                 </button>
               </Link>
             </div>
+
+            {/* -------------------- QUICK LINKS -------------------- */}
+            <div className="mt-12 pt-8 border-t border-slate-200">
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">
+                Quick Navigation
+              </p>
+              <div className="flex gap-6 text-sm font-bold text-slate-500">
+                <Link
+                  to="/user-dashboard"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/user-ads"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  My Ads
+                </Link>
+                <Link
+                  to="/user-favorites"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Favorites
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <div className="relative w-full mt-12 lg:w-1/2 lg:mt-0">
+          {/* -------------------- ILLUSTRATION -------------------- */}
+          <div className="relative w-full mt-16 lg:w-1/2 lg:mt-0 animate-in fade-in zoom-in duration-700">
+            <div className="absolute -inset-4 bg-blue-500/5 rounded-full blur-3xl" />
             <img
-              className="w-full max-w-lg lg:mx-auto"
+              className="relative w-full max-w-lg lg:mx-auto drop-shadow-2xl"
               src="https://merakiui.com/images/components/illustration.svg"
-              alt=""
+              alt="404 Illustration"
             />
           </div>
         </div>

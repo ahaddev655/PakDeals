@@ -1,109 +1,153 @@
 import React, { useEffect, useState } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, Search, FilterX } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function CategoryPage() {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [search, setSearch] = useState("");
   const location = useLocation();
 
   const normalizedSearch = search.trim().toLowerCase();
+  const categoryName = location.pathname.split("/")[2]?.replace(/_/g, " ");
 
   const fetchAdsByCategory = () => {
     setLoading(true);
-    const path = location.pathname;
-    const formattedPath = path.split("/");
-    const tableName = formattedPath[2];
+    const tableName = location.pathname.split("/")[2];
     axios
       .get(
         `https://pak-deals-backend.vercel.app/api/ads/category-ads/${tableName}`,
       )
       .then((res) => {
-        console.log(res?.data.data);
-        setAds(res.data.data);
+        setAds(res.data.data || []);
       })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     fetchAdsByCategory();
   }, [location.pathname]);
 
-  const filteredAds = ads.filter((ad) => {
-    const matchesSearch = ad.title.toLowerCase().includes(normalizedSearch);
-
-    return matchesSearch;
-  });
+  const filteredAds = ads.filter((ad) =>
+    ad.title.toLowerCase().includes(normalizedSearch),
+  );
 
   return (
-    <div className="page">
-      <div className="sm:flex items-center justify-between gap-3.5 mb-6">
-        <h1 className="md:text-[32px] text-2xl font-semibold text-gray-700 capitalize sm:text-start text-center">
-          {location.pathname.split("/")[2]?.replace(/_/g, " ")}
-        </h1>
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* --- HEADER SECTION --- */}
+      <div className="bg-white border-b border-gray-200 mb-8 py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:flex items-center justify-between gap-6">
+          <div className="mb-4 sm:mb-0">
+            <h1 className="text-3xl md:text-4xl font-black text-slate-900 capitalize tracking-tight">
+              {categoryName}
+            </h1>
+            <p className="text-gray-500 font-medium mt-1">
+              Showing {filteredAds.length} listings in this category
+            </p>
+          </div>
 
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="sm:w-75 w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-          focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-          transition-colors ease-in-out duration-300"
-          placeholder="Search..."
-        />
+          <div className="relative group sm:w-96 w-full">
+            <Search
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-800 transition-colors"
+              size={20}
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-12 pr-4 py-3.5 focus:bg-white focus:border-blue-800 focus:ring-4 focus:ring-blue-50 transition-all outline-none"
+              placeholder={`Search in ${categoryName}...`}
+            />
+          </div>
+        </div>
       </div>
 
-      {loading ? (
-        <p className="text-center text-lg text-gray-700 py-3">Loading ads...</p>
-      ) : filteredAds.length > 0 ? (
-        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-          {filteredAds.map((ad) => (
-            <Link
-              key={ad.id}
-              to={`/ad/${ad.table_name || ad.source_table}/${ad.id}`}
-            >
-              <div className="border-2 border-blue-800 rounded-lg p-1">
-                <img src={ad.image} alt="Ad" className="w-full rounded-md" />
+      <div className="max-w-7xl mx-auto px-4">
+        {loading ? (
+          /* --- SKELETON LOADING STATE --- */
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl h-100 animate-pulse border border-gray-100"
+              />
+            ))}
+          </div>
+        ) : filteredAds.length > 0 ? (
+          /* --- AD GRID --- */
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+            {filteredAds.map((ad) => (
+              <Link
+                key={ad.id}
+                to={`/ad/${ad.table_name || ad.source_table}/${ad.id}`}
+                className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-blue-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300"
+              >
+                {/* Image Container */}
+                <div className="relative h-56 overflow-hidden bg-gray-100">
+                  <img
+                    src={ad.image}
+                    alt={ad.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-900">
+                      {ad.category}
+                    </span>
+                  </div>
+                </div>
 
-                <div className="mt-3 px-2">
-                  <h5 className="font-medium text-gray-400">{ad.category}</h5>
-
-                  <h3 className="text-lg font-medium text-gray-700 line-clamp-2">
+                {/* Content */}
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-slate-800 line-clamp-2 min-h-14 group-hover:text-blue-900 transition-colors">
                     {ad.title}
                   </h3>
 
-                  <div className="mt-3 flex items-center gap-2">
-                    <div className="grid place-items-center w-8.75 h-8.75 bg-orange-100/40 rounded-full text-blue-800">
-                      <MapPin size={18} />
-                    </div>
-                    <span className="sm:text-sm text-xs text-gray-400 font-medium">
+                  <div className="mt-4 flex items-center gap-2 text-gray-400">
+                    <MapPin size={16} className="text-orange-600" />
+                    <span className="text-xs font-bold tracking-tight uppercase">
                       {ad.location}
                     </span>
                   </div>
 
-                  <hr className="my-3 border border-gray-300" />
-
-                  <h2 className="text-center text-blue-800 font-semibold text-2xl">
-                    PKR {Number(ad.price).toLocaleString()}
-                  </h2>
+                  <div className="mt-5 pt-4 border-t border-gray-50 flex items-center justify-between">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-gray-400 font-black uppercase">
+                        Price
+                      </span>
+                      <span className="text-xl font-black text-blue-900">
+                        PKR {Number(ad.price).toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all">
+                      <Search size={18} />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-gray-500 py-8">
-          No ads found for this category.
-        </p>
-      )}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          /* --- EMPTY STATE --- */
+          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
+            <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FilterX className="text-gray-300" size={40} />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800">No ads found</h3>
+            <p className="text-gray-500 max-w-xs mx-auto mt-2">
+              We couldn't find any listings matching "{search}". Try checking
+              your spelling or using different keywords.
+            </p>
+            <button
+              onClick={() => setSearch("")}
+              className="mt-6 text-blue-900 font-black uppercase tracking-widest text-xs hover:underline"
+            >
+              Clear Search
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

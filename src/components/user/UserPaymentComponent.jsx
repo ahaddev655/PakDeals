@@ -1,148 +1,199 @@
-import { Search } from "lucide-react";
+import { Search, ChevronDown, Filter, CreditCard } from "lucide-react";
 import React, { useState } from "react";
 
 function UserPaymentComponent() {
-  // ==================== SORT DROPDOWN JS ====================
-  const [selectedSort, setSelectedSort] = useState("by-amount");
+  const [selectedSort, setSelectedSort] = useState("by-date");
   const [sortDropdownToggle, setSortDropdownToggle] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const sortTabs = [
-    { key: "by-date", label: "Sort By Date" },
-    { key: "by-amount", label: "Sort By Amount" },
+    { key: "by-date", label: "Latest First" },
+    { key: "by-amount", label: "Highest Amount" },
+    { key: "by-type", label: "Payment Type" },
   ];
-  // ==================== PAYMENT JS ====================
-  const [payments, setPayments] = useState([
+
+  const [payments] = useState([
     {
       id: 1,
       type: "Direct Bank Transfer",
       amount: "200000",
-      date: "2/01/2010",
+      date: "2024-03-01",
+      status: "Completed",
     },
     {
       id: 2,
       type: "EasyPaisa Transfer",
       amount: "100000",
-      date: "2/01/2009",
+      date: "2024-03-10",
+      status: "Processing",
+    },
+    {
+      id: 3,
+      type: "JazzCash",
+      amount: "50000",
+      date: "2024-02-15",
+      status: "Completed",
     },
   ]);
-  // ==================== SEARCH QUERY JS ====================
-  const [searchQuery, setSearchQuery] = useState("");
+
+  // Handle Filtering and Sorting Logic
+  const filteredAndSortedPayments = payments
+    .filter((p) => p.type.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => {
+      if (selectedSort === "by-date")
+        return new Date(b.date) - new Date(a.date);
+      if (selectedSort === "by-amount")
+        return Number(b.amount) - Number(a.amount);
+      if (selectedSort === "by-type") return a.type.localeCompare(b.type);
+      return 0;
+    });
+
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Completed":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "Processing":
+        return "bg-amber-100 text-amber-700 border-amber-200";
+      default:
+        return "bg-slate-100 text-slate-700 border-slate-200";
+    }
+  };
+
   return (
-    <div className="sm:px-6 px-2.5 py-6 bg-white rounded-lg shadow-lg border border-gray-200">
-      {/* ==================== PAYMENTS HEADER ==================== */}
-      <div className="sm:flex items-center justify-between gap-3.5">
-        {/* -------------------- SEARCHBAR -------------------- */}
-        <div className="relative">
-          <Search className="absolute text-[#7f7f7f] top-2 left-2" />
-          <input
-            type="text"
-            placeholder="Search Payment Type"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-2 border-gray-200 rounded-md p-2 text-[15px] pl-10 sm:w-fit w-full"
-          />
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      {/* HEADER SECTION */}
+      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-black text-slate-800 tracking-tight">
+            Payment History
+          </h2>
+          <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">
+            Transaction Logs
+          </p>
         </div>
-        {/* -------------------- SORT DROPDOWN -------------------- */}
-        <div className="relative sm:mt-0 mt-4 text-end">
-          <button
-            onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
-            className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md bg-white shadow-sm w-41.5"
-          >
-            {sortTabs.find((s) => s.key === selectedSort)?.label || "Sort"}
-          </button>
-          <div
-            className={`absolute top-full mt-2 sm:left-0 right-0 w-40 bg-white shadow-lg border border-gray-200 p-1 rounded-md transition-all duration-300 origin-top transform ${
-              sortDropdownToggle
-                ? "scale-y-100 opacity-100"
-                : "scale-y-0 opacity-0"
-            }`}
-          >
-            {sortTabs.map((sort, i) => (
-              <div
-                key={i}
-                className="cursor-pointer p-2 hover:bg-blue-50 rounded-md hover:text-blue-700"
-                onClick={() => {
-                  setSelectedSort(sort.key);
-                  setSortDropdownToggle(false);
-                }}
-              >
-                {sort.label}
-              </div>
-            ))}
+
+        <div className="flex flex-wrap items-center gap-3">
+          {/* SEARCH */}
+          <div className="relative flex-1 md:flex-none">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={18}
+            />
+            <input
+              type="text"
+              placeholder="Filter transactions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none w-full md:w-64 transition-all"
+            />
+          </div>
+
+          {/* SORT DROPDOWN */}
+          <div className="relative">
+            <button
+              onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all"
+            >
+              <Filter size={16} />
+              {sortTabs.find((s) => s.key === selectedSort)?.label}
+              <ChevronDown
+                size={16}
+                className={`transition-transform ${sortDropdownToggle ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {sortDropdownToggle && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setSortDropdownToggle(false)}
+                />
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-100 shadow-xl rounded-xl p-2 z-20 animate-in fade-in zoom-in duration-200">
+                  {sortTabs.map((tab) => (
+                    <button
+                      key={tab.key}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm font-bold transition-colors ${selectedSort === tab.key ? "bg-blue-50 text-blue-600" : "text-slate-500 hover:bg-slate-50"}`}
+                      onClick={() => {
+                        setSelectedSort(tab.key);
+                        setSortDropdownToggle(false);
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
-      {/* ==================== PAYMENTS CONTAINER ==================== */}
-      <div>
-        {payments.length > 0 ? (
-          <div className="overflow-x-auto mt-3">
-            <table className="w-full">
-              <thead className="bg-gray-200 border-b border-gray-300">
-                <tr>
-                  {["ID", "Type", "Amount", "Date"].map((h, i) => (
+
+      {/* TABLE SECTION */}
+      <div className="overflow-x-auto">
+        {filteredAndSortedPayments.length > 0 ? (
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50/50">
+                {["Transaction ID", "Method", "Amount", "Status", "Date"].map(
+                  (head) => (
                     <th
-                      key={i}
-                      className={`font-semibold text-[#495057] py-3 px-6 ${
-                        i < 3 ? "text-start" : "text-center"
-                      }`}
+                      key={head}
+                      className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100"
                     >
-                      {h}
+                      {head}
                     </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {payments
-                  .filter((payment) =>
-                    payment.type
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()),
-                  )
-                  .sort((a, b) => {
-                    if (selectedSort === "by-status") {
-                      return a.status.localeCompare(b.status);
-                    }
-                    if (selectedSort === "by-date") {
-                      return (
-                        new Date(a.date).getFullYear() -
-                        new Date(b.date).getFullYear()
-                      );
-                    } else {
-                      return Number(b.amount) - Number(a.amount);
-                    }
-                  })
-                  .map((payment, i, arr) => (
-                    <tr
-                      key={payment.id}
-                      className={`border-b hover:bg-gray-100 transition-colors ease-in-out duration-200 ${
-                        i === arr.length - 1
-                          ? "border-transparent"
-                          : "border-gray-300"
-                      }`}
-                    >
-                      <td className="py-4 px-6 text-[15px] text-gray-700 font-semibold">
-                        #{payment.id}
-                      </td>
-
-                      <td className="py-4 px-6 text-[15px] text-gray-700">
+                  ),
+                )}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {filteredAndSortedPayments.map((payment) => (
+                <tr
+                  key={payment.id}
+                  className="hover:bg-slate-50/80 transition-colors group"
+                >
+                  <td className="px-6 py-4 text-sm font-black text-blue-600">
+                    #{payment.id.toString().padStart(4, "0")}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-white transition-colors">
+                        <CreditCard size={16} />
+                      </div>
+                      <span className="text-sm font-bold text-slate-700">
                         {payment.type}
-                      </td>
-
-                      <td className="py-4 px-6 text-[15px] text-gray-700">
-                        PKR {Number(payment.amount).toLocaleString()}
-                      </td>
-
-                      <td className="py-4 px-6 text-[15px] text-gray-700 text-center">
-                        {payment.date}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-sm font-black text-slate-900">
+                      PKR {Number(payment.amount).toLocaleString()}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(payment.status)}`}
+                    >
+                      {payment.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm font-bold text-slate-500">
+                    {payment.date}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         ) : (
-          <p className="text-center text-sm text-gray-700 py-3">
-            No payments available
-          </p>
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
+              <Search size={32} />
+            </div>
+            <h3 className="text-slate-900 font-black">No transactions found</h3>
+            <p className="text-slate-400 text-sm">
+              Try adjusting your search or filters
+            </p>
+          </div>
         )}
       </div>
     </div>

@@ -1,6 +1,13 @@
 import axios from "axios";
-import { ChevronDown, Eye, EyeClosed, RefreshCw, Save } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import {
+  Eye,
+  EyeClosed,
+  RefreshCw,
+  Save,
+  ShieldCheck,
+  Lock,
+} from "lucide-react";
+import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 function UserSecuritySettingsComponent() {
@@ -9,12 +16,18 @@ function UserSecuritySettingsComponent() {
     newPassword: "",
     confirmPassword: "",
   };
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [data, setData] = useState(defaultData);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ==================== REUSABLE COMPONENTS ====================
+  // ==================== INPUT HANDLERS ====================
+  const handleInputChange = (e) => {
+    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  // ==================== REUSABLE INPUT COMPONENT ====================
   const inputComponent = (
     label,
     value,
@@ -25,119 +38,112 @@ function UserSecuritySettingsComponent() {
   ) => {
     return (
       <div className="flex flex-col w-full relative">
-        <label htmlFor={name} className="font-medium text-gray-700">
+        <label
+          htmlFor={name}
+          className="text-sm font-black text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-2"
+        >
+          <Lock size={14} className="text-slate-400" />
           {label}
         </label>
-        <input
-          type={showPassword ? "text" : "password"}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 mt-1
-        focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-        transition-colors ease-in-out duration-300"
-          onChange={handleInputChange}
-        />
-
-        <div
-          className="absolute top-[55%] right-3 w-6 h-6 hover:text-blue-800 transition-colors ease-linear cursor-pointer"
-          onClick={() => setShowPassword(!showPassword)}
-        >
-          {showPassword ? <EyeClosed /> : <Eye />}
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 pr-12
+                     focus:border-blue-800 focus:ring-4 focus:ring-blue-50
+                     transition-all ease-in-out duration-300 outline-none font-medium text-slate-900"
+            onChange={handleInputChange}
+          />
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-800 transition-colors"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
+          </button>
         </div>
       </div>
     );
   };
 
-  // ==================== INPUT HANDLERS ====================
-  const handleInputChange = (e) => {
-    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  // ==================== FORM JS ====================
+  // ==================== FORM SUBMISSION ====================
   const handlePersonalSubmit = (e) => {
     e.preventDefault();
 
     // -------------------- VALIDATIONS --------------------
-    if (!data.confirmPassword && !data.newPassword) {
-      toast.error("All fields are required...");
+    if (!data.newPassword?.trim() || !data.confirmPassword?.trim()) {
+      toast.error("Both password fields are required.");
       return;
     }
 
-    if (!data.confirmPassword?.trim()) {
-      toast.error("Confirm your password...");
-      return;
-    }
-
-    if (!data.newPassword?.trim()) {
-      toast.error("New password is required...");
-      return;
-    }
-    if (data.newPassword < 12) {
-      toast.error("New password should be 12 characters long...");
+    if (data.newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters long.");
       return;
     }
 
     if (data.newPassword !== data.confirmPassword) {
-      toast.error("Password do not match...");
+      toast.error("Passwords do not match.");
       return;
     }
 
-    const payload = {
-      ...data,
-    };
-    // -------------------- API CONFIGURATION --------------------
+    setIsSubmitting(true);
     const userId = localStorage.getItem("id");
+
     axios
       .put(
         `https://pak-deals-backend.vercel.app/api/users/update-password/${userId}`,
-        payload,
+        data,
       )
       .then((response) => {
-        console.log(response.data);
-        setData({
-          newPassword: "",
-          confirmPassword: "",
-        });
+        setData(defaultData);
         toast.success(
-          response?.response?.data?.message ||
-            response?.data?.message ||
-            "Form submitted successfully...",
+          response?.data?.message || "Password updated successfully!",
         );
       })
       .catch((error) => {
         toast.error(
-          error?.response?.data?.error ||
-            error?.response?.error ||
-            "Internal Server Error",
+          error?.response?.data?.error || "Failed to update password.",
         );
-      });
+      })
+      .finally(() => setIsSubmitting(false));
   };
+
   return (
-    <div className="py-4 px-5">
+    <div className="py-6 px-4 max-w-4xl">
+      <ToastContainer position="top-right" autoClose={2500} theme="colored" />
+
       {/* -------------------- HEADING -------------------- */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">Security Settings</h1>
-        <p className="mt-1 text-gray-500 text-lg">
-          Manage your password and security preferences
-        </p>
+      <div className="flex items-center gap-4 mb-8">
+        <div className="bg-blue-50 p-3 rounded-2xl text-blue-800 shadow-sm">
+          <ShieldCheck size={32} />
+        </div>
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+            Security Settings
+          </h1>
+          <p className="text-gray-500 font-medium">
+            Strengthen your account by updating your password
+          </p>
+        </div>
       </div>
 
-      <div className="h-[1.5px] bg-gray-200 w-full rounded-full my-7.5" />
+      <div className="h-0.5 bg-slate-100 w-full rounded-full mb-10" />
 
       {/* ==================== FORM ==================== */}
-      <form onSubmit={handlePersonalSubmit} className="space-y-5">
-        {/* ==================== TOAST CONTAINER ==================== */}
-        <ToastContainer position="top-right" autoClose={2500} theme="light" />
-        {/* ==================== NEW AND CONFIRM PASSWORD ==================== */}
-        <div className="flex md:flex-row flex-col items-center gap-3">
+      <form
+        onSubmit={handlePersonalSubmit}
+        className="space-y-8 bg-white rounded-2xl p-2"
+      >
+        <div className="grid md:grid-cols-2 gap-6">
           {inputComponent(
             "New Password",
             data.newPassword,
             "newPassword",
             showNewPassword,
             setShowNewPassword,
-            "Enter Your New Password",
+            "••••••••••••",
           )}
           {inputComponent(
             "Confirm Password",
@@ -145,29 +151,41 @@ function UserSecuritySettingsComponent() {
             "confirmPassword",
             showConfirmPassword,
             setShowConfirmPassword,
-            "Confirm Your New Password",
+            "••••••••••••",
           )}
         </div>
 
-        {/* -------------------- SUBMIT BUTTONS -------------------- */}
-        <div className="flex md:flex-row flex-col items-center justify-center gap-3">
+        <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl flex gap-3">
+          <ShieldCheck className="text-blue-800 shrink-0" size={20} />
+          <p className="text-sm text-blue-900 leading-relaxed font-medium">
+            Tip: Use a mix of uppercase, lowercase, numbers, and symbols to
+            create a stronger password.
+          </p>
+        </div>
+
+        {/* -------------------- ACTION BUTTONS -------------------- */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
           <button
             type="submit"
-            className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"
+            disabled={isSubmitting}
+            className="flex-1 flex items-center justify-center gap-3 py-4 px-8 bg-blue-900 text-white font-black uppercase tracking-widest hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            <Save />
-            Submit changes
+            {isSubmitting ? (
+              <RefreshCw className="animate-spin" />
+            ) : (
+              <Save size={20} />
+            )}
+            {isSubmitting ? "Updating..." : "Submit Changes"}
           </button>
 
           <button
             type="button"
-            className="flex items-center gap-3 py-3 px-6 bg-gray-600 w-full rounded-md text-white font-medium hover:bg-gray-700 transition-colors duration-300 ease-in-out"
-            onClick={() => {
-              setData(defaultData);
-            }}
+            disabled={isSubmitting}
+            className="flex-1 flex items-center justify-center gap-3 py-4 px-8 bg-slate-100 text-slate-600 font-black uppercase tracking-widest hover:bg-slate-200 transition-all disabled:opacity-50"
+            onClick={() => setData(defaultData)}
           >
-            <RefreshCw />
-            Reset settings
+            <RefreshCw size={20} />
+            Reset Form
           </button>
         </div>
       </form>

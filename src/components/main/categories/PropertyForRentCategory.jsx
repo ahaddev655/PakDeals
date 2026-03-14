@@ -1,20 +1,100 @@
-import { ChevronDown, Plus, X } from "lucide-react";
+import {
+  ChevronDown,
+  Plus,
+  X,
+  Home,
+  Bed,
+  Bath,
+  Maximize,
+  MapPin,
+  Camera,
+  User,
+  CheckCircle2,
+} from "lucide-react";
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+
+// --- REUSABLE COMPONENTS ---
+const FormInput = ({ label, icon: Icon, ...props }) => (
+  <div className="w-full">
+    <label className="text-sm font-bold text-blue-900 ml-1 flex items-center gap-1">
+      {Icon && <Icon size={14} />} {label}
+    </label>
+    <input
+      {...props}
+      className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl px-4 py-3 mt-1 outline-none focus:border-blue-800 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all"
+    />
+  </div>
+);
+
+const FormDropdown = ({
+  label,
+  id,
+  dataKey,
+  icon: Icon,
+  openDropdown,
+  setOpenDropdown,
+  formData,
+  onSelect,
+  data,
+}) => {
+  const isOpen = openDropdown === id;
+  const items = data.propertyForRent.find((i) => i[dataKey])?.[dataKey] || [];
+
+  return (
+    <div className="w-full relative">
+      <label className="text-sm font-bold text-blue-900 ml-1 flex items-center gap-1">
+        {Icon && <Icon size={14} />} {label}
+      </label>
+      <button
+        type="button"
+        onClick={() => setOpenDropdown(isOpen ? "" : id)}
+        className={`w-full flex justify-between items-center mt-1 py-3 px-4 border-2 rounded-xl transition-all ${
+          isOpen
+            ? "border-blue-800 ring-4 ring-blue-50 bg-white"
+            : "border-gray-100 bg-gray-50"
+        } ${formData[id]?.id ? "text-gray-900 font-semibold" : "text-gray-400"}`}
+      >
+        {formData[id]?.label}
+        <ChevronDown
+          size={18}
+          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+      {isOpen && (
+        <div className="absolute z-30 top-full left-0 right-0 mt-2 bg-white border border-gray-100 shadow-2xl rounded-xl max-h-60 overflow-y-auto">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-gray-700 font-medium border-b last:border-0 border-gray-50"
+              onClick={() => onSelect(id, item)}
+            >
+              {item.text}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 function PropertyForRentCategory({
   openDropdown,
   setOpenDropdown,
   addAd_data,
 }) {
+  const userId = localStorage.getItem("id");
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
+
   const FEATURES_LIST = [
     "Electricity Backup",
     "Water Disposal",
     "Sewerage",
     "Water Supply",
-    "Broadband Internet Access",
-    "Satellite/Cable TV Ready",
+    "Broadband Internet",
+    "Satellite/TV Ready",
     "Intercom",
     "Lawn",
     "Balcony",
@@ -28,8 +108,6 @@ function PropertyForRentCategory({
   ];
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
-  const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("id");
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -50,76 +128,11 @@ function PropertyForRentCategory({
     images: [],
   });
 
-  const fileInputRef = useRef(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const form = new FormData();
-
-    form.append("subCategory", formData.subCategory?.label || "");
-    form.append("areaUnit", formData.areaUnit?.label || "");
-    form.append("areaSize", formData.areaSize || "");
-    form.append("furnishedStatus", formData.furnishedStatus?.label || "");
-    form.append("bedrooms", formData.bedrooms?.label || "");
-    form.append("bathrooms", formData.bathrooms?.label || "");
-    form.append("bathrooms", formData.bathrooms?.label || "");
-    form.append("numberOfStoreys", formData.numberOfStoreys?.label || "");
-    form.append("constructionState", formData.constructionState?.label || "");
-    form.append("location", formData.location?.label || "");
-    form.append("adTitle", formData.adTitle);
-    form.append("description", formData.description);
-    form.append("price", formData.price);
-    form.append("sellerName", formData.sellerName);
-    form.append("sellerContact", formData.sellerContact);
-    form.append("features", formData.features.join(", "));
-
-    formData.images.forEach((image) => {
-      form.append("images", image);
-    });
-    // -------------------- API CONFIGURATION --------------------
-    axios
-      .post(
-        `https://pak-deals-backend.vercel.app/api/ads/add-property-rent-ad/${userId}`,
-        form,
-      )
-      .then((response) => {
-        toast.success(response?.data?.message || "Ad Submitted...");
-
-        setFormData({
-          subCategory: DEFAULT_FILTER("Select Sub Category"),
-          areaUnit: DEFAULT_FILTER("Select Area Unit"),
-          areaSize: "",
-          furnishedStatus: DEFAULT_FILTER("Select Furnished Status"),
-          bedrooms: DEFAULT_FILTER("Select Bedrooms"),
-          bathrooms: DEFAULT_FILTER("Select Bathrooms"),
-          numberOfStoreys: DEFAULT_FILTER("Select No. of Storeys"),
-          constructionState: DEFAULT_FILTER("Select Construction State"),
-          location: DEFAULT_FILTER("Select Location"),
-          adTitle: "",
-          description: "",
-          price: "",
-          sellerName: "",
-          sellerContact: "",
-          features: [],
-          images: [],
-        });
-      })
-      .catch((error) => {
-        toast.error(error?.response?.error || "Something went wrong");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  const handleDetailChange = (e) => {
+  // --- HANDLERS ---
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "sellerContact" && value.length > 13) return;
-
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
   const handleSelect = (key, item) => {
@@ -127,232 +140,284 @@ function PropertyForRentCategory({
     setOpenDropdown("");
   };
 
-  const handleFeatureChange = (feature) => {
-    setFormData((prev) => {
-      const alreadySelected = prev.features.includes(feature);
-
-      return {
-        ...prev,
-        features: alreadySelected
-          ? prev.features.filter((f) => f !== feature)
-          : [...prev.features, feature],
-      };
-    });
+  const handleFeatureToggle = (feature) => {
+    setFormData((p) => ({
+      ...p,
+      features: p.features.includes(feature)
+        ? p.features.filter((f) => f !== feature)
+        : [...p.features, feature],
+    }));
   };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setFormData((prev) => {
-      const updatedImages = [...prev.images, ...files].slice(0, 5);
-      return { ...prev, images: updatedImages };
-    });
+    setFormData((p) => ({ ...p, images: [...p.images, ...files].slice(0, 5) }));
   };
 
-  const removeImage = (index) => {
-    setFormData((prev) => {
-      const updatedImages = [...prev.images];
-      updatedImages.splice(index, 1);
-      return { ...prev, images: updatedImages };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const form = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (key === "images")
+        formData.images.forEach((img) => form.append("images", img));
+      else if (key === "features")
+        form.append(key, formData.features.join(", "));
+      else form.append(key, formData[key]?.label || formData[key]);
     });
+
+    try {
+      const res = await axios.post(
+        `https://pak-deals-backend.vercel.app/api/ads/add-property-rent-ad/${userId}`,
+        form,
+      );
+      toast.success(res?.data?.message || "Listing published!");
+    } catch {
+      toast.error("Submission failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const renderDropdown = (label, key, dataKey, scrollable = false) => (
-    <div className="w-full">
-      <label className="font-semibold text-slate-600">{label}</label>
-      <div className="relative mt-1">
-        <button
-          type="button"
-          className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
-        transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          formData[key]?.id ? "text-black" : "text-gray-400"
-        }`}
-          onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
-        >
-          {formData[key]?.label}
-          <ChevronDown />
-        </button>
+  return (
+    <form className="space-y-8 bg-white p-2" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
 
-        <div
-          className={`absolute z-10 bg-white top-11.75 shadow-xl w-full origin-top transition-all
-        ${scrollable ? "h-70 overflow-auto" : ""}
-        ${
-          openDropdown === key
-            ? "scale-y-100 opacity-100"
-            : "scale-y-0 opacity-0"
-        }`}
-        >
-          {(
-            addAd_data.propertyForRent.find((i) => i[dataKey])?.[dataKey] || []
-          ).map((item) => (
-            <h4
-              key={item.id}
-              className="p-2 cursor-pointer hover:bg-blue-50"
-              onClick={() => handleSelect(key, item)}
+      {/* --- BASICS --- */}
+      <div className="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 space-y-6">
+        <h3 className="flex items-center gap-2 text-blue-900 font-black uppercase text-sm">
+          <Home size={18} /> Property Basics
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormDropdown
+            label="Sub Category"
+            id="subCategory"
+            dataKey="propertyRentSubCategories"
+            openDropdown={openDropdown}
+            setOpenDropdown={setOpenDropdown}
+            formData={formData}
+            onSelect={handleSelect}
+            data={addAd_data}
+          />
+          <FormInput
+            label="Listing Title"
+            name="adTitle"
+            value={formData.adTitle}
+            onChange={handleInputChange}
+            placeholder="e.g. Luxury 2-Bed Apartment"
+          />
+        </div>
+        <textarea
+          rows={4}
+          name="description"
+          placeholder="Describe rental terms..."
+          value={formData.description}
+          onChange={handleInputChange}
+          className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:border-blue-800 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all resize-none"
+        />
+      </div>
+
+      {/* --- SPECS --- */}
+      <div className="space-y-6">
+        <h3 className="flex items-center gap-2 text-blue-900 font-black uppercase text-sm">
+          <Maximize size={18} /> Dimensions & Build
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <FormDropdown
+            label="Bedrooms"
+            id="bedrooms"
+            dataKey="propertyRentBedrooms"
+            icon={Bed}
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+          <FormDropdown
+            label="Bathrooms"
+            id="bathrooms"
+            dataKey="propertyRentBathrooms"
+            icon={Bath}
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+          <FormDropdown
+            label="Furnished"
+            id="furnishedStatus"
+            dataKey="propertyRentFurnishedStatus"
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+          <FormDropdown
+            label="No. of Storeys"
+            id="numberOfStoreys"
+            dataKey="propertyRentStoreys"
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+          <FormDropdown
+            label="Construction"
+            id="constructionState"
+            dataKey="propertyRentConstructionStatus"
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+          <FormDropdown
+            label="Area Unit"
+            id="areaUnit"
+            dataKey="propertyRentAreaUnit"
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormInput
+            label="Area Size"
+            name="areaSize"
+            value={formData.areaSize}
+            onChange={handleInputChange}
+            placeholder="Total area"
+            icon={Maximize}
+          />
+          <FormInput
+            label="Rent / Month"
+            name="price"
+            type="number"
+            value={formData.price}
+            onChange={handleInputChange}
+            placeholder="PKR / Monthly"
+          />
+        </div>
+      </div>
+
+      {/* --- AMENITIES --- */}
+      <div className="space-y-3">
+        <label className="text-sm font-bold text-blue-900 uppercase">
+          Facilities
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {FEATURES_LIST.map((f) => (
+            <label
+              key={f}
+              className={`flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer text-[11px] font-bold transition-all ${formData.features.includes(f) ? "border-blue-800 bg-blue-800 text-white shadow-md" : "border-gray-100 bg-gray-50 text-gray-500 hover:border-blue-200"}`}
             >
-              {item.text}
-            </h4>
+              <input
+                type="checkbox"
+                className="hidden"
+                onChange={() => handleFeatureToggle(f)}
+              />
+              {formData.features.includes(f) && <CheckCircle2 size={12} />} {f}
+            </label>
           ))}
         </div>
       </div>
-    </div>
-  );
 
-  const renderInput = (label, name, type, value) => (
-    <div className="w-full">
-      <label className="font-semibold text-slate-600">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={handleDetailChange}
-        className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-      focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-      transition-colors ease-in-out duration-300"
-      />
-    </div>
-  );
+      {/* --- CONTACT & GALLERY --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
+        <div className="md:col-span-2">
+          <FormDropdown
+            label="Location"
+            id="location"
+            dataKey="propertyRentLocation"
+            icon={MapPin}
+            {...{
+              openDropdown,
+              setOpenDropdown,
+              formData,
+              data: addAd_data,
+              onSelect: handleSelect,
+            }}
+          />
+        </div>
+        <FormInput
+          label="Name"
+          name="sellerName"
+          value={formData.sellerName}
+          onChange={handleInputChange}
+          icon={User}
+        />
+        <FormInput
+          label="Contact"
+          name="sellerContact"
+          type="tel"
+          value={formData.sellerContact}
+          onChange={handleInputChange}
+          placeholder="+92..."
+        />
+      </div>
 
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <ToastContainer position="top-right" autoClose={1500} theme="light" />
       <div className="space-y-4">
-        {/* ====================== SUB CATEGORY & AD TITLE ====================== */}
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown(
-            "Sub Category",
-            "subCategory",
-            "propertyRentSubCategories",
-          )}
-          {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
-        </div>
-
-        {/* ====================== DESCRIPTION ====================== */}
-        <div className="w-full">
-          <label className="font-semibold text-slate-600">Description</label>
-          <textarea
-            type="text"
-            className="w-full border-2 border-gray-300 resize-none rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
-            rows={6}
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-          ></textarea>
-        </div>
-
-        {/* ====================== FURNISHED & BEDROOMS ====================== */}
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown(
-            "Furnished",
-            "furnishedStatus",
-            "propertyRentFurnishedStatus",
-          )}
-          {renderDropdown("Bedrooms", "bedrooms", "propertyRentBedrooms")}
-        </div>
-
-        {/* ====================== BATHROOMS & NO.OF STOREYS ====================== */}
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Bathrooms", "bathrooms", "propertyRentBathrooms")}
-          {renderDropdown(
-            "No. Of Storeys",
-            "numberOfStoreys",
-            "propertyRentStoreys",
-          )}
-        </div>
-
-        {/* ====================== CONSTRUCTION STATUS ====================== */}
-        {renderDropdown(
-          "Construction Status",
-          "constructionState",
-          "propertyRentConstructionStatus",
-        )}
-
-        {/* ====================== FEATURES ====================== */}
-        <div className="w-full">
-          <label className="font-semibold text-slate-600">Features</label>
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-2 gap-3">
-            {FEATURES_LIST.map((feature) => (
-              <label
-                key={feature}
-                className="flex items-center gap-2 cursor-pointer select-none"
-              >
-                <input
-                  type="checkbox"
-                  value={feature}
-                  checked={formData.features.includes(feature)}
-                  onChange={() => handleFeatureChange(feature)}
-                  className="checkbox"
-                />
-                <span className="font-medium text-gray-700">{feature}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* ====================== AREA UNIT & AREA SIZE ====================== */}
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Area Unit", "areaUnit", "propertyRentAreaUnit")}
-          {renderInput("Area Size", "areaSize", "text", formData.areaSize)}
-        </div>
-
-        {/* ====================== LOCATION & PRICE ====================== */}
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Location", "location", "propertyRentLocation")}
-          {renderInput("Price", "price", "number", formData.price)}
-        </div>
-
-        {/* ====================== SELLER NAME & CONTACT ====================== */}
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderInput(
-            "Seller Name",
-            "sellerName",
-            "text",
-            formData.sellerName,
-          )}
-          {renderInput(
-            "Seller Contact",
-            "sellerContact",
-            "tel",
-            formData.sellerContact,
-          )}
-        </div>
-
-        {/* ====================== IMAGE UPLOAD ====================== */}
-        <div className="flex gap-2">
+        <label className="text-sm font-black text-blue-900 uppercase flex items-center gap-2">
+          <Camera size={18} /> Photos
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {formData.images.map((img, idx) => (
-            <div key={idx} className="relative w-[25%]">
-              <div className="border border-gray-300 rounded-md rounded-t-lg p-1">
-                <img
-                  src={URL.createObjectURL(img)}
-                  alt={`upload-${idx}`}
-                  className="object-cover w-full h-full rounded-t-lg"
-                />
-                <div className="p-2 rounded-b-md text-center">
-                  <h1 className="font-medium text-gray-700">{img.name}</h1>
+            <div key={idx} className="relative aspect-square">
+              <img
+                src={URL.createObjectURL(img)}
+                alt="prop"
+                className="w-full h-full object-cover rounded-2xl border-2 border-blue-100"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    images: p.images.filter((_, i) => i !== idx),
+                  }))
+                }
+                className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg"
+              >
+                <X size={14} />
+              </button>
+              {idx === 0 && (
+                <div className="absolute bottom-2 left-2 right-2 bg-blue-900/80 text-[10px] text-white text-center py-1 rounded-lg backdrop-blur-md">
+                  Cover
                 </div>
-                <div
-                  className="absolute top-3 right-3 p-1 cursor-pointer bg-white rounded-full"
-                  onClick={() => removeImage(idx)}
-                >
-                  <X size={16} />
-                </div>
-              </div>
+              )}
             </div>
           ))}
-
           {formData.images.length < 5 && (
-            <div
-              className="w-[25%] h-42.25 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800 group"
+            <button
+              type="button"
               onClick={() => fileInputRef.current.click()}
+              className="aspect-square border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-2xl flex flex-col items-center justify-center text-blue-800 hover:bg-blue-100"
             >
-              <Plus
-                size={34}
-                className="group-hover:rotate-180 transition-transform duration-300 ease-in-out"
-              />
-            </div>
+              <Plus size={32} />{" "}
+              <span className="text-[10px] font-black uppercase mt-2">
+                Add Photo
+              </span>
+            </button>
           )}
         </div>
-
         <input
           type="file"
           multiple
@@ -361,20 +426,14 @@ function PropertyForRentCategory({
           ref={fileInputRef}
           onChange={handleImageChange}
         />
-        <div>
-          <p className="text-gray-700 font-medium mt-12">
-            Thumbnail will be the first image...
-          </p>
-        </div>
       </div>
 
-      {/* ====================== SUBMIT BUTTON ====================== */}
       <button
         type="submit"
-        className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
-        transition-all duration-300 font-medium rounded-lg"
+        disabled={loading}
+        className="w-full md:w-auto bg-blue-900 text-white font-black px-16 py-4 rounded-2xl shadow-2xl hover:bg-blue-800 transition-all disabled:opacity-50"
       >
-        {loading ? "Submitting Property Rent Ad..." : "Submit Property Rent Ad"}
+        {loading ? "Listing..." : "Post Property Ad"}
       </button>
     </form>
   );

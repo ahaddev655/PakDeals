@@ -1,5 +1,14 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import { MapPin, CalendarDays, Phone, Check, MoveRight } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  MapPin,
+  CalendarDays,
+  Phone,
+  Check,
+  MoveRight,
+  MessageCircle,
+  Share2,
+  ShieldCheck,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import fields from "../../data/adDetails_data.json";
@@ -33,23 +42,11 @@ const EXCLUDED_KEYS = [
 function AdsDetailPage() {
   const [adDetails, setAdDetails] = useState({});
   const [toggleNumber, setToggleNumber] = useState(false);
-  const [isFixed, setIsFixed] = useState(false);
-  const CATEGORY_FIELDS = fields;
-
-  const imageRef = useRef(null);
-  const sidebarRef = useRef(null);
+  const [activeImg, setActiveImg] = useState(0);
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setIsFixed(window.scrollY > 225);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Fetch Data
-  useEffect(() => {
     const [, , tableName, adId] = pathname.split("/");
-
     axios
       .get(
         `https://pak-deals-backend.vercel.app/api/ads/fetch-ad-details/${tableName}/${adId}`,
@@ -66,9 +63,7 @@ function AdsDetailPage() {
             ? `PKR ${Number(ad.price).toLocaleString()}`
             : "PKR 0",
           type: ad.subCategory || "",
-          postDate: ad.created_at
-            ? ad.created_at.slice(5, 16).replace(/-/g, "/")
-            : "",
+          postDate: ad.created_at ? ad.created_at.slice(0, 10) : "",
           number: ad.sellerContact || "",
           images: ad.images ? JSON.parse(ad.images) : [],
           features: ad.features ? JSON.parse(ad.features) : [],
@@ -78,191 +73,207 @@ function AdsDetailPage() {
       .catch((err) => console.error("Error fetching ad details:", err));
   }, [pathname]);
 
-  const handleImageChange = (index) => {
-    if (imageRef.current && adDetails.images?.[index]) {
-      imageRef.current.src = adDetails.images[index];
-    }
-  };
-
   const formatKey = (key) =>
     key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
 
-  const renderSpecs = () => {
-    const configKeys = CATEGORY_FIELDS[adDetails._tableName] || [];
-
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-        {Object.entries(adDetails)
-          .filter(([key, value]) => !EXCLUDED_KEYS.includes(key) && value)
-          .map(([key, value]) => (
-            <div
-              key={key}
-              className="flex items-center justify-between gap-3 w-full border-b border-gray-200 pb-1.5"
-            >
-              <p className="text-gray-500">
-                {configKeys.find(
-                  (k) =>
-                    k.toLowerCase().replace(/\s/g, "") === key.toLowerCase(),
-                ) || formatKey(key)}
-                :
-              </p>
-              <p className="font-medium">
-                {key === "price"
-                  ? `PKR ${Number(value).toLocaleString()}`
-                  : value}
-              </p>
-            </div>
-          ))}
-      </div>
-    );
-  };
-
   return (
-    <div className="page p-4 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="mb-5">
-        <div className="md:flex justify-between gap-4">
-          <h1 className="text-xl md:text-3xl font-semibold">
-            {adDetails.title}
-          </h1>
-          <div className="md:text-right mt-3 md:mt-0">
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
-              {adDetails.amount}
-            </h1>
-            <p className="text-orange-600 text-sm">{adDetails.type}</p>
-          </div>
-        </div>
-        <div className="flex gap-6 mt-2 text-gray-500 text-sm">
-          <div className="flex items-center gap-1">
-            <MapPin size={14} /> {adDetails.location}
-          </div>
-          <div className="flex items-center gap-1">
-            <CalendarDays size={14} /> {adDetails.postDate}
-          </div>
+    <div className="bg-gray-50 min-h-screen pb-20">
+      {/* --- TOP BREADCRUMB / ACTION BAR --- */}
+      <div className="bg-white border-b border-gray-200 py-3 mb-6">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
+          <span className="text-gray-400 font-medium tracking-tight uppercase">
+            PakDeals {">"} {adDetails._tableName?.replace(/-/g, " ")}
+          </span>
+          <button className="flex items-center gap-2 text-blue-900 font-bold hover:text-orange-600 transition-colors">
+            <Share2 size={16} /> Share Ad
+          </button>
         </div>
       </div>
 
-      <div className="lg:flex gap-5 relative">
-        <div className="w-full lg:w-3/4 space-y-6">
-          {/* Images */}
+      <div className="max-w-7xl mx-auto px-4 lg:flex gap-8">
+        {/* ==================== MAIN CONTENT AREA ==================== */}
+        <div className="lg:w-[70%] space-y-6">
+          {/* 1. Header & Pricing */}
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">
+                {adDetails.title}
+              </h1>
+              <div className="flex gap-4 mt-3 text-gray-500 text-sm font-medium">
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={16} className="text-orange-600" />{" "}
+                  {adDetails.location}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CalendarDays size={16} /> {adDetails.postDate}
+                </div>
+              </div>
+            </div>
+            <div className="bg-orange-50 px-6 py-4 rounded-xl border border-orange-100">
+              <p className="text-orange-600 text-xs font-black uppercase tracking-widest mb-1">
+                Total Price
+              </p>
+              <h2 className="text-3xl font-black text-orange-600">
+                {adDetails.amount}
+              </h2>
+            </div>
+          </div>
+
+          {/* 2. Professional Image Gallery */}
           {adDetails.images?.length > 0 && (
-            <div className="p-3 bg-white shadow-lg rounded-lg">
-              <img
-                ref={imageRef}
-                src={adDetails.images[0]}
-                alt="Main"
-                className="h-72 sm:h-96 w-full object-cover rounded-lg"
-              />
-              <div className="grid grid-cols-4 mt-3 gap-3">
+            <div className="space-y-3">
+              <div className="relative aspect-video w-full bg-slate-900 rounded-2xl overflow-hidden shadow-xl border-4 border-white">
+                <img
+                  src={adDetails.images[activeImg]}
+                  alt="Listing"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
                 {adDetails.images.map((img, i) => (
-                  <img
+                  <button
                     key={i}
-                    src={img}
-                    alt="Thumb"
-                    className="h-20 w-full object-cover rounded-lg cursor-pointer"
-                    onClick={() => handleImageChange(i)}
-                  />
+                    onClick={() => setActiveImg(i)}
+                    className={`relative w-24 h-20 shrink-0 rounded-lg overflow-hidden border-2 transition-all 
+                      ${activeImg === i ? "border-orange-600 scale-95" : "border-transparent opacity-70 hover:opacity-100"}`}
+                  >
+                    <img
+                      src={img}
+                      alt="Thumb"
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Dynamic Details */}
-          <div className="p-4 bg-white shadow-lg rounded-lg">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">
-              Ad Details
+          {/* 3. Specs & Ad Details */}
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 className="text-lg font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+              <ShieldCheck className="text-blue-900" size={20} /> Item
+              Specifications
             </h2>
-            {renderSpecs()}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-5">
+              {Object.entries(adDetails)
+                .filter(([key, value]) => !EXCLUDED_KEYS.includes(key) && value)
+                .map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="flex justify-between border-b border-gray-50 pb-2"
+                  >
+                    <span className="text-gray-400 font-medium text-sm">
+                      {formatKey(key)}
+                    </span>
+                    <span className="text-slate-900 font-bold text-sm">
+                      {key === "price"
+                        ? `PKR ${Number(value).toLocaleString()}`
+                        : value}
+                    </span>
+                  </div>
+                ))}
+            </div>
           </div>
 
-          {/* Features */}
+          {/* 4. Features */}
           {adDetails.features?.length > 0 && (
-            <div className="p-4 bg-white shadow-lg rounded-lg">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                Features
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <h2 className="text-lg font-black text-slate-900 uppercase tracking-widest mb-6">
+                Included Features
               </h2>
-              <div className="grid md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {adDetails.features.map((f, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-2 text-gray-500 text-sm"
+                    className="flex items-center gap-3 bg-blue-50/50 p-3 rounded-xl border border-blue-100/50"
                   >
                     <Check
-                      size={18}
-                      className="text-blue-800"
-                      strokeWidth={3}
-                    />{" "}
-                    {f}
+                      size={16}
+                      className="text-blue-900 bg-white rounded-full p-0.5"
+                      strokeWidth={4}
+                    />
+                    <span className="text-sm font-bold text-slate-700">
+                      {f}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Description */}
-          {adDetails.description && (
-            <div className="p-4 bg-white shadow-lg rounded-lg">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                Description
-              </h2>
-              <p className="text-gray-700 whitespace-pre-wrap">
-                {adDetails.description}
-              </p>
-            </div>
-          )}
+          {/* 5. Description */}
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 className="text-lg font-black text-slate-900 uppercase tracking-widest mb-4">
+              Seller Description
+            </h2>
+            <p className="text-slate-600 leading-relaxed text-base whitespace-pre-wrap">
+              {adDetails.description}
+            </p>
+          </div>
         </div>
 
-        {/* ==================== SELLER DETAILS ==================== */}
-        <div className="w-full lg:w-1/4">
-          <div
-            className="p-4 bg-white shadow-lg rounded-lg lg:sticky lg:top-5 lg:mb-10 relative mt-6 lg:mt-0 h-fit"
-          >
-            {/* -------------------- NAME & DATE -------------------- */}
-            <div className="flex justify-between items-start gap-2">
-              <h1 className="font-semibold text-lg leading-tight">
-                {adDetails.name}
-              </h1>
-              <span className="text-xs text-gray-400 whitespace-nowrap">
-                Posted {adDetails.postDate}
-              </span>
+        {/* ==================== SELLER SIDEBAR ==================== */}
+        <div className="lg:w-[30%] mt-8 lg:mt-0">
+          <div className="sticky top-6 space-y-4">
+            {/* Seller Info Card */}
+            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-inner">
+                  {adDetails.name?.[0]}
+                </div>
+                <h3 className="text-xl font-black text-slate-900">
+                  {adDetails.name}
+                </h3>
+                <p className="text-gray-400 text-xs font-bold uppercase tracking-tighter mt-1">
+                  Verified Seller
+                </p>
+
+                <div className="w-full h-px bg-gray-100 my-6" />
+
+                <div className="w-full space-y-3">
+                  <div
+                    className={`p-4 rounded-xl border-2 transition-all flex items-center justify-between
+                    ${toggleNumber ? "bg-white border-blue-900" : "bg-gray-50 border-transparent"}`}
+                  >
+                    <Phone size={18} className="text-blue-900" />
+                    <span className="font-mono font-black text-slate-800 tracking-wider">
+                      {toggleNumber ? adDetails.number : "03XX XXXXXXX"}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => setToggleNumber(!toggleNumber)}
+                    className="w-full text-[10px] font-black uppercase tracking-widest text-blue-900 hover:underline"
+                  >
+                    {toggleNumber ? "Hide Number" : "Show Number"}
+                  </button>
+
+                  <Link
+                    to={`https://wa.me/${adDetails.number?.replace(/\D/g, "")}`}
+                    target="_blank"
+                    className="flex items-center w-full gap-3 justify-center py-4 bg-green-600 rounded-xl text-white hover:bg-green-700 transition-all font-black shadow-lg shadow-green-100"
+                  >
+                    <MessageCircle size={20} /> WHATSAPP CHAT
+                  </Link>
+
+                  <button className="flex items-center w-full gap-3 justify-center py-4 bg-blue-900 rounded-xl text-white hover:bg-blue-800 transition-all font-black shadow-lg shadow-blue-100">
+                    CALL SELLER <MoveRight size={18} />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {/* -------------------- LOCATION -------------------- */}
-            <div className="flex items-center gap-2 mt-4 text-gray-500">
-              <MapPin size={16} strokeWidth={2.4} />
-              <h6 className="text-sm">{adDetails.location}</h6>
+            {/* Safety Tips Card */}
+            <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
+              <h4 className="text-orange-800 font-black text-xs uppercase tracking-widest flex items-center gap-2 mb-3">
+                <ShieldCheck size={16} /> Safety Tips
+              </h4>
+              <ul className="text-orange-700 text-xs font-bold space-y-2 leading-tight">
+                <li>• Always meet in a public place.</li>
+                <li>• Never pay in advance before inspection.</li>
+                <li>• Inspect the item thoroughly.</li>
+              </ul>
             </div>
-
-            {/* -------------------- NUMBER -------------------- */}
-            <div className="flex items-center gap-2 mt-2 text-gray-500">
-              <Phone size={16} strokeWidth={2.4} />
-              <h6 className="text-sm break-all font-mono">
-                {toggleNumber ? adDetails.number : "************"}
-              </h6>
-            </div>
-
-            <button
-              onClick={() => setToggleNumber(!toggleNumber)}
-              className="w-full text-center mt-4 text-gray-400 text-sm font-medium hover:text-gray-600 transition-colors"
-            >
-              {toggleNumber ? "Hide Number" : "Show Number"}
-            </button>
-
-            {/* -------------------- WHATSAPP BUTTON -------------------- */}
-            {adDetails.number && (
-              <Link
-                to={`https://wa.me/${adDetails.number.replace(/\D/g, "")}`}
-                target="_blank"
-              >
-                <button className="flex group items-center w-full gap-2 justify-center py-3 bg-blue-900 rounded-md text-white mt-5 hover:bg-blue-800 transition-all font-medium">
-                  Let's Chat
-                  <MoveRight
-                    size={20}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </button>
-              </Link>
-            )}
           </div>
         </div>
       </div>

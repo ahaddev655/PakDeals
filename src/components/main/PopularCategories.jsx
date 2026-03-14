@@ -9,7 +9,12 @@ import { Link } from "react-router-dom";
 
 function PopularCategories() {
   const categories = [
-    { icon: CarFront, adCount: "5", title: "Cars", link: "/category/motors_ads" },
+    {
+      icon: CarFront,
+      adCount: "5",
+      title: "Cars",
+      link: "/category/motors_ads",
+    },
     {
       icon: Smartphone,
       adCount: "10",
@@ -37,35 +42,48 @@ function PopularCategories() {
   ];
 
   return (
-    <section className="section">
-      <div className="mb-6">
-        <h1 className="sm:text-3xl text-2xl underline font-medium text-[#202020]">
+    <section className="section py-8">
+      {/* Header: Exact same style as All Categories for consistency */}
+      <div className="mb-8">
+        <h1 className="sm:text-3xl text-2xl font-bold text-[#202020] relative inline-block">
           Popular Categories
+          <span className="absolute bottom-0 left-0 w-full h-0.75 bg-blue-800 rounded-full"></span>
         </h1>
       </div>
-      <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
+
+      {/* Grid: 5-column structure preserved */}
+      <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
         {categories.map((cats, i) => {
           const Icon = cats.icon;
           return (
-            <Link to={cats.link} key={i}>
-              <div className="bg-white group rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-blue-800 py-3 px-4">
-                <div className="flex items-center gap-2">
-                  <div className="bg-orange-100/40 grid place-items-center w-13 h-13 rounded-full group-hover:bg-blue-900 group-hover:text-white transition-colors duration-300">
-                    <Icon />
+            <Link to={cats.link} key={i} className="group h-full">
+              {/* Card: Maintained border-2 border-blue-800 */}
+              <div className="bg-white h-full rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-blue-800 py-4 px-5">
+                <div className="flex items-center gap-3">
+                  {/* Icon: Preserved orange-100/40 background and circle shape */}
+                  <div className="bg-orange-100/60 grid place-items-center w-12 h-12 rounded-full group-hover:bg-blue-900 group-hover:text-white transition-all duration-300 shrink-0 shadow-sm">
+                    <Icon size={22} strokeWidth={2} />
                   </div>
+
                   <div>
-                    <h6 className="text-sm font-medium text-gray-500">
+                    <h6 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                       {cats.adCount} ads
                     </h6>
-                    <h4 className="text-gray-700 font-medium">{cats.title}</h4>
+                    <h4 className="text-gray-800 font-bold text-[15px] leading-tight group-hover:text-blue-800 transition-colors">
+                      {cats.title}
+                    </h4>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="mt-2 text-sm font-medium flex items-center justify-center gap-1 group-hover:gap-2 transition-all duration-300"
-                >
-                  See More <MoveRight />
-                </button>
+
+                {/* Divider and Action Button */}
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                  <button
+                    type="button"
+                    className="text-sm font-bold text-blue-800 flex items-center gap-1 group-hover:gap-2 transition-all duration-300"
+                  >
+                    See More <MoveRight size={16} />
+                  </button>
+                </div>
               </div>
             </Link>
           );

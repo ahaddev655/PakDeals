@@ -1,100 +1,130 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import { Loader2 } from "lucide-react";
 
 function UserDataChartComponent({
-  activeListings,
-  soldListings,
-  pendingListings,
-  totalListings,
-  loading,
+  activeListings = 0,
+  soldListings = 0,
+  pendingListings = 0,
+  totalListings = 0,
+  loading = false,
 }) {
   const options = {
     chart: {
-      type: "pie",
+      type: "donut",
+      fontFamily: "Inter, sans-serif",
     },
-    colors: ["#343a40", "#4f46e5", "#dc3545", "#6c757d"],
+    // Using your established color palette
+    colors: ["#4f46e5", "#ef4444", "#64748b"],
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ["#fff"],
+    },
     plotOptions: {
       pie: {
-        expandOnClick: true,
+        donut: {
+          size: "75%",
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: "TOTAL",
+              fontSize: "12px",
+              fontWeight: 800,
+              color: "#94a3b8",
+              formatter: () => totalListings,
+            },
+            value: {
+              show: true,
+              fontSize: "24px",
+              fontWeight: 900,
+              color: "#1e293b",
+              offsetY: 5,
+            },
+          },
+        },
       },
     },
     dataLabels: {
       enabled: true,
+      formatter: function (val) {
+        return val.toFixed(0) + "%";
+      },
       style: {
-        fontSize: "18px",
-        fontWeight: "700",
-        colors: ["#f8f8f8"],
+        fontSize: "12px",
+        fontWeight: "bold",
       },
-      dropShadow: {
-        enabled: false,
-      },
+      dropShadow: { enabled: false },
     },
-
-    labels: ["Total", "Active", "Sold", "Pending"],
+    labels: ["Active", "Sold", "Pending"],
     legend: {
       position: "right",
-      fontSize: "15px",
-      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
       fontWeight: 600,
-      labels: {
-        colors: "#374151",
-        useSeriesColors: false,
-      },
+      labels: { colors: "#475569" },
       markers: {
-        width: 12,
-        height: 12,
-        radius: 4,
+        width: 10,
+        height: 10,
+        radius: 3,
+        offsetX: -5,
       },
-      itemMargin: {
-        horizontal: 10,
-        vertical: 8,
-      },
+      itemMargin: { vertical: 5 },
       formatter: function (seriesName, opts) {
-        const value = opts.w.globals.series[opts.seriesIndex];
-        return `${seriesName} : ${value}`;
+        return `${seriesName}: ${opts.w.globals.series[opts.seriesIndex]}`;
+      },
+    },
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: (val) => `${val} Listings`,
       },
     },
     responsive: [
       {
         breakpoint: 768,
         options: {
-          chart: {
-            width: "100%",
-          },
           legend: {
             position: "bottom",
-            fontSize: "13px",
+            horizontalAlign: "center",
           },
         },
       },
     ],
   };
 
-  const series = [totalListings, activeListings, soldListings, pendingListings];
+  // Removed totalListings from the slices to maintain 100% proportional integrity
+  const series = [activeListings, soldListings, pendingListings];
 
   return (
-    <div className="col-span-2 bg-white p-6 shadow-lg rounded-lg border border-gray-300">
-      <div className="mb-4">
-        <h1 className="text-xl font-semibold text-gray-700">
+    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full col-span-2">
+      <div className="mb-6">
+        <h2 className="text-lg font-black text-slate-800 tracking-tight">
           Listing Analytics
-        </h1>
+        </h2>
+        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">
+          Distribution Overview
+        </p>
       </div>
-      <div className="relative w-full h-112.5 flex justify-center items-center shadow-sm rounded-lg overflow-hidden">
-        <div className="absolute inset-0 w-auto h-auto overflow-hidden">
-          {loading ? (
-            <p className="text-center font-semibold text-xl text-gray-600">
-              Loading...
+
+      <div className="flex-1 flex justify-center items-center min-h-80">
+        {loading ? (
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="animate-spin text-blue-600" size={32} />
+            <p className="text-slate-400 text-xs font-black uppercase tracking-widest">
+              Calculating...
             </p>
-          ) : (
+          </div>
+        ) : (
+          <div className="w-full max-w-112.5">
             <Chart
               options={options}
               series={series}
-              type="pie"
+              type="donut"
               width="100%"
-              height="100%"
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

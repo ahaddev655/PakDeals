@@ -1,14 +1,12 @@
-import { ChevronDown, Plus, X } from "lucide-react";
+import { ChevronDown, Plus, X, Camera, Info } from "lucide-react";
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
-  // ==================== VARIABLES ====================
   const DEFAULT_FILTER = (label) => ({ id: "", label });
   const userId = localStorage.getItem("id");
 
-  // ==================== USESTATES ====================
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
     type: DEFAULT_FILTER("Select Type"),
@@ -23,12 +21,13 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     features: [],
     breed: "",
     age: "",
-    color: "",
+    color: "#1e40af", // Default blue
     images: [],
   });
-  const [loading, setLoading] = useState(false);
 
-  // ==================== ARRAYS ====================
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
+
   const FEATURES_LIST = [
     "Trained",
     "Friendly",
@@ -44,15 +43,10 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     "Farm Raised",
   ];
 
-  // ==================== USEREFS ====================
-  const fileInputRef = useRef(null);
-
-  // ==================== CHANGES ====================
+  // ==================== HANDLERS ====================
   const handleDetailChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "sellerContact" && value.length > 13) return;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -84,7 +78,6 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
   };
 
-  // ==================== REMOVE AD ====================
   const removeImage = (index) => {
     setFormData((prev) => {
       const updatedImages = [...prev.images];
@@ -93,251 +86,262 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     });
   };
 
-  // ==================== ADD AD FUNCTION ====================
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.adTitle || !formData.price || !formData.sellerContact) {
+      toast.error("Please fill in the required fields");
+      return;
+    }
+
     setLoading(true);
-
     const form = new FormData();
-
-    form.append("subCategory", formData.subCategory?.label || "");
-    form.append("type", formData.type?.label || "");
-    form.append("sex", formData.sex?.label || "");
-    form.append("vaccinationStatus", formData.vaccinationStatus?.label || "");
-    form.append("location", formData.location?.label || "");
-    form.append("adTitle", formData.adTitle);
-    form.append("description", formData.description);
-    form.append("price", formData.price);
-    form.append("sellerName", formData.sellerName);
-    form.append("sellerContact", formData.sellerContact);
-    form.append("features", formData.features.join(", "));
-    form.append("breed", formData.breed);
-    form.append("age", formData.age);
-    form.append("color", formData.color);
-
-    formData.images.forEach((image) => {
-      form.append("images", image);
+    Object.keys(formData).forEach((key) => {
+      if (key === "images") {
+        formData.images.forEach((image) => form.append("images", image));
+      } else if (typeof formData[key] === "object" && formData[key].label) {
+        form.append(key, formData[key].label);
+      } else if (key === "features") {
+        form.append(key, formData.features.join(", "));
+      } else {
+        form.append(key, formData[key]);
+      }
     });
-    // -------------------- API CONFIGURATION --------------------
+
     axios
       .post(
         `https://pak-deals-backend.vercel.app/api/ads/add-animal-ad/${userId}`,
         form,
       )
-      .then((response) => {
-        toast.success(response?.data?.message || "Ad Submitted...");
-
-        setFormData({
-          subCategory: DEFAULT_FILTER("Select Sub Category"),
-          type: DEFAULT_FILTER("Select Type"),
-          sex: DEFAULT_FILTER("Select Sex"),
-          vaccinationStatus: DEFAULT_FILTER("Select Vaccination Status"),
-          location: DEFAULT_FILTER("Select Location"),
-          adTitle: "",
-          description: "",
-          price: "",
-          sellerName: "",
-          sellerContact: "",
-          features: [],
-          breed: "",
-          age: "",
-          color: "",
-          images: [],
-        });
+      .then((res) => {
+        toast.success(res?.data?.message || "Ad Posted Successfully!");
+        // Reset Logic
       })
-      .catch((error) => {
-        toast.error(error?.response?.data?.error || "Something went wrong");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((err) =>
+        toast.error(err?.response?.data?.error || "Submission failed"),
+      )
+      .finally(() => setLoading(false));
   };
 
-  // ==================== REUSABLE COMPONENTS ====================
-  const renderDropdown = (label, key, dataKey, scrollable = false) => (
-    <div className="w-full">
-      <label className="font-semibold text-slate-600">{label}</label>
-      <div className="relative mt-1">
-        <button
-          type="button"
-          className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
-        transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          formData[key]?.id ? "text-black" : "text-gray-400"
-        }`}
-          onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
-        >
-          {formData[key]?.label}
-          <ChevronDown />
-        </button>
+  // ==================== UI COMPONENTS ====================
+  const renderDropdown = (label, key, dataKey) => (
+    <div className="w-full relative">
+      <label className="text-sm font-bold text-blue-900 ml-1">{label}</label>
+      <button
+        type="button"
+        onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
+        className={`w-full flex justify-between items-center mt-1 py-3 px-4 border-2 rounded-xl transition-all
+          ${openDropdown === key ? "border-blue-800 ring-4 ring-blue-50" : "border-gray-100 bg-gray-50"}
+          ${formData[key]?.id ? "text-gray-900 font-semibold" : "text-gray-400"}`}
+      >
+        {formData[key]?.label}
+        <ChevronDown
+          size={18}
+          className={`transition-transform ${openDropdown === key ? "rotate-180" : ""}`}
+        />
+      </button>
 
-        <div
-          className={`absolute z-10 bg-white top-11.75 shadow-xl w-full origin-top transition-all
-        ${scrollable ? "h-70 overflow-auto" : ""}
-        ${
-          openDropdown === key
-            ? "scale-y-100 opacity-100"
-            : "scale-y-0 opacity-0"
-        }`}
-        >
+      {openDropdown === key && (
+        <div className="absolute z-20 top-full left-0 right-0 mt-2 bg-white border border-gray-100 shadow-2xl rounded-xl max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-2">
           {(addAd_data.animal.find((i) => i[dataKey])?.[dataKey] || []).map(
             (item) => (
-              <h4
+              <div
                 key={item.id}
-                className="p-2 cursor-pointer hover:bg-blue-50"
+                className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-gray-700 font-medium transition-colors border-b last:border-0 border-gray-50"
                 onClick={() => handleSelect(key, item)}
               >
                 {item.text}
-              </h4>
+              </div>
             ),
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 
-  const renderInput = (label, name, type, value) => (
+  const renderInput = (label, name, type, value, placeholder) => (
     <div className="w-full">
-      <label className="font-semibold text-slate-600">{label}</label>
+      <label className="text-sm font-bold text-blue-900 ml-1">{label}</label>
       <input
         type={type}
         name={name}
         value={value}
         onChange={handleDetailChange}
-        className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-      focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-      transition-colors ease-in-out duration-300"
+        placeholder={placeholder}
+        className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl px-4 py-3 mt-1 outline-none focus:border-blue-800 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all"
       />
     </div>
   );
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <ToastContainer position="top-right" autoClose={1500} theme="light" />
-      <div className="space-y-4">
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Sub Category", "subCategory", "animalSubCategories")}
-          {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
-        </div>
+    <form className="space-y-8 bg-white" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
 
+      {/* --- Section 1: Basic Info --- */}
+      <div className="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 space-y-6">
+        <h3 className="flex items-center gap-2 text-blue-900 font-black uppercase tracking-wider text-sm">
+          <Info size={18} /> Basic Information
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {renderDropdown("Sub Category", "subCategory", "animalSubCategories")}
+          {renderInput(
+            "Ad Title",
+            "adTitle",
+            "text",
+            formData.adTitle,
+            "e.g. Persian Cat for Sale",
+          )}
+        </div>
         <div className="w-full">
-          <label className="font-semibold text-slate-600">Description</label>
+          <label className="text-sm font-bold text-blue-900 ml-1">
+            Detailed Description
+          </label>
           <textarea
-            type="text"
-            className="w-full border-2 border-gray-300 resize-none rounded-lg px-3 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
-            rows={6}
+            rows={5}
             value={formData.description}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-          ></textarea>
+            placeholder="Describe the animal's health, behavior, and history..."
+            className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl px-4 py-3 mt-1 outline-none focus:border-blue-800 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all resize-none"
+          />
         </div>
+      </div>
 
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Type Of Animal", "type", "animalType")}
-          {renderInput("Breed", "breed", "text", formData.breed)}
-        </div>
+      {/* --- Section 2: Animal Specifications --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {renderDropdown("Animal Species", "type", "animalType")}
+        {renderInput("Breed", "breed", "text", formData.breed, "e.g. Siamese")}
+        {renderDropdown("Sex", "sex", "animalSex")}
+        {renderInput("Age", "age", "text", formData.age, "e.g. 2 Years")}
 
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Sex", "sex", "animalSex")}
-          {renderInput("Age", "age", "text", formData.age)}
-        </div>
-
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          <div className="w-full flex flex-col">
-            <label className="font-semibold text-slate-600">Color</label>
+        <div className="w-full">
+          <label className="text-sm font-bold text-blue-900 ml-1">
+            Color Theme
+          </label>
+          <div className="flex items-center gap-3 mt-1">
             <input
               type="color"
               name="color"
-              className="w-full border-2 border-gray-300 rounded-lg px-3 h-10.75 py-2 mt-1 focus:border-blue-800 focus:ring-2 focus:ring-blue-800 transition-colors ease-in-out duration-300"
               value={formData.color}
               onChange={handleDetailChange}
+              className="w-14 h-14 p-1 rounded-xl bg-gray-50 border-2 border-gray-100 cursor-pointer"
             />
-          </div>
-          {renderDropdown(
-            "Vaccination Status",
-            "vaccinationStatus",
-            "animalVaccinationStatus",
-          )}
-        </div>
-
-        <div className="w-full">
-          <label className="font-semibold text-slate-600">Features</label>
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-2 gap-3">
-            {FEATURES_LIST.map((feature) => (
-              <label
-                key={feature}
-                className="flex items-center gap-2 cursor-pointer select-none"
-              >
-                <input
-                  type="checkbox"
-                  name={feature}
-                  value={feature}
-                  checked={formData.features.includes(feature)}
-                  onChange={() => handleFeatureChange(feature)}
-                  className="checkbox"
-                />
-                <span className="font-medium text-gray-700">{feature}</span>
-              </label>
-            ))}
+            <span className="text-gray-500 text-sm font-mono uppercase font-bold">
+              {formData.color}
+            </span>
           </div>
         </div>
+        {renderDropdown(
+          "Vaccination",
+          "vaccinationStatus",
+          "animalVaccinationStatus",
+        )}
+      </div>
 
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderDropdown("Location", "location", "animalLocation")}
-          {renderInput("Price", "price", "number", formData.price)}
+      {/* --- Section 3: Features --- */}
+      <div className="space-y-3">
+        <label className="text-sm font-bold text-blue-900 ml-1">
+          Key Features & Temperament
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {FEATURES_LIST.map((feature) => (
+            <label
+              key={feature}
+              className={`flex items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer text-xs font-bold
+                ${
+                  formData.features.includes(feature)
+                    ? "border-blue-800 bg-blue-800 text-white shadow-lg shadow-blue-200"
+                    : "border-gray-100 bg-gray-50 text-gray-500 hover:border-blue-200"
+                }`}
+            >
+              <input
+                type="checkbox"
+                className="hidden"
+                checked={formData.features.includes(feature)}
+                onChange={() => handleFeatureChange(feature)}
+              />
+              {feature}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* --- Section 4: Pricing & Contact --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+        {renderDropdown("Location", "location", "animalLocation")}
+        {renderInput(
+          "Asking Price (PKR)",
+          "price",
+          "number",
+          formData.price,
+          "5000",
+        )}
+        {renderInput(
+          "Seller Name",
+          "sellerName",
+          "text",
+          formData.sellerName,
+          "Full Name",
+        )}
+        {renderInput(
+          "Contact Number",
+          "sellerContact",
+          "tel",
+          formData.sellerContact,
+          "+92 XXX XXXXXXX",
+        )}
+      </div>
+
+      {/* --- Section 5: Media Upload --- */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-black text-blue-900 uppercase tracking-tighter flex items-center gap-2">
+            <Camera size={18} /> Media Upload (Max 5)
+          </label>
+          <span className="text-xs font-bold text-gray-400">
+            {formData.images.length}/5 Images
+          </span>
         </div>
 
-        <div className="sm:flex gap-6 items-center sm:space-y-0 space-y-4">
-          {renderInput(
-            "Seller Name",
-            "sellerName",
-            "text",
-            formData.sellerName,
-          )}
-          {renderInput(
-            "Seller Contact",
-            "sellerContact",
-            "tel",
-            formData.sellerContact,
-          )}
-        </div>
-
-        {/* ====================== IMAGE UPLOAD ====================== */}
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {formData.images.map((img, idx) => (
-            <div key={idx} className="relative w-[25%]">
-              <div className="border border-gray-300 rounded-md rounded-t-lg p-1">
-                <img
-                  src={URL.createObjectURL(img)}
-                  alt={`upload-${idx}`}
-                  className="object-cover w-full h-full rounded-t-lg"
-                />
-                <div className="p-2 rounded-b-md text-center">
-                  <h1 className="font-medium text-gray-700">{img.name}</h1>
+            <div key={idx} className="relative aspect-square group">
+              <img
+                src={URL.createObjectURL(img)}
+                alt="preview"
+                className="w-full h-full object-cover rounded-2xl border-2 border-blue-100"
+              />
+              <button
+                type="button"
+                onClick={() => removeImage(idx)}
+                className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform"
+              >
+                <X size={16} />
+              </button>
+              {idx === 0 && (
+                <div className="absolute bottom-2 left-2 right-2 bg-blue-900/80 text-[10px] text-white text-center py-1 rounded-lg backdrop-blur-sm font-bold uppercase">
+                  Thumbnail
                 </div>
-                <div
-                  className="absolute top-3 right-3 p-1 cursor-pointer bg-white rounded-full"
-                  onClick={() => removeImage(idx)}
-                >
-                  <X size={16} />
-                </div>
-              </div>
+              )}
             </div>
           ))}
 
           {formData.images.length < 5 && (
-            <div
-              className="w-[25%] h-42.25 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800 group"
+            <button
+              type="button"
               onClick={() => fileInputRef.current.click()}
+              className="aspect-square border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-2xl flex flex-col items-center justify-center text-blue-800 hover:bg-blue-100 transition-all group"
             >
               <Plus
-                size={34}
-                className="group-hover:rotate-180 transition-transform duration-300 ease-in-out"
+                size={32}
+                className="group-hover:rotate-90 transition-transform"
               />
-            </div>
+              <span className="text-[10px] font-black uppercase mt-2">
+                Add Photo
+              </span>
+            </button>
           )}
         </div>
-
         <input
           type="file"
           multiple
@@ -347,19 +351,17 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
           onChange={handleImageChange}
         />
       </div>
-      <div>
-        <p className="text-gray-700 font-medium mt-12">
-          Thumbnail will be the first image...
-        </p>
-      </div>
 
-      <button
-        type="submit"
-        className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
-        transition-all duration-300 font-medium rounded-lg"
-      >
-        {loading ? "Submitting Animals Ad..." : "Submit Animals Ad"}
-      </button>
+      {/* --- Final Submit --- */}
+      <div className="pt-6">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full md:w-auto bg-blue-900 text-white font-black px-12 py-4 rounded-2xl shadow-2xl shadow-blue-200 hover:bg-blue-800 hover:-translate-y-1 transition-all disabled:opacity-50"
+        >
+          {loading ? "Processing Your Ad..." : "Publish Animal Advertisement"}
+        </button>
+      </div>
     </form>
   );
 }

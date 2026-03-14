@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
-  MessageCircle,
   Plus,
   X,
 } from "lucide-react";
@@ -35,129 +34,118 @@ function UserSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
     navigate("/login");
   };
 
+  const NavItem = ({ link, isMobile = false }) => {
+    const Icon = link.icon;
+    return (
+      <li>
+        <NavLink
+          to={link.link}
+          end
+          onClick={isMobile ? () => setOffCanvasToggle(false) : undefined}
+          className={({ isActive }) =>
+            `flex items-center gap-4 rounded-xl p-4 transition-all duration-300 ${
+              isActive
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40"
+                : "text-gray-400 hover:bg-white/5 hover:text-white group"
+            }`
+          }
+        >
+          <Icon
+            size={20}
+            className="group-hover:scale-110 transition-transform duration-300"
+            strokeWidth={2}
+          />
+          <span className="text-sm font-semibold tracking-wide">
+            {link.text}
+          </span>
+        </NavLink>
+      </li>
+    );
+  };
+
   return (
     <>
-      {/* SIDEBAR */}
-      <div className="sm:w-73.25 w-full bg-black min-h-screen flex-col lg:flex hidden">
-        <div className="text-center p-6">
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden lg:flex flex-col w-72 bg-black min-h-screen sticky top-0 overflow-y-auto border-r border-white/10">
+        <div className="p-8">
           <Link
             to="/"
-            className="text-white text-4xl font-bold font-montserrat tracking-wider"
+            className="text-white text-3xl font-black tracking-tighter"
           >
-            PakDeals
+            PakDeals<span className="text-blue-600">.</span>
           </Link>
         </div>
-        <hr className="my-5 border border-white rounded-full opacity-100" />
 
-        {/* NAVLINKS */}
-        <ul className="p-6">
-          {links.map((link, i) => {
-            const Icon = link.icon;
-            return (
-              <li key={i}>
-                <NavLink
-                  to={link.link}
-                  end
-                  className={({ isActive }) =>
-                    `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
-                      isActive
-                        ? "bg-blue-700 text-white shadow-lg shadow-blue-500/40"
-                        : "hover:bg-blue-50/7 hover:text-white group text-gray-300/70"
-                    }`
-                  }
-                >
-                  <Icon
-                    className="group-hover:scale-105 transition-transform ease-in-out duration-300 font-semibold"
-                    strokeWidth={1.25}
-                  />
-                  <span className="text-[15px] font-medium!">{link.text}</span>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
+        <nav className="flex-1 px-4">
+          <ul className="space-y-2">
+            {links.map((link, i) => (
+              <NavItem key={i} link={link} />
+            ))}
+          </ul>
+        </nav>
 
-        {/* LOGOUT BUTTON */}
-        <div className="p-6 text-gray-400 border-t mt-auto border-[#ffffff33]">
+        {/* LOGOUT SECTION */}
+        <div className="p-6 border-t border-white/10">
           <button
-            type="button"
             onClick={userLogOut}
-            className="flex items-center w-full gap-3 bg-white/18 p-4 rounded-lg transition-all ease-in-out duration-300 border border-transparent hover:border-blue-600 hover:bg-blue-600/20 hover:text-white hover:scale-102"
+            className="flex items-center justify-center w-full gap-3 bg-white/5 p-4 rounded-xl text-gray-400 font-bold hover:bg-rose-600 hover:text-white transition-all duration-300 group"
           >
-            <LogOut />
-            <h1 className="font-medium">Logout</h1>
+            <LogOut
+              size={20}
+              className="group-hover:translate-x-1 transition-transform"
+            />
+            <span>Logout</span>
           </button>
         </div>
-      </div>
+      </aside>
 
-      {/* OFFCANVAS */}
+      {/* MOBILE OFFCANVAS */}
       <div
-        className={`fixed top-0 left-0 w-full h-full z-50 bg-black/50 backdrop-blur-md lg:hidden transition-opacity ease-in-out duration-300 ${
-          offCanvasToggle ? "opacity-100" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-60 lg:hidden transition-all duration-500 ${
+          offCanvasToggle ? "visible" : "invisible"
         }`}
       >
+        {/* Backdrop */}
         <div
-          className={`w-full min-[610px]:w-73.25 overflow-auto bg-black h-screen origin-top-left flex flex-col shadow-[4px_0_24px_#0000004d] p-6 transition-transform duration-300 ease-in-out ${
-            offCanvasToggle ? "scale-x-100" : "scale-x-0"
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${
+            offCanvasToggle ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setOffCanvasToggle(false)}
+        />
+
+        {/* Drawer */}
+        <div
+          className={`absolute top-0 left-0 w-full sm:w-80 h-full bg-black flex flex-col shadow-2xl transition-transform duration-500 ease-out ${
+            offCanvasToggle ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="text-end ml-auto mb-4">
-            <X
-              strokeWidth={2.75}
-              className="text-white cursor-pointer"
-              onClick={() => setOffCanvasToggle(false)}
-            />
-          </div>
-
-          {/* HEADING */}
-          <div className="text-center">
-            <Link
-              to="/"
-              className="text-white text-4xl font-bold font-montserrat tracking-wider"
-            >
-              PakDeals
+          <div className="flex items-center justify-between p-8">
+            <Link to="/" className="text-white text-2xl font-black">
+              PakDeals<span className="text-blue-600">.</span>
             </Link>
-          </div>
-          <hr className="my-5 border border-white rounded-full opacity-100" />
-
-          {/* NAVLINKS */}
-          <ul>
-            {links.map((link, i) => {
-              const Icon = link.icon;
-              return (
-                <li key={i}>
-                  <NavLink
-                    to={link.link}
-                    onClick={() => setOffCanvasToggle(false)}
-                    end
-                    className={({ isActive }) =>
-                      `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
-                        isActive
-                          ? "bg-blue-800 text-white"
-                          : "hover:bg-blue-50/7 hover:text-white group text-gray-300/70"
-                      }`
-                    }
-                  >
-                    <Icon
-                      className="group-hover:scale-105 transition-transform ease-in-out duration-300 font-semibold text-[15px]"
-                      strokeWidth={1}
-                    />
-                    {link.text}
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* LOGOUT BUTTON */}
-          <div className="p-6 text-gray-400 border-t mt-auto border-[#ffffff33]">
             <button
-              type="button"
-              onClick={userLogOut}
-              className="flex items-center w-full gap-3 bg-white/18 p-4 rounded-lg transition-all ease-in-out duration-300 border border-transparent hover:border-blue-600 hover:bg-blue-600/20 hover:text-white hover:scale-102"
+              onClick={() => setOffCanvasToggle(false)}
+              className="p-2 bg-white/5 rounded-full text-white hover:bg-white/10"
             >
-              <LogOut />
-              <h1 className="font-medium">Logout</h1>
+              <X size={24} />
+            </button>
+          </div>
+
+          <nav className="flex-1 px-6">
+            <ul className="space-y-2">
+              {links.map((link, i) => (
+                <NavItem key={i} link={link} isMobile />
+              ))}
+            </ul>
+          </nav>
+
+          <div className="p-8 border-t border-white/10">
+            <button
+              onClick={userLogOut}
+              className="flex items-center justify-center w-full gap-3 bg-white/5 p-4 rounded-xl text-gray-400 font-bold hover:bg-rose-600 hover:text-white transition-all duration-300"
+            >
+              <LogOut size={20} />
+              <span>Logout</span>
             </button>
           </div>
         </div>

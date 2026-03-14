@@ -7,23 +7,37 @@ function UserPaymentsPage() {
   const userToken = localStorage.getItem("token");
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (userToken && userId) {
-      return;
+    if (!userToken || !userId) {
+      const timer = setTimeout(() => {
+        navigate("/signup");
+      }, 500);
+      return () => clearTimeout(timer);
     }
-    setTimeout(() => {
-      navigate("/signup");
-    }, 500);
-  }, []);
+  }, [userToken, userId, navigate]);
+
   return (
-    <div className="space-y-8 sm:px-6 px-2.5 py-6">
-      {/* -------------------- HEADING -------------------- */}
-      <div className="space-y-3 mb-6">
-        <h1 className="text-3xl font-semibold">Payments</h1>
-        <p className="text-gray-500">Lorem ipsum dolor sit amet, consectetur</p>
+    <div className="min-h-screen bg-[#f8fafc] sm:px-8 px-4 py-8">
+      {/* -------------------- HEADING SECTION -------------------- */}
+      <div className="mb-8">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">
+            Security & Billing
+          </span>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight font-montserrat">
+            Payments
+          </h1>
+          <p className="text-slate-500 font-medium mt-1">
+            Manage your billing information, invoices, and transaction history.
+          </p>
+        </div>
       </div>
-      {/* -------------------- PAYMENTS COMPONENT -------------------- */}
-      <UserPaymentComponent />
+
+      {/* -------------------- PAYMENTS COMPONENT CONTAINER -------------------- */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <UserPaymentComponent />
+      </div>
     </div>
   );
 }

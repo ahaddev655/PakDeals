@@ -1,4 +1,4 @@
-import { Heart, MapPin, Eye } from "lucide-react";
+import { Heart, MapPin, Eye, Trash2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
@@ -10,15 +10,15 @@ function UserFavoritesPage() {
   const userToken = localStorage.getItem("token");
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (userToken && userId) {
-      return;
+    if (!userToken || !userId) {
+      const timer = setTimeout(() => navigate("/signup"), 500);
+      return () => clearTimeout(timer);
     }
-    setTimeout(() => {
-      navigate("/signup");
-    }, 500);
-  }, []);
-  // ==================== TOGGLE FAVORITES ====================
+  }, [userToken, userId, navigate]);
+
+  // ==================== FETCH FAVORITES ====================
   useEffect(() => {
     const raw = localStorage.getItem("favoriteAds");
     setFavorites(raw ? JSON.parse(raw) : []);
@@ -26,215 +26,208 @@ function UserFavoritesPage() {
 
   // ==================== HANDLE FAVORITES ====================
   const handleFavorite = (ad) => {
-    const updatedFavorites = favorites.some((item) => item.id === ad.id)
-      ? favorites.filter((item) => item.id !== ad.id)
-      : [...favorites, ad];
-
+    const updatedFavorites = favorites.filter((item) => item.id !== ad.id);
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteAds", JSON.stringify(updatedFavorites));
   };
 
   return (
-    <div className="sm:px-6 px-2.5 py-6">
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200">
-        <div className="sm:flex items-center justify-between gap-5 py-4 px-7">
-          <h1 className="sm:text-[32px] text-2xl font-semibold text-gray-700">
+    <div className="min-h-screen bg-[#f8fafc] sm:px-8 px-4 py-8">
+      {/* -------------------- HEADING SECTION -------------------- */}
+      <div className="mb-8">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">
+            Wishlist
+          </span>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight font-montserrat">
             My Favorites
           </h1>
-          <p className="text-[#303030] font-light sm:text-base text-sm mt-2 sm:mt-0">
-            Lorem ipsum dolor sit amet, consectetur
+          <p className="text-slate-500 font-medium mt-1">
+            Items you've saved to review or purchase later.
           </p>
         </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         {favorites.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-200 border-b border-gray-300">
+            <table className="w-full text-left">
+              <thead className="bg-slate-900 text-white">
                 <tr>
-                  {["ID", "Title", "Category", "Price", "Action"].map(
-                    (h, i) => (
-                      <th
-                        key={i}
-                        className={`font-semibold text-[#495057] py-3 px-6 ${
-                          i < 3 ? "text-start" : "text-center"
-                        }`}
-                      >
-                        {h}
-                      </th>
-                    ),
-                  )}
+                  {[
+                    "Ad ID",
+                    "Item Details",
+                    "Category",
+                    "Price",
+                    "Actions",
+                  ].map((h, i) => (
+                    <th
+                      key={i}
+                      className="py-5 px-6 text-[11px] font-black uppercase tracking-widest text-slate-400"
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody>
-                {favorites.map((favorite, i, arr) => {
-                  const isFav = favorites.some(
-                    (item) => item.id === favorite.id,
-                  );
-                  return (
-                    <tr
-                      key={favorite.id}
-                      className={`border-b hover:bg-gray-100 transition-colors ease-in-out duration-200 ${
-                        i === arr.length - 1
-                          ? "border-transparent"
-                          : "border-gray-300"
-                      }`}
-                    >
-                      <td className="py-4 px-6 text-[15px] text-gray-700 font-semibold">
+              <tbody className="divide-y divide-slate-100">
+                {favorites.map((favorite) => (
+                  <tr
+                    key={favorite.id}
+                    className="group hover:bg-slate-50/80 transition-all duration-200"
+                  >
+                    <td className="py-5 px-6">
+                      <span className="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-lg">
                         #{favorite.id}
-                      </td>
+                      </span>
+                    </td>
 
-                      <td className="py-4 px-6 text-[15px] text-gray-700">
-                        <div className="font-medium text-gray-700">
-                          {favorite.title.slice(0, 35) + "..."}
+                    <td className="py-5 px-6">
+                      <div>
+                        <div className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">
+                          {favorite.title.length > 40
+                            ? favorite.title.slice(0, 40) + "..."
+                            : favorite.title}
                         </div>
-                        <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
-                          <MapPin size={14} />
+                        <div className="flex items-center gap-1 text-[11px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">
+                          <MapPin size={12} className="text-blue-500" />
                           {favorite.location}
                         </div>
-                      </td>
+                      </div>
+                    </td>
 
-                      <td className="py-4 px-6 text-[15px] text-gray-700">
+                    <td className="py-5 px-6">
+                      <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
                         {favorite.category}
-                      </td>
+                      </span>
+                    </td>
 
-                      <td className="py-4 px-6 text-[15px] text-gray-700 text-center">
-                        PKR {favorite.price}
-                      </td>
+                    <td className="py-5 px-6">
+                      <div className="text-sm font-black text-slate-900">
+                        <span className="text-blue-600 text-[10px] mr-1">
+                          PKR
+                        </span>
+                        {favorite.price.toLocaleString()}
+                      </div>
+                    </td>
 
-                      <td className="py-4 px-6 flex items-center justify-center gap-4">
-                        <div
-                          className="grid place-items-center hover:shadow-md w-10 h-10 rounded-md hover:text-blue-800 transition-all duration-300 ease-in-out cursor-pointer"
+                    <td className="py-5 px-6">
+                      <div className="flex items-center gap-2">
+                        <button
                           onClick={() => setSelectedAd(favorite)}
+                          className="p-2.5 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 shadow-sm"
                         >
-                          <Eye strokeWidth={1.9} size={18} />
-                        </div>
-                        <div
+                          <Eye size={16} />
+                        </button>
+                        <button
                           onClick={() => handleFavorite(favorite)}
-                          className={`grid place-items-center hover:shadow-md w-10 h-10 rounded-md transition-all duration-300 ease-in-out cursor-pointer ${
-                            isFav
-                              ? "text-red-600 hover:text-red-800"
-                              : "text-gray-600 hover:text-red-700"
-                          }`}
+                          className="p-2.5 bg-white border border-slate-200 text-rose-500 rounded-xl hover:bg-rose-600 hover:text-white hover:border-rose-600 transition-all duration-300 shadow-sm"
                         >
-                          <Heart
-                            strokeWidth={1.9}
-                            size={18}
-                            fill={isFav ? "currentColor" : "none"}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         ) : (
-          <div className="flex items-center justify-center w-full h-[65vh]">
-            <div className="text-center">
-              <h2 className="sm:text-2xl text-xl font-semibold text-gray-500">
-                No favorites
-              </h2>
-              <p className="text-gray-400 mt-2 sm:text-base text-sm">
-                You haven't added any ads to favorites yet.
-              </p>
+          <div className="flex flex-col items-center justify-center py-32 px-6 text-center">
+            <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-6">
+              <Heart size={40} className="text-slate-200" />
             </div>
+            <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+              Your wishlist is empty
+            </h2>
+            <p className="text-slate-500 font-medium mt-2 max-w-xs">
+              Save items you're interested in to track price drops and updates.
+            </p>
+            <Link
+              to="/"
+              className="mt-8 bg-blue-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all"
+            >
+              Browse Marketplace
+            </Link>
           </div>
         )}
 
-        {/* -------------------- ADS POPUP -------------------- */}
+        {/* -------------------- ADS PREVIEW POPUP -------------------- */}
         <div
-          className={`fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300 ${
-            selectedAd ? "opacity-100 z-50" : "opacity-0 -z-10"
+          className={`fixed inset-0 z-100 flex items-center justify-center p-4 transition-all duration-500 ${
+            selectedAd ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
-          onClick={() => setSelectedAd(null)}
         >
           <div
-            className={`bg-white w-full max-w-md rounded-2xl border border-gray-200 shadow-2xl p-6 md:p-8 transform transition-all duration-300 ${
-              selectedAd
-                ? "opacity-100 scale-100 translate-y-0"
-                : "opacity-0 scale-95 translate-y-6"
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+            onClick={() => setSelectedAd(null)}
+          />
+
+          <div
+            className={`relative bg-white w-full max-w-lg rounded-4xl overflow-hidden shadow-2xl transition-all duration-500 transform ${
+              selectedAd ? "scale-100 translate-y-0" : "scale-95 translate-y-12"
             }`}
-            onClick={(e) => e.stopPropagation()}
           >
             {selectedAd && (
-              <div className="space-y-5">
-                {/* -------------------- AD IMAGE -------------------- */}
-                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gray-200 shadow-lg group">
+              <div className="flex flex-col">
+                <div className="relative h-64 overflow-hidden">
                   <img
                     src={selectedAd.img}
-                    alt="IMG"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt="Ad"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black uppercase text-blue-600 tracking-widest shadow-lg">
+                    {selectedAd.category}
+                  </div>
                 </div>
 
-                {/* -------------------- DETAILS -------------------- */}
-                <div className="space-y-4">
-                  {/* TITLE */}
-                  <div>
-                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Title
-                    </h5>
-                    <p className="text-xl font-bold text-gray-800 mt-1 leading-snug">
+                <div className="p-8">
+                  <div className="mb-6">
+                    <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight mb-2">
                       {selectedAd.title}
-                    </p>
+                    </h3>
+                    <div className="flex items-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                      <MapPin size={14} className="text-blue-600" />
+                      {selectedAd.location}
+                    </div>
                   </div>
 
-                  {/* CATEGORY */}
-                  <div>
-                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Category
-                    </h5>
-                    <span className="inline-block mt-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full">
-                      {selectedAd.category}
-                    </span>
-                  </div>
-
-                  {/* PRICE */}
-                  <div>
-                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Price
-                    </h5>
-                    <p className="text-3xl font-extrabold text-green-600 mt-1">
-                      PKR {selectedAd.price}
-                    </p>
-                  </div>
-
-                  {/* LOCATION */}
-                  <div>
-                    <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Location
-                    </h5>
-                    <div className="flex items-center gap-2 mt-1 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
-                      <MapPin size={16} className="text-blue-600" />
-                      <p className="text-sm font-medium text-gray-700">
-                        {selectedAd.location}
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <span className="block text-[10px] font-black text-slate-400 uppercase mb-1">
+                        Price Tag
+                      </span>
+                      <p className="text-xl font-black text-blue-600">
+                        <span className="text-xs mr-1">PKR</span>
+                        {selectedAd.price.toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <span className="block text-[10px] font-black text-slate-400 uppercase mb-1">
+                        Ad Reference
+                      </span>
+                      <p className="text-xl font-black text-slate-800">
+                        #{selectedAd.id}
                       </p>
                     </div>
                   </div>
-                </div>
 
-                {/* -------------------- BUTTONS -------------------- */}
-                <div className="flex items-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    className="flex-1 py-3 bg-gray-600 hover:bg-gray-700 active:scale-[0.98] transition-all duration-200 text-white font-semibold rounded-xl shadow-md hover:shadow-lg"
-                    onClick={() => setSelectedAd(null)}
-                  >
-                    Cancel
-                  </button>
-
-                  <Link
-                    to={`/ad/${selectedAd.source_table || selectedAd.table_name}/${selectedAd.id}`}
-                    className="flex-1"
-                  >
+                  <div className="flex items-center gap-3">
                     <button
-                      type="button"
-                      className="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] transition-all duration-200 text-white font-semibold rounded-xl shadow-md hover:shadow-lg"
+                      onClick={() => setSelectedAd(null)}
+                      className="flex-1 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all active:scale-95"
                     >
-                      View Details
+                      Close Preview
                     </button>
-                  </Link>
+                    <Link
+                      to={`/ad/${selectedAd.source_table || selectedAd.table_name}/${selectedAd.id}`}
+                      className="flex-2"
+                    >
+                      <button className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all active:scale-95">
+                        View Full Listing
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}

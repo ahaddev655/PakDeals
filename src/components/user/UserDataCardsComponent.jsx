@@ -1,70 +1,73 @@
 import { Clock4, LayoutGrid, Lock, LockOpen } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 function UserDataCardsComponent({
-  activeListings,
-  soldListings,
-  pendingListings,
-  totalListings,
-  loading,
+  activeListings = 0,
+  soldListings = 0,
+  pendingListings = 0,
+  totalListings = 0,
+  loading = false,
 }) {
   const dataCards = [
     {
       text: "Total Listings",
       value: totalListings,
       icon: LayoutGrid,
-      color: "#343a40",
+      color: "bg-[#2d3436]", // Dark Charcoal
     },
     {
       text: "Active Listings",
       value: activeListings,
       icon: LockOpen,
-      color: "#4f46e5",
+      color: "bg-[#4f46e5]", // Indigo
     },
     {
       text: "Sold Listings",
       value: soldListings,
       icon: Clock4,
-      color: "#dc3545",
+      color: "bg-[#ef4444]", // Rose/Red
     },
     {
       text: "Pending Listings",
       value: pendingListings,
       icon: Lock,
-      color: "#6c757d",
+      color: "bg-[#64748b]", // Slate Gray
     },
   ];
 
   return (
-    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
       {dataCards.map((card, i) => {
         const Icon = card.icon;
 
         return (
           <div
             key={i}
-            className="p-6 flex items-center justify-between bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out"
+            className="p-6 flex items-center justify-between bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300"
           >
-            <div>
-              <p className="uppercase text-[13px] font-medium text-gray-400 tracking-wide">
+            <div className="flex-1">
+              <p className="uppercase text-[11px] font-bold text-slate-400 tracking-widest">
                 {card.text}
               </p>
-              <h3 className="mt-3 text-3xl font-semibold text-gray-700">
-                {loading ? (
-                  <p className="text-center font-semibold text-xl text-gray-600">
-                    Loading...
-                  </p>
-                ) : (
-                  (card.value || 0).toLocaleString()
-                )}
-              </h3>
+
+              {loading ? (
+                /* Shimmer/Skeleton Loader */
+                <div className="mt-3 h-9 w-24 bg-slate-100 animate-pulse rounded-lg" />
+              ) : (
+                <h3 className="mt-2 text-3xl font-black text-slate-800 tracking-tight">
+                  {Number(card.value || 0).toLocaleString()}
+                </h3>
+              )}
             </div>
 
             <div
-              className="w-15 h-15 text-white grid place-items-center rounded-xl"
-              style={{ backgroundColor: card.color }}
+              className={`w-14 h-14 text-white flex items-center justify-center rounded-2xl shadow-inner ${card.color}`}
             >
-              <Icon />
+              {loading ? (
+                <div className="w-6 h-6 bg-white/20 animate-pulse rounded-full" />
+              ) : (
+                <Icon size={28} strokeWidth={2.2} />
+              )}
             </div>
           </div>
         );

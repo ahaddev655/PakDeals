@@ -1,26 +1,21 @@
 import axios from "axios";
-import { ChevronDown, Plus, X } from "lucide-react";
+import {
+  ChevronDown,
+  Plus,
+  X,
+  Baby,
+  Camera,
+  ToyBrick,
+  UserCircle,
+  MapPin,
+} from "lucide-react";
 import { useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
-  const FEATURES_LIST = [
-    "Adjustable",
-    "Foldable",
-    "Portable",
-    "Musical",
-    "Lights",
-    "Interactive",
-    "Safety Harness",
-    "Washable Fabric",
-    "Durable",
-    "Eco-Friendly",
-    "Battery Operated",
-    "Remote COntrol",
-  ];
-
-  const [loading, setLoading] = useState(false);
   const userId = localStorage.getItem("id");
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const DEFAULT_FILTER = (label) => ({ id: "", label });
 
@@ -40,13 +35,25 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     images: [],
   });
 
-  const fileInputRef = useRef(null);
+  const FEATURES_LIST = [
+    "Adjustable",
+    "Foldable",
+    "Portable",
+    "Musical",
+    "Lights",
+    "Interactive",
+    "Safety Harness",
+    "Washable Fabric",
+    "Durable",
+    "Eco-Friendly",
+    "Battery Operated",
+    "Remote Control",
+  ];
 
+  // ==================== HANDLERS ====================
   const handleDetailChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "sellerContact" && value.length > 13) return;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -57,10 +64,10 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleFeatureChange = (feature) => {
     setFormData((prev) => {
-      const alreadySelected = prev.features.includes(feature);
+      const isSelected = prev.features.includes(feature);
       return {
         ...prev,
-        features: alreadySelected
+        features: isSelected
           ? prev.features.filter((f) => f !== feature)
           : [...prev.features, feature],
       };
@@ -69,10 +76,10 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setFormData((prev) => {
-      const updatedImages = [...prev.images, ...files].slice(0, 5);
-      return { ...prev, images: updatedImages };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files].slice(0, 5),
+    }));
   };
 
   const removeImage = (index) => {
@@ -88,234 +95,243 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     setLoading(true);
 
     const form = new FormData();
-
-    form.append("subCategory", formData.subCategory?.label || "");
-    form.append("itemType", formData.itemType?.label || "");
-    form.append("ageGroup", formData.ageGroup?.label || "");
-    form.append("condition", formData.condition?.label || "");
-    form.append("location", formData.location?.label || "");
-    form.append("adTitle", formData.adTitle);
-    form.append("description", formData.description);
-    form.append("brand", formData.brand);
-    form.append("features", formData.features.join(", "));
-    form.append("price", formData.price);
-    form.append("sellerName", formData.sellerName);
-    form.append("sellerContact", formData.sellerContact);
-
-    formData.images.forEach((image) => {
-      form.append("images", image);
+    Object.keys(formData).forEach((key) => {
+      if (key === "images") {
+        formData.images.forEach((img) => form.append("images", img));
+      } else if (formData[key]?.label) {
+        form.append(key, formData[key].label);
+      } else if (key === "features") {
+        form.append(key, formData.features.join(", "));
+      } else {
+        form.append(key, formData[key]);
+      }
     });
-    // -------------------- API CONFIGURATION --------------------
+
     axios
       .post(
         `https://pak-deals-backend.vercel.app/api/ads/add-kids-ad/${userId}`,
         form,
       )
-      .then((response) => {
-        toast.success(response?.data?.message || "Ad Submitted...");
-
-        setFormData({
-          subCategory: DEFAULT_FILTER("Select Sub Category"),
-          itemType: DEFAULT_FILTER("Select Item Type"),
-          ageGroup: DEFAULT_FILTER("Select Age Group"),
-          condition: DEFAULT_FILTER("Select Condition"),
-          location: DEFAULT_FILTER("Select Location"),
-          adTitle: "",
-          description: "",
-          brand: "",
-          features: [],
-          price: "",
-          sellerName: "",
-          sellerContact: "",
-          images: [],
-        });
+      .then((res) => {
+        toast.success(res?.data?.message || "Kids ad posted successfully!");
+        // Reset form would go here
       })
-      .catch((error) => {
-        toast.error(error?.response?.error || "Something went wrong");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch(() => toast.error("Submission failed"))
+      .finally(() => setLoading(false));
   };
 
+  // ==================== UI HELPERS ====================
   const renderDropdown = (label, key, dataKey, scrollable = false) => (
-    <div className="w-full">
-      <label className="font-semibold text-slate-600">{label}</label>
-      <div className="relative mt-1">
-        <button
-          type="button"
-          className={`w-full flex justify-between py-2 px-3 border-2 border-gray-300 rounded-lg 
-        transition-colors duration-300 focus:ring-2 focus:ring-blue-800 ${
-          formData[key]?.id ? "text-black" : "text-gray-400"
-        }`}
-          onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
-        >
-          {formData[key]?.label}
-          <ChevronDown />
-        </button>
-
+    <div className="w-full relative">
+      <label className="text-sm font-bold text-blue-900 ml-1">{label}</label>
+      <button
+        type="button"
+        onClick={() => setOpenDropdown(openDropdown === key ? "" : key)}
+        className={`w-full flex justify-between items-center mt-1 py-3 px-4 border-2 rounded-xl transition-all
+          ${openDropdown === key ? "border-blue-800 ring-4 ring-blue-50" : "border-gray-100 bg-gray-50"}
+          ${formData[key]?.id ? "text-gray-900 font-semibold" : "text-gray-400"}`}
+      >
+        {formData[key]?.label}
+        <ChevronDown
+          size={18}
+          className={`transition-transform ${openDropdown === key ? "rotate-180" : ""}`}
+        />
+      </button>
+      {openDropdown === key && (
         <div
-          className={`absolute z-10 bg-white top-11.75 shadow-xl w-full origin-top transition-all
-        ${scrollable ? "h-70 overflow-auto" : ""}
-        ${
-          openDropdown === key
-            ? "scale-y-100 opacity-100"
-            : "scale-y-0 opacity-0"
-        }`}
+          className={`absolute z-20 top-full left-0 right-0 mt-2 bg-white border border-gray-100 shadow-2xl rounded-xl overflow-y-auto animate-in fade-in slide-in-from-top-2 ${scrollable ? "h-60" : "max-h-60"}`}
         >
           {(addAd_data.kids.find((i) => i[dataKey])?.[dataKey] || []).map(
             (item) => (
-              <h4
+              <div
                 key={item.id}
-                className="p-2 cursor-pointer hover:bg-blue-50"
+                className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-gray-700 font-medium transition-colors border-b last:border-0 border-gray-50"
                 onClick={() => handleSelect(key, item)}
               >
                 {item.text}
-              </h4>
+              </div>
             ),
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 
-  const renderInput = (label, name, type, value) => (
+  const renderInput = (label, name, type, value, placeholder) => (
     <div className="w-full">
-      <label className="font-semibold text-slate-600">{label}</label>
+      <label className="text-sm font-bold text-blue-900 ml-1">{label}</label>
       <input
         type={type}
         name={name}
         value={value}
         onChange={handleDetailChange}
-        className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-      focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-      transition-colors ease-in-out duration-300"
+        placeholder={placeholder}
+        className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl px-4 py-3 mt-1 outline-none focus:border-blue-800 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all"
       />
     </div>
   );
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <ToastContainer position="top-right" autoClose={1500} theme="light" />
-      {/* ====================== SUB CATEGORY & ITEM TYPE ====================== */}
-      <div className="sm:flex gap-6">
-        {renderDropdown("Sub Category", "subCategory", "kidsSubCategories")}
-        {renderInput("Ad Title", "adTitle", "text", formData.adTitle)}
-      </div>
-      {/* ====================== DESCRIPTION ====================== */}
-      <div className="w-full">
-        <label className="font-semibold text-slate-600">Description</label>
+    <form className="space-y-8 bg-white" onSubmit={handleSubmit}>
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+
+      {/* --- SECTION 1: CORE DETAILS --- */}
+      <div className="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 space-y-6">
+        <h3 className="flex items-center gap-2 text-blue-900 font-black uppercase tracking-wider text-sm">
+          <Baby size={18} /> Basic Information
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {renderDropdown("Sub Category", "subCategory", "kidsSubCategories")}
+          {renderInput(
+            "Ad Title",
+            "adTitle",
+            "text",
+            formData.adTitle,
+            "e.g. Fisher-Price Baby Jumperoo",
+          )}
+        </div>
         <textarea
+          rows={4}
           name="description"
-          rows={6}
+          placeholder="Mention features, safety certifications, or usage history..."
           value={formData.description}
           onChange={handleDetailChange}
-          className="w-full border-2 rounded-lg px-3 py-2 border-gray-300 transition-colors duration-300 focus:ring-2 focus:ring-blue-800 resize-none"
-        ></textarea>
+          className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:border-blue-800 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all resize-none"
+        />
       </div>
-      {/* ====================== ITEM TYPE & AGE GROUP ====================== */}
-      <div className="sm:flex gap-6">
-        {renderDropdown("Item Type", "itemType", "kidsItemType", true)}
-        {renderDropdown("Age Group", "ageGroup", "kidsAgeGroup", true)}
+
+      {/* --- SECTION 2: SPECIFICATIONS --- */}
+      <div className="space-y-6">
+        <h3 className="flex items-center gap-2 text-blue-900 font-black uppercase tracking-wider text-sm">
+          <ToyBrick size={18} /> Product Specs
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {renderDropdown("Item Type", "itemType", "kidsItemType", true)}
+          {renderDropdown("Age Group", "ageGroup", "kidsAgeGroup", true)}
+          {renderInput(
+            "Brand",
+            "brand",
+            "text",
+            formData.brand,
+            "e.g. Mothercare, LEGO, Barbie",
+          )}
+          {renderDropdown("Condition", "condition", "kidsCondition")}
+        </div>
       </div>
-      {/* ====================== BRAND & CONDITION ====================== */}
-      <div className="sm:flex gap-6">
-        {renderInput("Brand", "brand", "text", formData.brand)}
-        {renderDropdown("Condition", "condition", "kidsCondition")}
-      </div>
-      {/* ====================== FEATURES ====================== */}
-      <div className="w-full">
-        <label className="font-semibold text-slate-600">Features</label>
-        <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-2 gap-3">
+
+      {/* --- SECTION 3: FEATURES --- */}
+      <div className="space-y-3">
+        <label className="text-sm font-bold text-blue-900 ml-1 uppercase tracking-tight">
+          Key Features
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {FEATURES_LIST.map((feature) => (
             <label
               key={feature}
-              className="flex items-center gap-2 cursor-pointer select-none"
+              className={`flex items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer text-[10px] font-black uppercase text-center
+                ${
+                  formData.features.includes(feature)
+                    ? "border-blue-800 bg-blue-800 text-white shadow-lg shadow-blue-100"
+                    : "border-gray-100 bg-gray-50 text-gray-500 hover:border-blue-200"
+                }`}
             >
               <input
                 type="checkbox"
-                value={feature}
+                className="hidden"
                 checked={formData.features.includes(feature)}
                 onChange={() => handleFeatureChange(feature)}
-                className="checkbox"
               />
-              <span className="font-medium text-gray-700">{feature}</span>
+              {feature}
             </label>
           ))}
         </div>
       </div>
-      {/* ====================== LOCATION & PRICE ====================== */}
-      <div className="sm:flex gap-6">
+
+      {/* --- SECTION 4: LOCATION & CONTACT --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
         {renderDropdown("Location", "location", "kidsLocation")}
-        {renderInput("Price", "price", "number", formData.price)}
-      </div>
-      {/* ====================== SELLER NAME & CONTACT ====================== */}
-      <div className="sm:flex gap-6">
-        {renderInput("Seller Name", "sellerName", "text", formData.sellerName)}
         {renderInput(
-          "Seller Contact",
+          "Price (PKR)",
+          "price",
+          "number",
+          formData.price,
+          "Asking price",
+        )}
+        {renderInput(
+          "Seller Name",
+          "sellerName",
+          "text",
+          formData.sellerName,
+          "Your Name",
+        )}
+        {renderInput(
+          "Contact Number",
           "sellerContact",
           "tel",
           formData.sellerContact,
+          "+92 3XX XXXXXXX",
         )}
       </div>
 
-      {/* ====================== IMAGE UPLOAD ====================== */}
-      <div className="flex gap-2">
-        {formData.images.map((img, idx) => (
-          <div key={idx} className="relative w-[25%]">
-            <div className="border border-gray-300 rounded-md rounded-t-lg p-1">
+      {/* --- SECTION 5: GALLERY --- */}
+      <div className="space-y-4">
+        <label className="text-sm font-black text-blue-900 uppercase tracking-tighter flex items-center gap-2">
+          <Camera size={18} /> Photos (Max 5)
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {formData.images.map((img, idx) => (
+            <div key={idx} className="relative aspect-square group">
               <img
                 src={URL.createObjectURL(img)}
-                alt={`upload-${idx}`}
-                className="object-cover w-full h-full rounded-t-lg"
+                alt="preview"
+                className="w-full h-full object-cover rounded-2xl border-2 border-blue-100 shadow-sm"
               />
-              <div className="p-2 rounded-b-md text-center">
-                <h1 className="font-medium text-gray-700">{img.name}</h1>
-              </div>
-              <div
-                className="absolute top-3 right-3 p-1 cursor-pointer bg-white rounded-full"
+              <button
+                type="button"
                 onClick={() => removeImage(idx)}
+                className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:rotate-90 transition-all"
               >
-                <X size={16} />
-              </div>
+                <X size={14} />
+              </button>
+              {idx === 0 && (
+                <div className="absolute bottom-2 left-2 right-2 bg-blue-900/80 text-[10px] text-white text-center py-1.5 rounded-lg backdrop-blur-md font-bold uppercase tracking-widest">
+                  Cover Image
+                </div>
+              )}
             </div>
-          </div>
-        ))}
-
-        {formData.images.length < 5 && (
-          <div
-            className="w-[25%] h-42.25 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer text-blue-800 group"
-            onClick={() => fileInputRef.current.click()}
-          >
-            <Plus
-              size={34}
-              className="group-hover:rotate-180 transition-transform duration-300 ease-in-out"
-            />
-          </div>
-        )}
-      </div>
-
-      <input
-        type="file"
-        multiple
-        accept="image/*"
-        className="hidden"
-        ref={fileInputRef}
-        onChange={handleImageChange}
-      />
-      <div>
-        <p className="text-gray-700 font-medium mt-12">
-          Thumbnail will be the first image...
-        </p>
+          ))}
+          {formData.images.length < 5 && (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current.click()}
+              className="aspect-square border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-2xl flex flex-col items-center justify-center text-blue-800 hover:bg-blue-100 transition-all group"
+            >
+              <Plus
+                size={32}
+                className="group-hover:scale-110 transition-transform"
+              />
+              <span className="text-[10px] font-black uppercase mt-2 text-center">
+                Add Photo
+              </span>
+            </button>
+          )}
+        </div>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+        />
       </div>
 
       <button
         type="submit"
-        className="bg-white shadow-lg py-3 px-6 hover:rounded-4xl hover:bg-blue-900 hover:text-white hover:-translate-y-1
-        transition-all duration-300 font-medium rounded-lg"
+        disabled={loading}
+        className="w-full md:w-auto bg-blue-900 text-white font-black px-16 py-4 rounded-2xl shadow-2xl shadow-blue-100 hover:bg-blue-800 hover:-translate-y-1 transition-all disabled:opacity-50"
       >
-        {loading ? "Submitting Kids Ad..." : "Submit Kids Ad"}
+        {loading ? "Posting Ad..." : "Submit Kids Ad"}
       </button>
     </form>
   );

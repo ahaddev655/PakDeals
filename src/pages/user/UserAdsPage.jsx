@@ -7,23 +7,37 @@ function UserAdsPage() {
   const userToken = localStorage.getItem("token");
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (userToken && userId) {
-      return;
+    if (!userToken || !userId) {
+      const timer = setTimeout(() => {
+        navigate("/signup");
+      }, 500);
+      return () => clearTimeout(timer);
     }
-    setTimeout(() => {
-      navigate("/signup");
-    }, 500);
-  }, []);
+  }, [userToken, userId, navigate]);
+
   return (
-    <div className="space-y-8 sm:px-6 px-2.5 py-6">
-      {/* -------------------- HEADING -------------------- */}
-      <div className="space-y-3 mb-6">
-        <h1 className="text-3xl font-semibold">My Ads</h1>
-        <p className="text-gray-500">Manage all your listings here</p>
+    <div className="min-h-screen bg-[#f8fafc] sm:px-8 px-4 py-8">
+      {/* -------------------- HEADING SECTION -------------------- */}
+      <div className="mb-8">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">
+            Inventory Management
+          </span>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight font-montserrat">
+            My Ads
+          </h1>
+          <p className="text-slate-500 font-medium mt-1">
+            Review, edit, or remove your current marketplace listings.
+          </p>
+        </div>
       </div>
-      {/* -------------------- LISTING TABLE -------------------- */}
-      <UserAdsComponent />
+
+      {/* -------------------- TABLE CONTAINER -------------------- */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <UserAdsComponent />
+      </div>
     </div>
   );
 }

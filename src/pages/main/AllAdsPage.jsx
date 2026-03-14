@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import { ChevronDown, Heart, MapPin } from "lucide-react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { ChevronDown, Heart, MapPin, Search, FilterX } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function AllAdsPage() {
-  // ==================== CATEGORY DROPDOWN JS ====================
+  // ==================== STATE ====================
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("All");
+  const [search, setSearch] = useState("");
+  const [favorites, setFavorites] = useState([]);
   const dropdownRef = useRef(null);
 
   const categories = [
@@ -23,195 +25,213 @@ function AllAdsPage() {
     "Kids",
   ];
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!dropdownRef.current?.contains(e.target)) setIsOpen(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // ==================== SEARCHBAR JS ====================
-  const [search, setSearch] = useState("");
-  const [favorites, setFavorites] = useState([]);
-
-  // ==================== ADS JS ====================
+  // Dummy Data (In production, this would be a fetch call)
   const ads = [
     {
       id: 1,
-      category: "Property for rent",
-      title:
-        "10-Marla Brand New Lush HOUSE (A++) For SALE CITIHOUSING samundri road Faisalabad.",
+      category: "Property For Rent",
+      title: "10-Marla Brand New Lush HOUSE For SALE Faisalabad.",
       location: "Punjab, Pakistan",
-      price: "PKR 3,000,000",
+      price: 3000000,
       image: "/assets/k5lf638szuebxt02cpab.jpg",
     },
     {
       id: 2,
-      category: "Property for sale",
-      title:
-        "10-Marla Brand New Lush HOUSE (A++) For SALE CITIHOUSING samundri road Faisalabad.",
+      category: "Property For Sale",
+      title: "Luxury Apartment in Karachi.",
       location: "Sindh, Pakistan",
-      price: "PKR 3,000,000",
+      price: 15000000,
       image: "/assets/k5lf638szuebxt02cpab.jpg",
     },
     {
       id: 3,
-      category: "Mobile",
-      title:
-        "10-Marla Brand New Lush HOUSE (A++) For SALE CITIHOUSING samundri road Faisalabad.",
+      category: "Mobiles",
+      title: "Samsung S25 Ultra Phantom Black.",
       location: "Balochistan, Pakistan",
-      price: "PKR 3,000,000",
+      price: 200000,
       image: "/assets/k5lf638szuebxt02cpab.jpg",
     },
     {
       id: 4,
       category: "Cars",
-      title:
-        "10-Marla Brand New Lush HOUSE (A++) For SALE CITIHOUSING samundri road Faisalabad.",
+      title: "Honda Civic RS 2024 Model.",
       location: "Khyber Pakhtunkhwa, Pakistan",
-      price: "PKR 3,000,000",
-      image: "/assets/k5lf638szuebxt02cpab.jpg",
-    },
-    {
-      id: 5,
-      category: "Motorcycles",
-      title:
-        "10-Marla Brand New Lush HOUSE (A++) For SALE CITIHOUSING samundri road Faisalabad.",
-      location: "Khyber Pakhtunkhwa, Pakistan",
-      price: "PKR 3,000,000",
+      price: 8500000,
       image: "/assets/k5lf638szuebxt02cpab.jpg",
     },
   ];
 
+  // ==================== EFFECTS ====================
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!dropdownRef.current?.contains(e.target)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
     const stored = JSON.parse(localStorage.getItem("favoriteAds")) || [];
     setFavorites(stored);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ==================== LOGIC ====================
   const handleFavorite = (ad) => {
-    let updatedFavorites = favorites;
-
-    if (favorites.find((item) => item.id === ad.id)) {
-      updatedFavorites = favorites.filter((item) => item.id !== ad.id);
-    } else {
-      updatedFavorites = [...favorites, ad];
-    }
-
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteAds", JSON.stringify(updatedFavorites));
+    let updated = favorites.some((f) => f.id === ad.id)
+      ? favorites.filter((f) => f.id !== ad.id)
+      : [...favorites, ad];
+    setFavorites(updated);
+    localStorage.setItem("favoriteAds", JSON.stringify(updated));
   };
 
-  const formatCategory = (category) =>
-    category.toLowerCase().split(" ").join("-");
-
-  const filteredAds = ads.filter((ad) => {
-    const matchesCategory = selected === "All" || ad.category === selected;
-    const matchesSearch = ad.title.toLowerCase().includes(search.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredAds = useMemo(() => {
+    return ads.filter((ad) => {
+      const matchesCategory = selected === "All" || ad.category === selected;
+      const matchesSearch = ad.title
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [selected, search]);
 
   return (
-    <div className="page">
-      {/* ==================== CATEGORY DROPDOWN & SEARCHBAR ==================== */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
-        {/* -------------------- CATEGORY DROPDOWN -------------------- */}
-        <div ref={dropdownRef} className="relative w-full max-w-xs">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-full flex items-center justify-between bg-white px-4 py-3 rounded-lg shadow-md border-2 border-gray-300 hover:border-blue-600 focus:outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-500 font-semibold transition"
-          >
-            <span>{selected}</span>
-            <ChevronDown
-              className={`w-5 h-5 transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`}
-            />
-          </button>
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* --- PAGE HEADER --- */}
+      <div className="bg-white border-b border-gray-200 mb-8 py-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+              Browse All Ads
+            </h1>
+            <p className="text-gray-500 font-medium">
+              Find the best deals across Pakistan
+            </p>
+          </div>
 
-          {isOpen && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-xl z-20 max-h-64 overflow-y-auto">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setSelected(cat);
-                    setIsOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-700 text-gray-700 font-medium border-b border-gray-100 last:border-b-0 transition"
-                >
-                  {cat}
-                </button>
-              ))}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Category Dropdown */}
+            <div ref={dropdownRef} className="relative w-full sm:w-64">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between bg-white px-4 py-3 rounded-xl border border-gray-200 hover:border-blue-600 focus:ring-4 focus:ring-blue-50 font-bold text-slate-700 transition-all"
+              >
+                <span className="truncate">{selected}</span>
+                <ChevronDown
+                  className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              {isOpen && (
+                <div className="absolute top-full mt-2 w-full bg-white border border-gray-100 rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto animate-in fade-in slide-in-from-top-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelected(cat);
+                        setIsOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-900 text-sm font-bold text-slate-600 transition"
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        {/* -------------------- SEARCHBAR -------------------- */}
-        <div className="max-[520px]:w-full w-[30%]">
-          <input
-            type="text"
-            placeholder="Search an ad..."
-            className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
-          focus:border-blue-800 focus:ring-2 focus:ring-blue-800
-          transition-colors ease-in-out duration-300"
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-          />
+
+            {/* Search Input */}
+            <div className="relative w-full sm:w-80 group">
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-900"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="What are you looking for?"
+                className="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 focus:border-blue-800 focus:ring-4 focus:ring-blue-50 transition-all outline-none font-medium"
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+              />
+            </div>
+          </div>
         </div>
       </div>
-      {/* ==================== ADS ==================== */}
-      <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-5">
-        {filteredAds.map((ad) => {
-          const isFav = favorites.some((item) => item.id === ad.id);
 
-          return (
-            <Link key={ad.id} to={`/${formatCategory(ad.category)}/${ad.id}`}>
-              <div className="border-2 border-blue-800 rounded-lg p-1">
-                <div className="relative">
-                  <img src={ad.image} alt="IMG" className="w-full rounded-md" />
-
-                  <div
+      <div className="max-w-7xl mx-auto px-4">
+        {filteredAds.length > 0 ? (
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+            {filteredAds.map((ad) => {
+              const isFav = favorites.some((item) => item.id === ad.id);
+              return (
+                <Link
+                  key={ad.id}
+                  to={`/ad/${ad.category.toLowerCase().replace(/\s/g, "-")}/${ad.id}`}
+                  className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-blue-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300 relative"
+                >
+                  {/* Favorite Button */}
+                  <button
                     onClick={(e) => {
                       e.preventDefault();
                       handleFavorite(ad);
                     }}
-                    className={`absolute top-2 right-2 grid place-items-center w-10 h-10 
-                      backdrop-blur-md z-10 cursor-pointer rounded-full transition-all duration-300
-                      ${
-                        isFav
-                          ? "bg-blue-900 text-white"
-                          : "bg-white/50 text-gray-700 hover:bg-blue-900 hover:text-white hover:shadow-lg hover:shadow-blue-900/50 hover:-translate-y-0.5"
-                      }
-                    `}
+                    className={`absolute top-3 right-3 z-20 p-2 rounded-full transition-all duration-300 ${
+                      isFav
+                        ? "bg-blue-900 text-white shadow-lg"
+                        : "bg-white/80 backdrop-blur text-gray-700 hover:bg-white hover:text-red-500 shadow-sm"
+                    }`}
                   >
-                    <Heart fill={isFav ? "currentColor" : "none"} />
+                    <Heart
+                      size={18}
+                      fill={isFav ? "currentColor" : "none"}
+                      strokeWidth={2.5}
+                    />
+                  </button>
+
+                  {/* Image */}
+                  <div className="h-48 overflow-hidden bg-gray-100">
+                    <img
+                      src={ad.image}
+                      alt={ad.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
-                </div>
 
-                <div className="mt-3 px-2">
-                  <h5 className="font-medium text-gray-400">{ad.category}</h5>
+                  {/* Card Body */}
+                  <div className="p-5">
+                    <span className="text-[10px] font-black text-blue-900 uppercase tracking-widest">
+                      {ad.category}
+                    </span>
+                    <h3 className="text-md font-bold text-slate-800 mt-1 line-clamp-2 h-12">
+                      {ad.title}
+                    </h3>
 
-                  <h3 className="text-lg font-medium text-gray-700 line-clamp-2">
-                    {ad.title}
-                  </h3>
-
-                  <div className="mt-3 flex items-center gap-2">
-                    <div className="grid place-items-center w-8.75 h-8.75 bg-orange-100/40 rounded-full text-blue-800">
-                      <MapPin size={18} />
+                    <div className="mt-4 flex items-center gap-2 text-gray-400">
+                      <MapPin size={14} className="text-orange-600" />
+                      <span className="text-xs font-bold uppercase tracking-tighter">
+                        {ad.location}
+                      </span>
                     </div>
-                    <h1 className="sm:text-sm text-xs text-gray-400 font-medium">
-                      {ad.location}
-                    </h1>
+
+                    <div className="mt-5 pt-4 border-t border-gray-50">
+                      <p className="text-xs font-black text-gray-400 uppercase tracking-widest leading-none">
+                        Price
+                      </p>
+                      <h2 className="text-xl font-black text-blue-900">
+                        PKR {ad.price.toLocaleString()}
+                      </h2>
+                    </div>
                   </div>
-
-                  <hr className="my-3 border border-gray-300" />
-
-                  <h2 className="text-center text-blue-800 font-semibold text-2xl">
-                    {ad.price}
-                  </h2>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-32 bg-white rounded-3xl border border-dashed border-gray-200">
+            <FilterX className="mx-auto text-gray-300 mb-4" size={48} />
+            <h3 className="text-xl font-bold text-slate-800">
+              No matches found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your filters or search keywords.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
