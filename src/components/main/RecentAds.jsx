@@ -1,7 +1,13 @@
 import axios from "axios";
 import { Heart, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { io } from "socket.io-client";
+
+const SOCKET_URL = "https://pak-deals-backend.vercel.app";
+const socket = io(SOCKET_URL, {
+  transports: ["websocket"],
+});
 
 function RecentAds() {
   const [favorites, setFavorites] = useState([]);
@@ -10,12 +16,11 @@ function RecentAds() {
   const [ads, setAds] = useState([]);
   const userId = localStorage.getItem("id");
 
-  const fetchUserAds = () => {
+  // 2. Wrap fetchUserAds in useCallback so it can be used in useEffect safely
+  const fetchUserAds = useCallback(() => {
     setLoading(true);
     axios
-      .get(
-        `https://pak-deals-backend.vercel.app/api/ads/all-user-ads/${userId}`,
-      )
+      .get(`${SOCKET_URL}/api/ads/all-user-ads/${userId}`)
       .then((response) => {
         const res = response?.data?.data || {};
         const formatAd = (ad) => ({
@@ -37,12 +42,24 @@ function RecentAds() {
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  };
+  }, [userId]);
+
+  // 3. WebSocket Listener
+  useEffect(() => {
+    socket.on("global_ads_update", (data) => {
+      console.log("Global update received:", data.message);
+      fetchUserAds();
+    });
+
+    return () => {
+      socket.off("global_ads_update");
+    };
+  }, [fetchUserAds]);
 
   useEffect(() => {
     setFavorites(JSON.parse(localStorage.getItem("favoriteAds")) || []);
     fetchUserAds();
-  }, []);
+  }, [fetchUserAds]);
 
   const handleFavorite = (ad) => {
     const isFav = favorites.find((item) => item.id === ad.id);
@@ -62,7 +79,6 @@ function RecentAds() {
 
   return (
     <section className="section py-8">
-      {/* 1. Header: Kept underline but made it cleaner */}
       <div className="mb-8">
         <h1 className="sm:text-3xl text-2xl font-bold text-[#202020] relative inline-block">
           Recently Posted Ads
@@ -70,7 +86,7 @@ function RecentAds() {
         </h1>
       </div>
 
-      {/* 2. Tabs: Kept original pill-box structure, just softened colors */}
+      {/* TABS CONTROLS */}
       <div className="mb-10 flex flex-wrap items-center justify-center gap-2 bg-white shadow-md p-2 border border-gray-200 rounded-4xl w-fit mx-auto sm:mx-0">
         {[
           { id: "all", label: "All" },
@@ -93,7 +109,6 @@ function RecentAds() {
         ))}
       </div>
 
-      {/* 3. Ads Grid: Kept original 4-column structure */}
       {loading ? (
         <p className="text-center py-10 font-medium text-gray-500">
           Loading your ads...
@@ -108,7 +123,6 @@ function RecentAds() {
                 to={`/ad/${ad.table_name}/${ad.id}`}
                 className="group"
               >
-                {/* Card: Kept the border-2 border-blue-800 you had */}
                 <div className="border-2 border-blue-800 rounded-2xl p-2 bg-white hover:shadow-xl transition-all duration-300">
                   <div className="relative overflow-hidden rounded-xl">
                     <img
@@ -116,7 +130,6 @@ function RecentAds() {
                       alt="Ad"
                       className="w-full aspect-4/3 object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    {/* Favorite Button: Kept original position */}
                     <div
                       onClick={(e) => {
                         e.preventDefault();
@@ -140,7 +153,6 @@ function RecentAds() {
                       {ad.title}
                     </h3>
 
-                    {/* Location: Kept the circle-icon style */}
                     <div className="mt-4 flex items-center gap-2">
                       <div className="flex items-center justify-center w-8 h-8 bg-blue-50 rounded-full text-blue-800">
                         <MapPin size={16} />
@@ -152,7 +164,6 @@ function RecentAds() {
 
                     <hr className="my-4 border-gray-100" />
 
-                    {/* Price: Kept centered large blue text */}
                     <h2 className="text-center text-blue-800 font-extrabold text-2xl tracking-tight">
                       PKR {ad.price}
                     </h2>

@@ -255,10 +255,6 @@ function AdsDetailPage() {
                   >
                     <MessageCircle size={20} /> WHATSAPP CHAT
                   </Link>
-
-                  <button className="flex items-center w-full gap-3 justify-center py-4 bg-blue-900 rounded-xl text-white hover:bg-blue-800 transition-all font-black shadow-lg shadow-blue-100">
-                    CALL SELLER <MoveRight size={18} />
-                  </button>
                 </div>
               </div>
             </div>
