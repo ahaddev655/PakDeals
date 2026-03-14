@@ -45,8 +45,8 @@ function CategoryPage() {
 
   return (
     <div className="page">
-      <div className="flex items-center justify-between gap-3.5 mb-6">
-        <h1 className="text-[32px] font-semibold text-gray-700 capitalize">
+      <div className="sm:flex items-center justify-between gap-3.5 mb-6">
+        <h1 className="md:text-[32px] text-2xl font-semibold text-gray-700 capitalize sm:text-start text-center">
           {location.pathname.split("/")[2]?.replace(/_/g, " ")}
         </h1>
 
@@ -54,7 +54,7 @@ function CategoryPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-75 border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
+          className="sm:w-75 w-full border-2 border-gray-300 rounded-lg px-3 py-2 mt-1
           focus:border-blue-800 focus:ring-2 focus:ring-blue-800
           transition-colors ease-in-out duration-300"
           placeholder="Search..."

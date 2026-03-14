@@ -29,7 +29,7 @@ function UserPaymentComponent() {
   return (
     <div className="sm:px-6 px-2.5 py-6 bg-white rounded-lg shadow-lg border border-gray-200">
       {/* ==================== PAYMENTS HEADER ==================== */}
-      <div className="flex items-center justify-between gap-3.5">
+      <div className="sm:flex items-center justify-between gap-3.5">
         {/* -------------------- SEARCHBAR -------------------- */}
         <div className="relative">
           <Search className="absolute text-[#7f7f7f] top-2 left-2" />
@@ -38,11 +38,11 @@ function UserPaymentComponent() {
             placeholder="Search Payment Type"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-2 border-gray-200 rounded-md p-2 text-[15px] pl-10"
+            className="border-2 border-gray-200 rounded-md p-2 text-[15px] pl-10 sm:w-fit w-full"
           />
         </div>
         {/* -------------------- SORT DROPDOWN -------------------- */}
-        <div className="relative sm:mt-0 mt-4">
+        <div className="relative sm:mt-0 mt-4 text-end">
           <button
             onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
             className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md bg-white shadow-sm w-41.5"
@@ -50,7 +50,7 @@ function UserPaymentComponent() {
             {sortTabs.find((s) => s.key === selectedSort)?.label || "Sort"}
           </button>
           <div
-            className={`absolute top-full mt-2 left-0 w-40 bg-white shadow-lg border border-gray-200 p-1 rounded-md transition-all duration-300 origin-top transform ${
+            className={`absolute top-full mt-2 sm:left-0 right-0 w-40 bg-white shadow-lg border border-gray-200 p-1 rounded-md transition-all duration-300 origin-top transform ${
               sortDropdownToggle
                 ? "scale-y-100 opacity-100"
                 : "scale-y-0 opacity-0"

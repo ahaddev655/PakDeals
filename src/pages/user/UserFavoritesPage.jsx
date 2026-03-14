@@ -37,11 +37,11 @@ function UserFavoritesPage() {
   return (
     <div className="sm:px-6 px-2.5 py-6">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200">
-        <div className="flex items-center justify-between gap-5 py-4 px-7">
-          <h1 className="text-[32px] font-semibold text-gray-700">
+        <div className="sm:flex items-center justify-between gap-5 py-4 px-7">
+          <h1 className="sm:text-[32px] text-2xl font-semibold text-gray-700">
             My Favorites
           </h1>
-          <p className="text-[#303030] font-light">
+          <p className="text-[#303030] font-light sm:text-base text-sm mt-2 sm:mt-0">
             Lorem ipsum dolor sit amet, consectetur
           </p>
         </div>
@@ -131,10 +131,10 @@ function UserFavoritesPage() {
         ) : (
           <div className="flex items-center justify-center w-full h-[65vh]">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold text-gray-500">
+              <h2 className="sm:text-2xl text-xl font-semibold text-gray-500">
                 No favorites
               </h2>
-              <p className="text-gray-400 mt-2">
+              <p className="text-gray-400 mt-2 sm:text-base text-sm">
                 You haven't added any ads to favorites yet.
               </p>
             </div>

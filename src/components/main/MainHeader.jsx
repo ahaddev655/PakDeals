@@ -94,18 +94,21 @@ function MainHeader() {
           <div className="flex items-center gap-3">
             <Link
               to={"/favorites"}
+              onClick={() => setOffCanvasToggle(false)}
               className="hover:bg-blue-900/60 cursor-pointer hover:text-blue-800 text-white transition-colors ease-in-out duration-200 w-8 h-8 rounded-sm grid place-items-center"
             >
               <Heart />
             </Link>
             <Link
               to={"/user-dashboard/"}
+              onClick={() => setOffCanvasToggle(false)}
               className="hover:bg-blue-900/60 hover:text-blue-800 text-white transition-colors ease-in-out duration-200 w-8 h-8 rounded-sm grid place-items-center cursor-pointer"
             >
               <User />
             </Link>
             <Link to={"/add-ad"}>
               <button
+                onClick={() => setOffCanvasToggle(false)}
                 type="button"
                 className="bg-white rounded-md hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-900/50 py-2 px-8 font-medium hover:rounded-4xl hover:bg-blue-900 hover:text-white transition-all ease-linear duration-200"
               >

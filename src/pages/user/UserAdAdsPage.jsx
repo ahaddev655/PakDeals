@@ -43,7 +43,7 @@ function UserAdAdsPage() {
         <h1 className="sm:text-4xl text-3xl font-black! font-montserrat">
           Post Your Ad
         </h1>
-        <p className="text-lg mt-1 font-medium text-gray-600">
+        <p className="sm:text-lg mt-1 font-medium text-gray-600">
           Lorem ipsum dolor sit amet consectetur.
         </p>
       </div>

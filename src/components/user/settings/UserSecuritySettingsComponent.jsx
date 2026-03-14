@@ -130,7 +130,7 @@ function UserSecuritySettingsComponent() {
         {/* ==================== TOAST CONTAINER ==================== */}
         <ToastContainer position="top-right" autoClose={2500} theme="light" />
         {/* ==================== NEW AND CONFIRM PASSWORD ==================== */}
-        <div className="flex items-center gap-3">
+        <div className="flex md:flex-row flex-col items-center gap-3">
           {inputComponent(
             "New Password",
             data.newPassword,
@@ -150,7 +150,7 @@ function UserSecuritySettingsComponent() {
         </div>
 
         {/* -------------------- SUBMIT BUTTONS -------------------- */}
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex md:flex-row flex-col items-center justify-center gap-3">
           <button
             type="submit"
             className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"

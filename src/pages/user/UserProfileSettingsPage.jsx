@@ -53,7 +53,7 @@ function UserProfileSettingsPage() {
   }, []);
   return (
     <div className="sm:px-6 px-2.5 py-6">
-      <div className="flex justify-center gap-6">
+      <div className="md:flex justify-center gap-6">
         <div className="lg:w-[30%] w-full rounded-lg space-y-6">
           {/* -------------------- PROFILE -------------------- */}
           <div className="w-full bg-white shadow-md rounded-lg p-3.75">
@@ -86,7 +86,7 @@ function UserProfileSettingsPage() {
             )}
           </div>
           {/* -------------------- NAVIGATION TABS -------------------- */}
-          <div className="w-full bg-white shadow-md rounded-lg p-3.75 space-y-0.75">
+          <div className="w-full bg-white shadow-md rounded-lg p-3.75 space-y-0.75 md:mb-0 mb-6">
             {tabs.map((tab, i) => {
               const Icon = tab.icon;
               return (

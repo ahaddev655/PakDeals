@@ -209,7 +209,7 @@ function UserBuisnessSettingsComponent() {
             </div>
 
             {/* ==================== BUISNESS CATEGORY & TYPE ==================== */}
-            <div className="flex items-center justify-center gap-5">
+            <div className="flex md:flex-row flex-col items-center justify-center gap-5">
               {/* -------------------- BUISNESS CATEGORY -------------------- */}
               {selectComponent(
                 "Select Buisness Category",
@@ -229,7 +229,7 @@ function UserBuisnessSettingsComponent() {
             </div>
 
             {/* -------------------- SUBMIT BUTTONS -------------------- */}
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex md:flex-row flex-col items-center justify-center gap-3">
               <button
                 type="submit"
                 className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"

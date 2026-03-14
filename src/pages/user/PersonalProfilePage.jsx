@@ -51,7 +51,7 @@ function PersonalProfilePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 min-w-xl">
+      <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 md:w-xl w-full">
         {loading ? (
           <p className="text-center font-semibold text-xl text-gray-600">
             Loading...

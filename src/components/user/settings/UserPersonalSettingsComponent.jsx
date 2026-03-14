@@ -43,7 +43,7 @@ function UserPersonalSettingsComponent() {
     required,
   ) => {
     return (
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full md:mt-0 mt-3">
         <label htmlFor={name} className="font-medium text-gray-700">
           {label}
           {required === true ? <span className="text-red-600"> *</span> : ""}
@@ -238,7 +238,7 @@ function UserPersonalSettingsComponent() {
               theme="light"
             />
             {/* ==================== FIRST & LAST NAME ==================== */}
-            <div className="flex items-center justify-center gap-5">
+            <div className="md:flex items-center justify-center gap-5">
               {/* -------------------- FIRST NAME -------------------- */}
               {inputComponent(
                 "First Name",
@@ -260,7 +260,7 @@ function UserPersonalSettingsComponent() {
             </div>
 
             {/* ==================== EMAIL & MOBILE NUMBER ==================== */}
-            <div className="flex items-center justify-center gap-5">
+            <div className="md:flex items-center justify-center gap-5">
               {/* -------------------- EMAIL -------------------- */}
               {inputComponent(
                 "Email Address",
@@ -282,7 +282,7 @@ function UserPersonalSettingsComponent() {
             </div>
 
             {/* ==================== COUNTRY & CITY ==================== */}
-            <div className="flex items-center justify-center gap-5">
+            <div className="md:flex items-center justify-center gap-5">
               {/* -------------------- COUNTRY -------------------- */}
               {selectComponent(
                 "Select Country",
@@ -312,7 +312,7 @@ function UserPersonalSettingsComponent() {
             )}
 
             {/* -------------------- SUBMIT BUTTONS -------------------- */}
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex md:flex-row flex-col items-center justify-center gap-3">
               <button
                 type="submit"
                 className="flex items-center gap-3 py-3 px-6 bg-blue-800 w-full rounded-md text-white font-medium hover:bg-blue-900 transition-colors duration-300 ease-in-out"
