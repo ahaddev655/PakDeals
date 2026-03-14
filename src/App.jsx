@@ -29,11 +29,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUserPage from "./pages/admin/AdminUserPage";
 import AdminAdsPage from "./pages/admin/AdminAdsPage";
-import AdminAdAdsPage from "./pages/admin/AdminAdAdsPage";
-import AdminFavoritesPage from "./pages/admin/AdminFavoritesPage";
 import AdminPaymentsPage from "./pages/admin/AdminPaymentsPage";
-import AdminProfileSettingsPage from "./pages/admin/AdminProfileSettingsPage";
-import AdminPersonalProfilePage from "./pages/admin/AdminPersonalProfilePage";
 
 function App() {
   const router = createBrowserRouter([
@@ -155,11 +151,11 @@ function App() {
         },
         {
           path: "add-ad",
-          element: <AdminAdAdsPage />,
+          element: <UserAdAdsPage />,
         },
         {
           path: "favorites",
-          element: <AdminFavoritesPage />,
+          element: <UserFavoritesPage />,
         },
         {
           path: "payments",
@@ -167,11 +163,11 @@ function App() {
         },
         {
           path: "profile-settings",
-          element: <AdminProfileSettingsPage />,
+          element: <UserProfileSettingsPage />,
         },
         {
           path: "profile",
-          element: <AdminPersonalProfilePage />,
+          element: <PersonalProfilePage />,
         },
       ],
     },

@@ -1,5 +1,5 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
 import React from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   CircleUserRound,
   CreditCard,
@@ -7,173 +7,122 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
-  MessageCircle,
   Plus,
   UserIcon,
   X,
 } from "lucide-react";
 
-function AdminSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
-  const links = [
-    { icon: LayoutDashboard, text: "Dashboard", link: "/87b27389/" },
-    { icon: UserIcon, text: "Users Management", link: "/87b27389/users" },
-    {
-      icon: Megaphone,
-      text: "Ads Management",
-      link: "/87b27389/ads",
-    },
-    {
-      icon: Heart,
-      text: "My Favorites",
-      link: "/87b27389/favorites",
-    },
-    { icon: Plus, text: "Add Ads", link: "/87b27389/add-ad" },
-    {
-      icon: CreditCard,
-      text: "Payments",
-      link: "/87b27389/payments",
-    },
-    {
-      icon: CircleUserRound,
-      text: "Profile Settings",
-      link: "/87b27389/profile-settings",
-    },
-  ];
+// Move links outside to prevent re-creation on every render
+const ADMIN_LINKS = [
+  { icon: LayoutDashboard, text: "Dashboard", link: "/87b27389/" },
+  { icon: UserIcon, text: "Users Management", link: "/87b27389/users" },
+  { icon: Megaphone, text: "Ads Management", link: "/87b27389/ads" },
+  { icon: Heart, text: "My Favorites", link: "/87b27389/favorites" },
+  { icon: Plus, text: "Add Ads", link: "/87b27389/add-ad" },
+  { icon: CreditCard, text: "Payments", link: "/87b27389/payments" },
+  {
+    icon: CircleUserRound,
+    text: "Profile Settings",
+    link: "/87b27389/profile-settings",
+  },
+];
 
+function AdminSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const navigate = useNavigate();
 
-  const userLogOut = (e) => {
+  const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem("token");
-    localStorage.removeItem("id");
-    localStorage.removeItem("role");
+    localStorage.clear(); // Cleans up token, id, and role in one go
     navigate("/login");
   };
-  return (
-    <>
-      {/* SIDEBAR */}
-      <div className="sm:w-73.25 w-full bg-black min-h-screen flex-col lg:flex hidden">
-        <div className="text-center p-6">
-          <Link
-            to="/"
-            className="text-white text-4xl font-bold font-montserrat tracking-wider"
-          >
-            PakDeals
-          </Link>
-        </div>
-        <hr className="my-5 border border-white rounded-full opacity-100" />
 
-        {/* NAVLINKS */}
-        <ul className="p-6">
-          {links.map((link, i) => {
-            const Icon = link.icon;
-            return (
-              <li key={i}>
-                <NavLink
-                  to={link.link}
-                  end
-                  className={({ isActive }) =>
-                    `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
-                      isActive
-                        ? "bg-blue-700 text-white shadow-lg shadow-blue-500/40"
-                        : "hover:bg-blue-50/7 hover:text-white group text-gray-300/70"
-                    }`
-                  }
-                >
-                  <Icon
-                    className="group-hover:scale-105 transition-transform ease-in-out duration-300 font-semibold"
-                    strokeWidth={1.25}
-                  />
-                  <span className="text-[15px] font-medium!">{link.text}</span>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
+  // Reusable NavLink style logic
+  const navLinkClasses = ({ isActive }) =>
+    `flex items-center gap-4 rounded-xl p-4 transition-all duration-300 group ${
+      isActive
+        ? "bg-blue-700 text-white shadow-lg shadow-blue-500/20"
+        : "text-gray-400 hover:bg-white/5 hover:text-white"
+    }`;
 
-        {/* LOGOUT BUTTON */}
-        <div className="p-6 text-gray-400 border-t mt-auto border-[#ffffff33]">
-          <button
-            type="button"
-            onClick={userLogOut}
-            className="flex items-center w-full gap-3 bg-white/18 p-4 rounded-lg transition-all ease-in-out duration-300 border border-transparent hover:border-blue-600 hover:bg-blue-600/20 hover:text-white hover:scale-102"
-          >
-            <LogOut />
-            <h1 className="font-medium">Logout</h1>
-          </button>
+  // Shared Sidebar Content to avoid duplication
+  const SidebarContent = ({ isMobile = false }) => (
+    <div className="flex flex-col h-full">
+      {isMobile && (
+        <div className="flex justify-end p-2">
+          <X
+            className="text-white cursor-pointer hover:rotate-90 transition-transform duration-300"
+            onClick={() => setOffCanvasToggle(false)}
+          />
         </div>
+      )}
+
+      <div className="text-center py-8 px-6">
+        <Link to="/" className="text-white text-3xl font-bold tracking-tighter">
+          Pak<span className="text-blue-500">Deals</span>
+        </Link>
       </div>
 
-      {/* OFFCANVAS */}
+      <nav className="flex-1 px-4 space-y-1">
+        {ADMIN_LINKS.map((item, i) => (
+          <NavLink
+            key={i}
+            to={item.link}
+            end
+            onClick={() => isMobile && setOffCanvasToggle(false)}
+            className={navLinkClasses}
+          >
+            <item.icon
+              size={20}
+              strokeWidth={(isActive) => (isActive ? 2 : 1.5)}
+            />
+            <span className="text-sm font-medium">{item.text}</span>
+          </NavLink>
+        ))}
+      </nav>
+
+      <div className="p-4 border-t border-white/10">
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full gap-3 p-4 rounded-xl text-gray-400 hover:text-white hover:bg-red-500/10 hover:border-red-500/50 border border-transparent transition-all duration-300 group"
+        >
+          <LogOut
+            size={20}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          <span className="font-semibold text-sm">Logout</span>
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden lg:flex flex-col w-72 bg-[#0a0a0a] min-h-screen border-r border-white/5 sticky top-0">
+        <SidebarContent />
+      </aside>
+
+      {/* MOBILE OFFCANVAS */}
       <div
-        className={`fixed top-0 left-0 w-full h-full z-50 bg-black/50 backdrop-blur-md lg:hidden transition-opacity ease-in-out duration-300 ${
-          offCanvasToggle ? "opacity-100" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-500 ${
+          offCanvasToggle ? "visible" : "invisible"
         }`}
       >
+        {/* Backdrop */}
         <div
-          className={`w-full min-[610px]:w-73.25 overflow-auto bg-black h-screen origin-top-left flex flex-col shadow-[4px_0_24px_#0000004d] p-6 transition-transform duration-300 ease-in-out ${
-            offCanvasToggle ? "scale-x-100" : "scale-x-0"
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${
+            offCanvasToggle ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setOffCanvasToggle(false)}
+        />
+
+        {/* Drawer */}
+        <div
+          className={`absolute top-0 left-0 w-72 h-full bg-[#0a0a0a] shadow-2xl transition-transform duration-500 ease-out ${
+            offCanvasToggle ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="text-end ml-auto mb-4">
-            <X
-              strokeWidth={2.75}
-              className="text-white cursor-pointer"
-              onClick={() => setOffCanvasToggle(false)}
-            />
-          </div>
-
-          {/* HEADING */}
-          <div className="text-center">
-            <Link
-              to="/"
-              className="text-white text-4xl font-bold font-montserrat tracking-wider"
-            >
-              PakDeals
-            </Link>
-          </div>
-          <hr className="my-5 border border-white rounded-full opacity-100" />
-
-          {/* NAVLINKS */}
-          <ul>
-            {links.map((link, i) => {
-              const Icon = link.icon;
-              return (
-                <li key={i}>
-                  <NavLink
-                    to={link.link}
-                    onClick={() => setOffCanvasToggle(false)}
-                    end
-                    className={({ isActive }) =>
-                      `flex items-center gap-4 rounded-xl p-4 transition-colors ease-in-out duration-300 ${
-                        isActive
-                          ? "bg-blue-800 text-white"
-                          : "hover:bg-blue-50/7 hover:text-white group text-gray-300/70"
-                      }`
-                    }
-                  >
-                    <Icon
-                      className="group-hover:scale-105 transition-transform ease-in-out duration-300 font-semibold text-[15px]"
-                      strokeWidth={1}
-                    />
-                    {link.text}
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* LOGOUT BUTTON */}
-          <div className="p-6 text-gray-400 border-t mt-auto border-[#ffffff33]">
-            <button
-              type="button"
-              onClick={userLogOut}
-              className="flex items-center w-full gap-3 bg-white/18 p-4 rounded-lg transition-all ease-in-out duration-300 border border-transparent hover:border-blue-600 hover:bg-blue-600/20 hover:text-white hover:scale-102"
-            >
-              <LogOut />
-              <h1 className="font-medium">Logout</h1>
-            </button>
-          </div>
+          <SidebarContent isMobile />
         </div>
       </div>
     </>

@@ -97,7 +97,7 @@ function UserDataChartComponent({
   const series = [activeListings, soldListings, pendingListings];
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full col-span-2">
+    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full">
       <div className="mb-6">
         <h2 className="text-lg font-black text-slate-800 tracking-tight">
           Listing Analytics
