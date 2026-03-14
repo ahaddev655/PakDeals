@@ -8,6 +8,7 @@ import axios from "axios";
 function UserDashboardPage() {
   // ==================== AUTH CHECK ====================
   const userToken = localStorage.getItem("token");
+  const [userName, setUserName] = useState("");
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
 
@@ -31,26 +32,41 @@ function UserDashboardPage() {
 
   // ==================== API FETCHING ====================
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://pak-deals-backend.vercel.app/api/ads/all-ads",
-        );
-        const data = response.data;
+    const fetchDashboardData = () => {
+      setLoading(true);
 
-        setStats({
-          total: data.all_ads || 0,
-          active: data.active_ads || 0,
-          pending: data.pending_ads || 0,
-          sold: data.sold_ads || 0,
+      axios
+        .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
+        .then((response) => {
+          const data = response.data;
+          setStats({
+            total: data.all_ads || 0,
+            active: data.active_ads || 0,
+            pending: data.pending_ads || 0,
+            sold: data.sold_ads || 0,
+          });
+        })
+        .catch((error) => {
+          console.error("ADS FETCH API ERROR:", error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-      } catch (error) {
-        console.error("ADS FETCH API ERROR:", error);
-      } finally {
-        setLoading(false);
-      }
     };
+
+    axios
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
+      )
+      .then((response) => {
+        setUserName(response.data.user.firstName + " " + response.data.user.lastName);
+      })
+      .catch((error) => {
+        console.error(
+          "Navbar Fetch Error:",
+          error?.response?.data?.error || "Error",
+        );
+      });
 
     fetchDashboardData();
   }, []);
@@ -68,7 +84,7 @@ function UserDashboardPage() {
           </h1>
           <p className="text-slate-500 font-medium mt-1">
             Welcome back,{" "}
-            <span className="text-slate-900 font-bold">Ali Tufan</span>. Here is
+            <span className="text-slate-900 font-bold">{userName}</span>. Here is
             what's happening today.
           </p>
         </div>

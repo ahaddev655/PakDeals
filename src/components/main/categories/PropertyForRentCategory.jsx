@@ -154,29 +154,36 @@ function PropertyForRentCategory({
     setFormData((p) => ({ ...p, images: [...p.images, ...files].slice(0, 5) }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+
     const form = new FormData();
     Object.keys(formData).forEach((key) => {
-      if (key === "images")
+      if (key === "images") {
         formData.images.forEach((img) => form.append("images", img));
-      else if (key === "features")
+      } else if (key === "features") {
         form.append(key, formData.features.join(", "));
-      else form.append(key, formData[key]?.label || formData[key]);
+      } else {
+        form.append(key, formData[key]?.label || formData[key]);
+      }
     });
 
-    try {
-      const res = await axios.post(
+    axios
+      .post(
         `https://pak-deals-backend.vercel.app/api/ads/add-property-rent-ad/${userId}`,
         form,
-      );
-      toast.success(res?.data?.message || "Listing published!");
-    } catch {
-      toast.error("Submission failed");
-    } finally {
-      setLoading(false);
-    }
+      )
+      .then((res) => {
+        toast.success(res?.data?.message || "Listing published!");
+      })
+      .catch((error) => {
+        console.error("Submission error:", error);
+        toast.error("Submission failed");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

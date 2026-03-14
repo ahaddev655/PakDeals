@@ -55,6 +55,15 @@ function AdsDetailPage() {
         const ad = data?.ad_details;
         if (!ad) return;
 
+        let parsedFeatures = [];
+        if (ad.features) {
+          try {
+            parsedFeatures = JSON.parse(ad.features);
+          } catch (e) {
+            parsedFeatures = ad.features.split(",").map((f) => f.trim());
+          }
+        }
+
         setAdDetails({
           ...ad,
           _tableName: tableName,
@@ -65,8 +74,12 @@ function AdsDetailPage() {
           type: ad.subCategory || "",
           postDate: ad.created_at ? ad.created_at.slice(0, 10) : "",
           number: ad.sellerContact || "",
-          images: ad.images ? JSON.parse(ad.images) : [],
-          features: ad.features ? JSON.parse(ad.features) : [],
+          images: ad.images
+            ? typeof ad.images === "string"
+              ? JSON.parse(ad.images)
+              : ad.images
+            : [],
+          features: parsedFeatures,
           name: ad.sellerName || "",
         });
       })

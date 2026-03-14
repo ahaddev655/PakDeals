@@ -45,10 +45,21 @@ function RecentAds() {
   }, []);
 
   const handleFavorite = (ad) => {
-    const isFav = favorites.find((item) => item.id === ad.id);
-    const updated = isFav
-      ? favorites.filter((i) => i.id !== ad.id)
-      : [...favorites, ad];
+    const currentFavs = JSON.parse(localStorage.getItem("favoriteAds")) || [];
+
+    const isAlreadyFav = currentFavs.some(
+      (item) => item.id === ad.id && item.table_name === ad.table_name,
+    );
+
+    let updated;
+    if (isAlreadyFav) {
+      updated = currentFavs.filter(
+        (i) => !(i.id === ad.id && i.table_name === ad.table_name),
+      );
+    } else {
+      updated = [...currentFavs, ad];
+    }
+
     setFavorites(updated);
     localStorage.setItem("favoriteAds", JSON.stringify(updated));
   };
@@ -93,7 +104,6 @@ function RecentAds() {
         ))}
       </div>
 
-      {/* 3. Ads Grid: Kept original 4-column structure */}
       {loading ? (
         <p className="text-center py-10 font-medium text-gray-500">
           Loading your ads...
@@ -101,14 +111,15 @@ function RecentAds() {
       ) : (
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
           {filteredAds.map((ad) => {
-            const isFav = favorites.some((item) => item.id === ad.id);
+            const isFav = favorites.some(
+              (item) => item.id === ad.id && item.table_name === ad.table_name,
+            );
             return (
               <Link
                 key={ad.id}
                 to={`/ad/${ad.table_name}/${ad.id}`}
                 className="group"
               >
-                {/* Card: Kept the border-2 border-blue-800 you had */}
                 <div className="border-2 border-blue-800 rounded-2xl p-2 bg-white hover:shadow-xl transition-all duration-300">
                   <div className="relative overflow-hidden rounded-xl">
                     <img
@@ -116,7 +127,6 @@ function RecentAds() {
                       alt="Ad"
                       className="w-full aspect-4/3 object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    {/* Favorite Button: Kept original position */}
                     <div
                       onClick={(e) => {
                         e.preventDefault();
@@ -140,7 +150,6 @@ function RecentAds() {
                       {ad.title}
                     </h3>
 
-                    {/* Location: Kept the circle-icon style */}
                     <div className="mt-4 flex items-center gap-2">
                       <div className="flex items-center justify-center w-8 h-8 bg-blue-50 rounded-full text-blue-800">
                         <MapPin size={16} />
@@ -152,7 +161,6 @@ function RecentAds() {
 
                     <hr className="my-4 border-gray-100" />
 
-                    {/* Price: Kept centered large blue text */}
                     <h2 className="text-center text-blue-800 font-extrabold text-2xl tracking-tight">
                       PKR {ad.price}
                     </h2>

@@ -12,13 +12,25 @@ function FavoritesPage() {
   }, []);
 
   const handleFavorite = (ad) => {
+    // Filter by ID to remove
     const updatedFavorites = favorites.filter((item) => item.id !== ad.id);
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteAds", JSON.stringify(updatedFavorites));
   };
 
+  // Helper to handle image source variety
+  const getDisplayImage = (ad) => {
+    if (ad.img) return ad.img;
+    if (ad.images) {
+      const parsed =
+        typeof ad.images === "string" ? JSON.parse(ad.images) : ad.images;
+      return parsed[0];
+    }
+    return "https://via.placeholder.com/400x300?text=No+Image";
+  };
+
   return (
-    <div className="md:px-12 sm:px-6 px-4 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto py-12 min-h-[80vh]">
+    <div className="md:px-12 sm:px-6 px-4 w-full max-w-7xl mx-auto py-12 min-h-[80vh]">
       {/* -------------------- HEADER -------------------- */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-gray-100 pb-6">
         <div>
@@ -61,15 +73,16 @@ function FavoritesPage() {
           {favorites.map((ad) => (
             <Link
               key={ad.id}
-              to={`/ad/${ad.table_name || ad.source_table}/${ad.id}`}
+              // Ensure we use the correct table name property
+              to={`/ad/${ad.table_name || ad.source_table || "_tableName"}/${ad.id}`}
               className="group"
             >
               <div className="bg-white border-2 border-blue-800/10 rounded-2xl p-2 hover:border-blue-800 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-300 h-full flex flex-col">
                 {/* Image Container */}
                 <div className="relative overflow-hidden rounded-xl aspect-4/3">
                   <img
-                    src={ad.img}
-                    alt={ad.title}
+                    src={getDisplayImage(ad)}
+                    alt={ad.title || ad.adTitle}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
 
@@ -77,6 +90,7 @@ function FavoritesPage() {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       handleFavorite(ad);
                     }}
                     className="absolute top-3 right-3 grid place-items-center w-9 h-9 
@@ -90,18 +104,18 @@ function FavoritesPage() {
                 {/* Info Container */}
                 <div className="mt-4 px-2 pb-2 grow flex flex-col">
                   <span className="text-[10px] uppercase tracking-widest font-black text-blue-500 bg-blue-50 px-2 py-1 rounded w-fit mb-2">
-                    {ad.category}
+                    {ad.category || ad.subCategory || "General"}
                   </span>
 
                   <h3 className="text-lg font-bold text-gray-800 line-clamp-2 leading-tight group-hover:text-blue-900 transition-colors">
-                    {ad.title}
+                    {ad.title || ad.adTitle}
                   </h3>
 
                   <div className="mt-auto">
                     <div className="mt-4 flex items-center gap-2 text-gray-500">
                       <MapPin size={16} className="text-blue-800" />
                       <span className="text-xs font-semibold truncate">
-                        {ad.location}
+                        {ad.location || "Pakistan"}
                       </span>
                     </div>
 
@@ -110,7 +124,7 @@ function FavoritesPage() {
                         <span className="text-sm font-medium mr-1 text-blue-400">
                           PKR
                         </span>
-                        {Number(ad.price).toLocaleString()}
+                        {ad.price ? ad.price : "0"}
                       </h2>
                     </div>
                   </div>

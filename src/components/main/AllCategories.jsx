@@ -98,7 +98,7 @@ function AllCategories() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/ads/category-ads-count")
+      .get("https://pak-deals-backend.vercel.app/api/ads/category-ads-count")
       .then((response) => {
         const data = response.data;
         setAnimalsCount(data.animal_count.count);
