@@ -1,0 +1,92 @@
+{
+    "CATEGORY_FIELDS": {
+        "animal_ads": [
+            "Type",
+            "Sex",
+            "Breed",
+            "Age",
+            "Color",
+            "Vaccination Status"
+        ],
+        "bikes_ads": [
+            "Make",
+            "Model",
+            "Year",
+            "Engine Type",
+            "Engine Capacity",
+            "KM Driven",
+            "Condition",
+            "Ignition Type",
+            "Origin",
+            "Registration City"
+        ],
+        "books_ads": [
+            "Item Type",
+            "Genre",
+            "Author",
+            "Language",
+            "Format",
+            "Condition"
+        ],
+        "electronics_ads": [
+            "Type",
+            "Brand",
+            "Model",
+            "Condition",
+            "Warranty"
+        ],
+        "fashion_ads": [
+            "Type",
+            "Brand",
+            "Gender",
+            "Size",
+            "Color",
+            "Material",
+            "Condition"
+        ],
+        "furniture_ads": [
+            "Item Type",
+            "Brand",
+            "Material",
+            "Dimensions",
+            "Condition"
+        ],
+        "kids_ads": [
+            "Item Type",
+            "Brand",
+            "Age Group",
+            "Condition"
+        ],
+        "mobile_ads": [
+            "Brand",
+            "Condition"
+        ],
+        "motors_ads": [
+            "Make",
+            "Year",
+            "Color",
+            "Condition",
+            "Body/Fuel",
+            "Transmission",
+            "Body Type",
+            "Assembly",
+            "Document Status",
+            "Owners",
+            "Seats"
+        ],
+        "property_rent_ads": [
+            "Area Unit",
+            "Area Size",
+            "Bedrooms",
+            "Bathrooms",
+            "Number of Storeys",
+            "Furnished Status",
+            "Construction State"
+        ],
+        "property_sale_ads": [
+            "Area Unit",
+            "Area Type",
+            "Area"
+        ]
+    }
+}

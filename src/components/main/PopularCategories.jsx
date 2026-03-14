@@ -19,13 +19,13 @@ function PopularCategories() {
     {
       icon: House,
       adCount: "15",
-      title: "Property Sale",
+      title: "Property For Sale",
       link: "/category/property_sale_ads",
     },
     {
       icon: House,
       adCount: "15",
-      title: "Property Rent",
+      title: "Property For Rent",
       link: "/category/property_rent_ads",
     },
     {

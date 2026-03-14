@@ -238,7 +238,7 @@ function UserAdsComponent() {
           <button
             type="button"
             onClick={() => setSortDropdownToggle(!sortDropdownToggle)}
-            className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md w-35.25"
+            className="py-2 px-4 border border-gray-200 focus:border-blue-700 rounded-md xl:w-38 w-35.25"
           >
             {sortTabs.find((s) => s.key === selectedSort)?.label || "Sort"}
           </button>

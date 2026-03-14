@@ -72,7 +72,7 @@ function AllCategories() {
     {
       icon: Album,
       adCount: "45",
-      title: "Books & Sports Items",
+      title: "Books & Sports",
       link: "/category/books_ads",
     },
     {
