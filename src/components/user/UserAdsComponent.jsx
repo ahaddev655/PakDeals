@@ -12,14 +12,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import { io } from "socket.io-client";
-
-// Note: WebSockets require a persistent server, not Vercel.
-const SOCKET_URL = "https://pak-deals-backend.vercel.app";
-const socket = io(SOCKET_URL, {
-  transports: ["websocket"],
-  autoConnect: true,
-});
 
 function UserAdsComponent() {
   const [selectedNavTab, setSelectedNavTab] = useState("all-ads");
@@ -83,7 +75,7 @@ function UserAdsComponent() {
       setLoading(true);
       axios
         .get(
-          `${SOCKET_URL}/api/ads/all-user-ads-paginated/${userId}?page=${page}&per_page=${perPage}`,
+          `https://pak-deals-backend.vercel.app/api/ads/all-user-ads-paginated/${userId}?page=${page}&per_page=${perPage}`,
         )
         .then((res) => {
           const result = res?.data?.data || {};
@@ -98,39 +90,16 @@ function UserAdsComponent() {
     [userId, formatAd],
   );
 
-  // --- WebSocket Logic ---
-  useEffect(() => {
-    if (!userId) return;
-
-    socket.emit("join", { room: userId });
-
-    socket.on("ads_updated", (data) => {
-      console.log("Real-time update:", data.message);
-      fetchUserAds(currentPage);
-      toast.info("List updated in real-time");
-    });
-
-    return () => {
-      socket.off("ads_updated");
-    };
-  }, [userId, currentPage, fetchUserAds]);
-
   useEffect(() => {
     if (userId) fetchUserAds(1);
   }, [userId, fetchUserAds]);
 
   const updateAdStatus = (id, tableName, newStatus) => {
-    const endpoint = `${SOCKET_URL}/api/status/${newStatus}/${tableName}/${id}`;
+    const endpoint = `https://pak-deals-backend.vercel.app/api/status/${newStatus}/${tableName}/${id}`;
     axios
       .put(endpoint)
       .then(() => {
         toast.success(`Status updated to ${newStatus}`);
-
-        socket.emit("notify_change", {
-          userId,
-          message: `Ad ${id} status changed`,
-        });
-
         setAds((prev) =>
           prev.map((ad) => (ad.id === id ? { ...ad, status: newStatus } : ad)),
         );
@@ -143,7 +112,9 @@ function UserAdsComponent() {
     if (!window.confirm("Are you sure you want to delete this ad?")) return;
     const loadId = toast.loading("Removing ad...");
     axios
-      .delete(`${SOCKET_URL}/api/ads/delete-user-ad/${id}/${tableName}`)
+      .delete(
+        `https://pak-deals-backend.vercel.app/api/ads/delete-user-ad/${id}/${tableName}`,
+      )
       .then(() => {
         toast.update(loadId, {
           render: "Ad deleted",
@@ -151,9 +122,6 @@ function UserAdsComponent() {
           isLoading: false,
           autoClose: 2000,
         });
-
-        // Notify server of deletion
-        socket.emit("notify_change", { userId, message: "Ad deleted" });
         fetchUserAds(currentPage);
       })
       .catch(() =>
@@ -194,7 +162,7 @@ function UserAdsComponent() {
             Sort: {selectedSort === "by-name" ? "Name" : "Year"}
           </button>
           {sortDropdownToggle && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-100 shadow-xl rounded-xl z-30 p-1">
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-100 shadow-xl rounded-xl z-30 p-1 animate-in fade-in slide-in-from-top-2">
               <button
                 onClick={() => {
                   setSelectedSort("by-name");
@@ -311,12 +279,14 @@ function UserAdsComponent() {
                         <button
                           onClick={() => setSelectedAd(ad)}
                           className="p-2 hover:bg-blue-50 text-slate-400 hover:text-blue-700 rounded-lg transition-all"
+                          title="View Details"
                         >
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => removeAd(ad.id, ad.table_name)}
                           className="p-2 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-lg transition-all"
+                          title="Delete Listing"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -328,8 +298,14 @@ function UserAdsComponent() {
           </table>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <PackageOpen size={48} className="text-slate-300 mb-4" />
+            <div className="bg-slate-50 p-6 rounded-full mb-4">
+              <PackageOpen size={48} className="text-slate-300" />
+            </div>
             <h3 className="text-lg font-bold text-slate-900">No Ads Found</h3>
+            <p className="text-slate-500 max-w-xs mx-auto">
+              You haven't posted any ads yet or no results match your search
+              criteria.
+            </p>
           </div>
         )}
       </div>
@@ -344,17 +320,17 @@ function UserAdsComponent() {
             <button
               disabled={currentPage === 1}
               onClick={() => fetchUserAds(currentPage - 1)}
-              className="p-2 disabled:opacity-30 hover:bg-white rounded-lg border border-slate-200"
+              className="p-2 disabled:opacity-30 hover:bg-white rounded-lg border border-transparent hover:border-slate-200 transition-all"
             >
               <ChevronLeft size={20} />
             </button>
-            <span className="px-4 py-2 bg-white border border-slate-200 rounded-lg font-black text-sm text-blue-800">
+            <span className="px-4 py-2 bg-white border border-slate-200 rounded-lg font-black text-sm text-blue-800 shadow-sm">
               {currentPage} / {totalPages}
             </span>
             <button
               disabled={currentPage === totalPages}
               onClick={() => fetchUserAds(currentPage + 1)}
-              className="p-2 disabled:opacity-30 hover:bg-white rounded-lg border border-slate-200"
+              className="p-2 disabled:opacity-30 hover:bg-white rounded-lg border border-transparent hover:border-slate-200 transition-all"
             >
               <ChevronRight size={20} />
             </button>
@@ -362,26 +338,118 @@ function UserAdsComponent() {
         </div>
       )}
 
-      {/* DETAIL MODAL (Briefly included for context) */}
+      {/* DETAIL MODAL */}
       {selectedAd && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+          className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setSelectedAd(null)}
         >
           <div
-            className="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl"
+            className="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-8">
-              <h2 className="text-2xl font-black mb-4">{selectedAd.title}</h2>
+            <div className="relative h-64">
+              <img
+                src={selectedAd.img}
+                className="w-full h-full object-cover"
+                alt=""
+              />
               <button
-                onClick={() =>
-                  updateAdStatus(selectedAd.id, selectedAd.table_name, "sold")
-                }
-                className="w-full py-4 bg-amber-600 text-white rounded-xl font-black"
+                onClick={() => setSelectedAd(null)}
+                className="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full backdrop-blur-md hover:bg-black transition-all"
               >
-                Mark as Sold
+                <X size={20} />
               </button>
+            </div>
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 mb-1 leading-tight">
+                    {selectedAd.title}
+                  </h2>
+                  <p className="text-blue-700 font-black text-xl">
+                    Rs {Number(selectedAd.price).toLocaleString()}
+                  </p>
+                </div>
+                <span
+                  className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${statusStyles[selectedAd.status]}`}
+                >
+                  {selectedAd.status}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="bg-slate-50 p-3 rounded-xl">
+                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">
+                    Category
+                  </p>
+                  <p className="text-sm font-bold text-slate-700">
+                    {selectedAd.category}
+                  </p>
+                </div>
+                <div className="bg-slate-50 p-3 rounded-xl">
+                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">
+                    Listed On
+                  </p>
+                  <p className="text-sm font-bold text-slate-700">
+                    {selectedAd.createdAt}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Link
+                  to={`/ad/${selectedAd.table_name}/${selectedAd.id}`}
+                  className="block"
+                >
+                  <button className="w-full py-4 bg-blue-900 text-white font-black uppercase tracking-widest rounded-xl hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20">
+                    View Public Listing
+                  </button>
+                </Link>
+                {selectedAd.status !== "sold" && (
+                  <div className="grid grid-cols-2 gap-3">
+                    {selectedAd.status === "inactive" || selectedAd.status === "pending" ? (
+                      <button
+                        onClick={() =>
+                          updateAdStatus(
+                            selectedAd.id,
+                            selectedAd.table_name,
+                            "active",
+                          )
+                        }
+                        className="py-3 bg-emerald-600 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-emerald-700"
+                      >
+                        Set Active
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          updateAdStatus(
+                            selectedAd.id,
+                            selectedAd.table_name,
+                            "inactive",
+                          )
+                        }
+                        className="py-3 bg-slate-600 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-700"
+                      >
+                        Set Inactive
+                      </button>
+                    )}
+                    <button
+                      onClick={() =>
+                        updateAdStatus(
+                          selectedAd.id,
+                          selectedAd.table_name,
+                          "sold",
+                        )
+                      }
+                      className="py-3 bg-amber-600 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-amber-700"
+                    >
+                      Mark Sold
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
