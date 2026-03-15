@@ -1,10 +1,12 @@
-import { Heart, MapPin, Eye, Trash2 } from "lucide-react";
+import { Heart, MapPin, Eye, Trash2, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function UserFavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [selectedAd, setSelectedAd] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // ==================== AUTH CHECK ====================
   const userToken = localStorage.getItem("token");
@@ -18,17 +20,64 @@ function UserFavoritesPage() {
     }
   }, [userToken, userId, navigate]);
 
-  // ==================== FETCH FAVORITES ====================
+  // ==================== FETCH FAVORITES LOGIC ====================
   useEffect(() => {
-    const raw = localStorage.getItem("favoriteAds");
-    setFavorites(raw ? JSON.parse(raw) : []);
+    const fetchFavoriteDetails = async () => {
+      const saved = JSON.parse(localStorage.getItem("favoriteAds")) || [];
+
+      if (saved.length === 0) {
+        setFavorites([]);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const promises = saved.map((ad) =>
+          axios.get(
+            `https://pak-deals-backend.vercel.app/api/ads/fetch-ad-details/${ad.table_name}/${ad.id}`,
+          ),
+        );
+
+        const results = await Promise.allSettled(promises);
+
+        const fetchedAds = results
+          .filter((res) => res.status === "fulfilled")
+          .map((res) => {
+            const adData = res.value.data.ad_details;
+            const imageArray = JSON.parse(adData.images || "[]");
+
+            return {
+              id: adData.id,
+              table_name: adData.table_name,
+              source_table: adData.source_table,
+              image: imageArray[0],
+              title: adData.adTitle,
+              category: adData.subCategory,
+              price: Number(adData.price),
+              location: adData.location,
+            };
+          });
+
+        setFavorites(fetchedAds);
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFavoriteDetails();
   }, []);
 
-  // ==================== HANDLE FAVORITES ====================
+  // ==================== HANDLE REMOVE FAVORITE ====================
   const handleFavorite = (ad) => {
     const updatedFavorites = favorites.filter((item) => item.id !== ad.id);
     setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteAds", JSON.stringify(updatedFavorites));
+
+    const localData = JSON.parse(localStorage.getItem("favoriteAds")) || [];
+    const filteredLocal = localData.filter((item) => item.id !== ad.id);
+    localStorage.setItem("favoriteAds", JSON.stringify(filteredLocal));
   };
 
   return (
@@ -49,7 +98,14 @@ function UserFavoritesPage() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        {favorites.length > 0 ? (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-32">
+            <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-4" />
+            <p className="text-slate-500 font-bold animate-pulse">
+              Loading your wishlist...
+            </p>
+          </div>
+        ) : favorites.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-slate-900 text-white">
@@ -81,11 +137,10 @@ function UserFavoritesPage() {
                         #{favorite.id}
                       </span>
                     </td>
-
                     <td className="py-5 px-6">
                       <div>
                         <div className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">
-                          {favorite.title.length > 40
+                          {favorite.title?.length > 40
                             ? favorite.title.slice(0, 40) + "..."
                             : favorite.title}
                         </div>
@@ -95,22 +150,19 @@ function UserFavoritesPage() {
                         </div>
                       </div>
                     </td>
-
                     <td className="py-5 px-6">
                       <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
                         {favorite.category}
                       </span>
                     </td>
-
                     <td className="py-5 px-6">
                       <div className="text-sm font-black text-slate-900">
                         <span className="text-blue-600 text-[10px] mr-1">
                           Rs
                         </span>
-                        {favorite.price.toLocaleString()}
+                        {favorite.price?.toLocaleString()}
                       </div>
                     </td>
-
                     <td className="py-5 px-6">
                       <div className="flex items-center gap-2">
                         <button
@@ -154,25 +206,20 @@ function UserFavoritesPage() {
 
         {/* -------------------- ADS PREVIEW POPUP -------------------- */}
         <div
-          className={`fixed inset-0 z-100 flex items-center justify-center p-4 transition-all duration-500 ${
-            selectedAd ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+          className={`fixed inset-0 z-100 flex items-center justify-center p-4 transition-all duration-500 ${selectedAd ? "opacity-100 visible" : "opacity-0 invisible"}`}
         >
           <div
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
             onClick={() => setSelectedAd(null)}
           />
-
           <div
-            className={`relative bg-white w-full max-w-lg rounded-4xl overflow-hidden shadow-2xl transition-all duration-500 transform ${
-              selectedAd ? "scale-100 translate-y-0" : "scale-95 translate-y-12"
-            }`}
+            className={`relative bg-white w-full max-w-lg rounded-4xl overflow-hidden shadow-2xl transition-all duration-500 transform ${selectedAd ? "scale-100 translate-y-0" : "scale-95 translate-y-12"}`}
           >
             {selectedAd && (
               <div className="flex flex-col">
                 <div className="relative h-64 overflow-hidden">
                   <img
-                    src={selectedAd.img}
+                    src={selectedAd.image}
                     alt="Ad"
                     className="w-full h-full object-cover"
                   />
@@ -180,7 +227,6 @@ function UserFavoritesPage() {
                     {selectedAd.category}
                   </div>
                 </div>
-
                 <div className="p-8">
                   <div className="mb-6">
                     <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight mb-2">
@@ -191,7 +237,6 @@ function UserFavoritesPage() {
                       {selectedAd.location}
                     </div>
                   </div>
-
                   <div className="grid grid-cols-2 gap-4 mb-8">
                     <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                       <span className="block text-[10px] font-black text-slate-400 uppercase mb-1">
@@ -199,7 +244,7 @@ function UserFavoritesPage() {
                       </span>
                       <p className="text-xl font-black text-blue-600">
                         <span className="text-xs mr-1">Rs</span>
-                        {selectedAd.price.toLocaleString()}
+                        {selectedAd.price?.toLocaleString()}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
@@ -211,11 +256,10 @@ function UserFavoritesPage() {
                       </p>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setSelectedAd(null)}
-                      className="flex-1 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all active:scale-95"
+                      className="flex-1 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all"
                     >
                       Close Preview
                     </button>
@@ -223,7 +267,7 @@ function UserFavoritesPage() {
                       to={`/ad/${selectedAd.source_table || selectedAd.table_name}/${selectedAd.id}`}
                       className="flex-2"
                     >
-                      <button className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all active:scale-95">
+                      <button className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all">
                         View Full Listing
                       </button>
                     </Link>

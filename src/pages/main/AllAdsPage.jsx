@@ -112,7 +112,7 @@ function AllAdsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
-        {isLoading ? (
+        {!isLoading ? (
           filteredAds.length > 0 ? (
             <>
               <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">

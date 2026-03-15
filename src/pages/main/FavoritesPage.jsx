@@ -1,14 +1,44 @@
 import { Heart, MapPin, ShoppingBag } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    // Load favorites from local storage
     const saved = JSON.parse(localStorage.getItem("favoriteAds")) || [];
-    setFavorites(saved);
+    setFavorites([]);
+
+    saved.forEach((ad) => {
+      axios
+        .get(
+          `https://pak-deals-backend.vercel.app/api/ads/fetch-ad-details/${ad.table_name}/${ad.id}`,
+        )
+        .then((response) => {
+          const adData = response.data.ad_details;
+          const imageArray = JSON.parse(adData.images);
+          const displayImage = imageArray[0];
+
+          const formattedAd = {
+            id: adData.id,
+            table_name: adData.table_name,
+            source_table: adData.source_table,
+            image: displayImage,
+            title: adData.adTitle,
+            category: adData.subCategory,
+            price: Number(adData.price).toLocaleString(),
+            location: adData.location,
+          };
+
+          console.log(formattedAd);
+
+          setFavorites((prevFavorites) => [...prevFavorites, formattedAd]);
+        })
+        .catch((error) => {
+          console.log("Error fetching ad:", error);
+        });
+    });
   }, []);
 
   const handleFavorite = (ad) => {
@@ -16,18 +46,6 @@ function FavoritesPage() {
     const updatedFavorites = favorites.filter((item) => item.id !== ad.id);
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteAds", JSON.stringify(updatedFavorites));
-  };
-
-  // Helper to handle image source variety
-  const getDisplayImage = (ad) => {
-    if (ad.img) return ad.img;
-    if (ad.image) return ad.image;
-    if (ad.images) {
-      const parsed =
-        typeof ad.images === "string" ? JSON.parse(ad.images) : ad.images;
-      return parsed[0];
-    }
-    return "https://via.placeholder.com/400x300?text=No+Image";
   };
 
   return (
@@ -81,7 +99,7 @@ function FavoritesPage() {
                 {/* Image Container */}
                 <div className="relative overflow-hidden rounded-xl aspect-4/3">
                   <img
-                    src={getDisplayImage(ad)}
+                    src={ad.image || ad.images || ad.img}
                     alt={ad.title || ad.adTitle}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
