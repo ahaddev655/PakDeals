@@ -99,7 +99,6 @@ function SignUpComponent() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
       <ToastContainer position="top-right" autoClose={1500} theme="colored" />
 
-      {/* Card: Maintained border-2 border-blue-800 */}
       <div className="w-full max-w-lg bg-white border-2 border-blue-800 rounded-2xl shadow-2xl p-8 transition-all duration-300">
         <div className="text-center mb-6">
           <h2 className="text-blue-800 text-4xl font-black font-montserrat tracking-tighter">

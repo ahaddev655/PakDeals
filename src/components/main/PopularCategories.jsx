@@ -66,7 +66,6 @@ function PopularCategories() {
 
   return (
     <section className="section py-8">
-      {/* Header: Exact same style as All Categories for consistency */}
       <div className="mb-8">
         <h1 className="sm:text-3xl text-2xl font-bold text-[#202020] relative inline-block">
           Popular Categories

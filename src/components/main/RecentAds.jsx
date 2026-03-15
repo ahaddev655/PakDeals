@@ -12,9 +12,7 @@ function RecentAds() {
   const fetchUserAds = () => {
     setLoading(true);
     axios
-      .get(
-        "https://pak-deals-backend.vercel.app/api/ads/all-user-ads"
-      )
+      .get("https://pak-deals-backend.vercel.app/api/ads/all-user-ads")
       .then((response) => {
         const res = response?.data?.data || {};
         const formatAd = (ad) => ({
@@ -56,7 +54,12 @@ function RecentAds() {
         (i) => !(i.id === ad.id && i.table_name === ad.table_name),
       );
     } else {
-      updated = [...currentFavs, ad];
+      const leanAd = {
+        id: ad.id,
+        table_name: ad.table_name,
+        source_table: ad.source_table,
+      };
+      updated = [...currentFavs, leanAd];
     }
 
     setFavorites(updated);
@@ -72,7 +75,6 @@ function RecentAds() {
 
   return (
     <section className="section py-8">
-      {/* 1. Header: Kept underline but made it cleaner */}
       <div className="mb-8">
         <h1 className="sm:text-3xl text-2xl font-bold text-[#202020] relative inline-block">
           Recently Posted Ads
@@ -80,7 +82,6 @@ function RecentAds() {
         </h1>
       </div>
 
-      {/* 2. Tabs: Kept original pill-box structure, just softened colors */}
       <div className="mb-10 flex flex-wrap items-center justify-center gap-2 bg-white shadow-md p-2 border border-gray-200 rounded-4xl w-fit mx-auto sm:mx-0">
         {[
           { id: "all", label: "All" },

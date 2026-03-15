@@ -1,7 +1,6 @@
 import React from "react";
 
 function GoogleBanner() {
-  // Replace this with your actual image URL once uploaded to assets
   const bannerSrc = "/assets/Google Banner dummy.png";
 
   return (
@@ -23,7 +22,6 @@ function GoogleBanner() {
               className="h-auto lg:w-182 md:w-117 w-full object-contain transition-transform duration-500 group-hover:scale-[1.01]"
             />
 
-            {/* Subtle overlay on hover to make it feel interactive */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
           </div>
         </div>

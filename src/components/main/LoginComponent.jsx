@@ -74,7 +74,10 @@ function LoginComponent() {
               toast.success("Google Login Successful!");
               setTimeout(() => navigate("/user-dashboard/"), 2000);
             })
-            .catch((error) => toast.error("Google sync failed."));
+            .catch((error) => {
+              console.error(error);
+              toast.error(error?.response?.data?.error || "Google sync failed.");
+            });
         })
         .catch(() => toast.error("Google data fetch failed"));
     },
@@ -85,9 +88,7 @@ function LoginComponent() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <ToastContainer position="top-right" autoClose={1500} theme="colored" />
 
-      {/* Card Structure: Maintained border-2 border-blue-800 */}
       <div className="w-full max-w-md bg-white border-2 border-blue-800 rounded-2xl shadow-2xl p-8 transform transition-all duration-300">
-        {/* Heading: Kept the PakDeals Branding */}
         <div className="text-center mb-8">
           <h2 className="text-blue-800 text-4xl font-black font-montserrat tracking-tighter">
             PakDeals<span className="text-orange-500">.</span>
@@ -145,7 +146,6 @@ function LoginComponent() {
             </div>
           </div>
 
-          {/* SUBMIT BUTTON: Kept your hover logic */}
           <button
             type="submit"
             disabled={loading}
@@ -163,7 +163,6 @@ function LoginComponent() {
             <div className="h-px w-full bg-gray-200"></div>
           </div>
 
-          {/* GOOGLE BUTTON: Refined to look cleaner */}
           <button
             type="button"
             onClick={() => handleGoogleSubmit()}

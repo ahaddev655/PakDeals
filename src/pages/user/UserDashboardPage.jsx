@@ -36,7 +36,7 @@ function UserDashboardPage() {
       setLoading(true);
 
       axios
-        .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
+        .get("https://pak-deals-backend.vercel.app/api/ads/all-ads-count")
         .then((response) => {
           const data = response.data;
           setStats({
