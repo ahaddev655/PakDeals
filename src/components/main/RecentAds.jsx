@@ -8,13 +8,12 @@ function RecentAds() {
   const [tabToggle, setTabToggle] = useState("all");
   const [loading, setLoading] = useState(false);
   const [ads, setAds] = useState([]);
-  const userId = localStorage.getItem("id");
 
   const fetchUserAds = () => {
     setLoading(true);
     axios
       .get(
-        `https://pak-deals-backend.vercel.app/api/ads/all-user-ads/${userId}`,
+        "https://pak-deals-backend.vercel.app/api/ads/all-user-ads"
       )
       .then((response) => {
         const res = response?.data?.data || {};
