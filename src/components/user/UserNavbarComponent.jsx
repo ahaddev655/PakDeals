@@ -7,10 +7,10 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const [navbarToggle, setNavbarToggle] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [fetching, setFetching] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const navigate = useNavigate();
   const userId = localStorage.getItem("id");
-  const userRole = localStorage.getItem("role");
 
   const links = [
     { text: "Home", link: "/" },
@@ -32,6 +32,10 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
       )
       .then((response) => {
         setFirstName(response.data.user.firstName);
+        if (response.data.user.role === "admin") {
+          setIsAdmin(true);
+          return;
+        }
       })
       .catch((error) => {
         console.error(
@@ -82,9 +86,9 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
             </li>
           ))}
 
-          {userRole === "admin" && (
+          {isAdmin && (
             <li>
-              <NavLink to="/87b27389/" className={navLinkClass}>
+              <NavLink to="/control-center-9xA7kLm2/" className={navLinkClass}>
                 Admin Panel
               </NavLink>
             </li>

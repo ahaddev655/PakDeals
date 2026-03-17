@@ -70,7 +70,6 @@ function LoginComponent() {
               const user = response.data.user;
               localStorage.setItem("token", user.token);
               localStorage.setItem("id", user.id);
-              localStorage.setItem("role", user.role);
               toast.success("Google Login Successful!");
               setTimeout(() => navigate("/user-dashboard/"), 2000);
             })

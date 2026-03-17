@@ -6,19 +6,6 @@ import AdminChartsComponent from "../../components/admin/AdminChartsComponent";
 import AdminRecentActivitiesComponent from "../../components/admin/AdminRecentActivitiesComponent";
 
 function AdminDashboardPage() {
-  const userToken = localStorage.getItem("token");
-  const userId = localStorage.getItem("id");
-  const userRole = localStorage.getItem("role");
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (userToken && userId && userRole === "admin") {
-      return;
-    }
-    setTimeout(() => {
-      navigate("/user-dashboard");
-    }, 500);
-  }, []);
-
   const [totalListings, setTotalListings] = useState(Number(null));
   const [activeListings, setActiveListings] = useState(Number(null));
   const [blogs, setBlogs] = useState(Number(null));
@@ -29,7 +16,7 @@ function AdminDashboardPage() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/admin/fetch-count")
+      .get("https://pak-deals-backend.vercel.app/api/admin/fetch-count")
       .then((response) => {
         console.log(response.data);
         const data = response.data;

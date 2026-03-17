@@ -48,7 +48,6 @@ function SignUpComponent() {
         const user = response.data;
         localStorage.setItem("token", user.token);
         localStorage.setItem("id", user.id);
-        localStorage.setItem("role", user.role);
         toast.success(response?.data?.message || "Account Created!");
 
         setTimeout(() => navigate("/user-dashboard/"), 2000);

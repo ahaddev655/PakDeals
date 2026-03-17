@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
 import {
   Eye,
   Trash2,
@@ -7,17 +7,13 @@ import {
   ChevronRight,
   User,
   Search,
+  Users,
 } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
 
 function AdminUserPage() {
-  const userToken = localStorage.getItem("token");
-  const userId = localStorage.getItem("id");
-  const userRole = localStorage.getItem("role");
-  const navigate = useNavigate();
-
   const [selectedNavTab, setSelectedNavTab] = useState("all-users");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedSort, setSelectedSort] = useState("by-name");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -25,57 +21,25 @@ function AdminUserPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [perPage] = useState(20);
 
   useEffect(() => {
-    if (!(userToken && userId && userRole === "admin")) {
-      setTimeout(() => navigate("/user-dashboard"), 500);
-      return;
-    }
     setLoading(true);
-    setTimeout(() => {
-      const dummyUsers = [
-        {
-          id: 1,
-          firstName: "Ahmad",
-          lastName: "Khan",
-          email: "ahmad@example.com",
-          role: "admin",
-          is_google_user: true,
-          mobileNumber: "+923001234567",
-          country: "Pakistan",
-          city: "Lahore",
-          address: "Gulberg III",
-          company: "Tech Solutions",
-          description: "Lead Developer",
-          buisnessCategory: "IT Services",
-          buisnessType: "Software",
-          created_at: "2024-01-15",
-        },
-        {
-          id: 2,
-          firstName: "Sara",
-          lastName: "Ahmed",
-          email: "sara@web.com",
-          role: "user",
-          is_google_user: false,
-          mobileNumber: "+923219876543",
-          country: "Pakistan",
-          city: "Karachi",
-          address: "DHA Phase 6",
-          company: "Retail Co",
-          description: "Frequent Buyer",
-          buisnessCategory: "E-commerce",
-          buisnessType: "Retail",
-          created_at: "2023-11-20",
-        },
-      ];
-      setUsers(dummyUsers);
-      setTotalUsers(dummyUsers.length);
-      setTotalPages(1);
-      setLoading(false);
-    }, 800);
-  }, [userToken, userId, userRole, navigate]);
+    axios
+      .get("https://pak-deals-backend.vercel.app/api/admin/fetch-users")
+      .then((response) => {
+        const data = response.data.data;
+        setTotalPages(data.total_pages);
+        setTotalUsers(data.total);
+        setCurrentPage(data.page);
+        setUsers(data.users);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const tabs = [
     { key: "all-users", label: "All Users" },
@@ -88,6 +52,16 @@ function AdminUserPage() {
     user: "bg-blue-100 text-blue-600",
   };
 
+  const filteredUsers = useMemo(() => {
+    return users.filter((u) => {
+      const fullName = `${u.firstName} ${u.lastName}`.toLowerCase();
+      const matchesSearch = fullName.includes(searchQuery.toLowerCase());
+      const matchesTab =
+        selectedNavTab === "all-users" || u.role === selectedNavTab;
+      return matchesSearch && matchesTab;
+    });
+  }, [users, searchQuery, selectedNavTab]);
+
   const handlePageChange = (p) => {
     if (p < 1 || p > totalPages) return;
     setCurrentPage(p);
@@ -95,10 +69,28 @@ function AdminUserPage() {
   };
 
   const removeUser = (id) => {
-    if (window.confirm("Are you sure you want to remove this user?")) {
-      setUsers(users.filter((u) => u.id !== id));
-      if (selectedUser?.id === id) setSelectedUser(null);
-    }
+    if (!window.confirm("Are you sure you want to delete this ad?")) return;
+    const loadId = toast.loading("Removing ad...");
+    axios
+      .delete(
+        `https://pak-deals-backend.vercel.app/api/admin/delete-user/${id}`,
+      )
+      .then(() => {
+        toast.update(loadId, {
+          render: "User deleted",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+      })
+      .catch(() =>
+        toast.update(loadId, {
+          render: "Delete failed",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        }),
+      );
   };
 
   const getVisiblePages = () => {
@@ -107,8 +99,16 @@ function AdminUserPage() {
     return pages;
   };
 
+  const getEmptyMessage = () => {
+    if (searchQuery) return `No users found matching "${searchQuery}"`;
+    if (selectedNavTab === "admin") return "No administrator records found.";
+    if (selectedNavTab === "user") return "No regular user records found.";
+    return "The user database is currently empty.";
+  };
+
   return (
     <div className="p-6">
+      <ToastContainer position="top-right" autoClose={1500} theme="colored" />
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         {/* HEADER & FILTERS */}
         <div className="p-6 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -141,12 +141,13 @@ function AdminUserPage() {
           </div>
         </div>
 
-        {/* TABLE SECTION */}
+        {/* CONTENT SECTION */}
         {loading ? (
-          <p className="text-center text-sm text-gray-700 py-10">
-            Loading database records...
-          </p>
-        ) : users.length > 0 ? (
+          <div className="py-20 flex flex-col items-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm text-gray-500">Loading database records...</p>
+          </div>
+        ) : filteredUsers.length > 0 ? (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -162,7 +163,9 @@ function AdminUserPage() {
                     ].map((h, i) => (
                       <th
                         key={i}
-                        className={`font-semibold text-[#495057] py-4 px-6 text-sm ${i === 0 || i === 1 ? "text-start" : "text-center"}`}
+                        className={`font-semibold text-[#495057] py-4 px-6 text-sm ${
+                          i === 0 || i === 1 ? "text-start" : "text-center"
+                        }`}
                       >
                         {h}
                       </th>
@@ -170,60 +173,58 @@ function AdminUserPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users
-                    .filter((u) => {
-                      const matchesSearch = `${u.firstName} ${u.lastName}`
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase());
-                      const matchesTab =
-                        selectedNavTab === "all-users" ||
-                        u.role === selectedNavTab;
-                      return matchesSearch && matchesTab;
-                    })
-                    .map((user, i, arr) => (
-                      <tr
-                        key={user.id}
-                        className={`border-b hover:bg-gray-50 transition-colors ${i === arr.length - 1 ? "border-transparent" : "border-gray-200"}`}
-                      >
-                        <td className="py-4 px-6 text-sm text-gray-500">
-                          #{user.id}
-                        </td>
-                        <td className="py-4 px-6 text-[15px] font-medium text-gray-800">
-                          {user.firstName} {user.lastName}
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-600 text-center">
-                          {user.email}
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <span
-                            className={`text-[11px] uppercase font-bold px-3 py-1 rounded-full ${roleStyles[user.role]}`}
-                          >
-                            {user.role}
+                  {filteredUsers.map((user, i) => (
+                    <tr
+                      key={user.id}
+                      className={`border-b hover:bg-gray-50 transition-colors ${
+                        i === filteredUsers.length - 1
+                          ? "border-transparent"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <td className="py-4 px-6 text-sm text-gray-500">
+                        #{user.id}
+                      </td>
+                      <td className="py-4 px-6 text-[15px] font-medium text-gray-800">
+                        {user.firstName} {user.lastName}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-600 text-center">
+                        {user.email}
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <span
+                          className={`text-[11px] uppercase font-bold px-3 py-1 rounded-full ${
+                            roleStyles[user.role] || "bg-gray-100 text-gray-600"
+                          }`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        {user.is_google_user ? (
+                          <span className="text-green-600 text-sm font-medium">
+                            Yes
                           </span>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          {user.is_google_user ? (
-                            <span className="text-green-600 text-sm">Yes</span>
-                          ) : (
-                            <span className="text-gray-400 text-sm">No</span>
-                          )}
-                        </td>
-                        <td className="py-4 px-6 flex items-center justify-center gap-3">
-                          <div
-                            className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg cursor-pointer transition-colors"
-                            onClick={() => setSelectedUser(user)}
-                          >
-                            <Eye size={18} />
-                          </div>
-                          <div
-                            className="p-2 hover:bg-red-50 text-red-600 rounded-lg cursor-pointer transition-colors"
-                            onClick={() => removeUser(user.id)}
-                          >
-                            <Trash2 size={18} />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                        ) : (
+                          <span className="text-gray-400 text-sm">No</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-6 flex items-center justify-center gap-3">
+                        <button
+                          className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors"
+                          onClick={() => setSelectedUser(user)}
+                        >
+                          <Eye size={18} />
+                        </button>
+                        <button
+                          className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
+                          onClick={() => removeUser(user.id)}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -231,8 +232,8 @@ function AdminUserPage() {
             {/* PAGINATION */}
             <div className="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-sm text-gray-600">
-                Showing <span className="font-medium">1</span> to{" "}
-                <span className="font-medium">{users.length}</span> of{" "}
+                Showing{" "}
+                <span className="font-medium">{filteredUsers.length}</span> of{" "}
                 <span className="font-medium">{totalUsers}</span> users
               </div>
               <div className="flex items-center gap-2">
@@ -247,7 +248,11 @@ function AdminUserPage() {
                   <button
                     key={index}
                     onClick={() => handlePageChange(page)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium ${page === currentPage ? "bg-blue-800 text-white" : "border border-gray-300 text-gray-600"}`}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      page === currentPage
+                        ? "bg-blue-800 text-white"
+                        : "border border-gray-300 text-gray-600 hover:bg-gray-50"
+                    }`}
                   >
                     {page}
                   </button>
@@ -263,12 +268,30 @@ function AdminUserPage() {
             </div>
           </>
         ) : (
-          <p className="text-center text-sm text-gray-700 py-10">
-            No users found.
-          </p>
+          /* EMPTY STATE - Shows when tab/search has 0 results */
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <div className="bg-gray-50 p-6 rounded-full mb-4">
+              <Users size={48} className="text-gray-300" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">No Results</h3>
+            <p className="text-gray-500 max-w-xs mx-auto mt-1">
+              {getEmptyMessage()}
+            </p>
+            {(searchQuery || selectedNavTab !== "all-users") && (
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedNavTab("all-users");
+                }}
+                className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-800"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
         )}
 
-        {/* -------------------- UPDATED TRANSITION POPUP -------------------- */}
+        {/* USER DETAIL POPUP */}
         <div
           className={`fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300 ease-in-out ${
             selectedUser
@@ -289,11 +312,7 @@ function AdminUserPage() {
               <>
                 <div className="bg-blue-800 p-6 text-white flex items-center gap-4">
                   <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30 text-[32px] font-bold uppercase text-white">
-                    {selectedUser.firstName ? (
-                      selectedUser?.firstName?.charAt(0)
-                    ) : (
-                      <User size={32} />
-                    )}
+                    {selectedUser.firstName?.charAt(0) || <User size={32} />}
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">
@@ -311,7 +330,9 @@ function AdminUserPage() {
                     ["Mobile", selectedUser.mobileNumber],
                     [
                       "Location",
-                      `${selectedUser.city}, ${selectedUser.country}`,
+                      `${selectedUser.city || "N/A"}, ${
+                        selectedUser.country || "N/A"
+                      }`,
                     ],
                     ["Address", selectedUser.address],
                     ["Company", selectedUser.company],
@@ -329,7 +350,7 @@ function AdminUserPage() {
                         {label}
                       </p>
                       <p className="text-sm font-semibold text-gray-700 mt-1">
-                        {value || "N/A"}
+                        {value || `Not provided`}
                       </p>
                     </div>
                   ))}

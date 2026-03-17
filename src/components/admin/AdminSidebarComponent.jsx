@@ -13,16 +13,20 @@ import {
 } from "lucide-react";
 
 const ADMIN_LINKS = [
-  { icon: LayoutDashboard, text: "Dashboard", link: "/87b27389/" },
-  { icon: UserIcon, text: "Users Management", link: "/87b27389/users" },
-  { icon: Megaphone, text: "Ads Management", link: "/87b27389/ads" },
-  { icon: Heart, text: "My Favorites", link: "/87b27389/favorites" },
-  { icon: Plus, text: "Add Ads", link: "/87b27389/add-ad" },
-  { icon: CreditCard, text: "Payments", link: "/87b27389/payments" },
+  {
+    icon: LayoutDashboard,
+    text: "Dashboard",
+    link: "/control-center-9xA7kLm2/",
+  },
+  {
+    icon: UserIcon,
+    text: "Users Management",
+    link: "/control-center-9xA7kLm2/users",
+  },
   {
     icon: CircleUserRound,
     text: "Profile Settings",
-    link: "/87b27389/profile-settings",
+    link: "/control-center-9xA7kLm2/profile-settings",
   },
 ];
 
