@@ -3,7 +3,7 @@ import AdminAdsComponent from "./../../components/admin/AdminAdsComponent";
 
 function AdminAdsPage() {
   return (
-    <div>
+    <div className="sm:px-6 px-2.5 py-6">
       <AdminAdsComponent />
     </div>
   );

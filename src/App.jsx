@@ -29,6 +29,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUserPage from "./pages/admin/AdminUserPage";
 import AdminAdsPage from './pages/admin/AdminAdsPage';
+import AdminBlogsPage from './pages/admin/AdminBlogsPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -147,6 +148,10 @@ function App() {
         {
           path: "ads",
           element: <AdminAdsPage />,
+        },
+        {
+          path: "blogs",
+          element: <AdminBlogsPage />,
         },
         {
           path: "profile-settings",

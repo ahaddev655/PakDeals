@@ -109,7 +109,7 @@ function AdminUserComponent() {
     return "The user database is currently empty.";
   };
   return (
-    <div className="p-6">
+    <div>
       <ToastContainer position="top-right" autoClose={1500} theme="colored" />
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         {/* HEADER & FILTERS */}

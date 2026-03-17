@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
+  MessageSquareReply,
   UserIcon,
   X,
 } from "lucide-react";
@@ -24,6 +25,11 @@ const ADMIN_LINKS = [
     icon: Megaphone,
     text: "Ads Management",
     link: "/control-center-9xA7kLm2/ads",
+  },
+  {
+    icon: MessageSquareReply,
+    text: "Blogs Management",
+    link: "/control-center-9xA7kLm2/blogs",
   },
   {
     icon: CircleUserRound,
