@@ -28,6 +28,7 @@ import AdsDetailPage from "./pages/main/AdsDetailPage";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUserPage from "./pages/admin/AdminUserPage";
+import AdminAdsPage from './pages/admin/AdminAdsPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -142,6 +143,10 @@ function App() {
         {
           path: "users",
           element: <AdminUserPage />,
+        },
+        {
+          path: "ads",
+          element: <AdminAdsPage />,
         },
         {
           path: "profile-settings",

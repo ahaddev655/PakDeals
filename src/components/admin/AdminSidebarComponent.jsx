@@ -2,12 +2,9 @@ import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   CircleUserRound,
-  CreditCard,
-  Heart,
   LayoutDashboard,
   LogOut,
   Megaphone,
-  Plus,
   UserIcon,
   X,
 } from "lucide-react";
@@ -22,6 +19,11 @@ const ADMIN_LINKS = [
     icon: UserIcon,
     text: "Users Management",
     link: "/control-center-9xA7kLm2/users",
+  },
+  {
+    icon: Megaphone,
+    text: "Ads Management",
+    link: "/control-center-9xA7kLm2/ads",
   },
   {
     icon: CircleUserRound,
