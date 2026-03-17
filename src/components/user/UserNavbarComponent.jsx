@@ -7,7 +7,7 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const [navbarToggle, setNavbarToggle] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [fetching, setFetching] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const navigate = useNavigate();
   const userId = localStorage.getItem("id");

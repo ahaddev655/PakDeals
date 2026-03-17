@@ -75,7 +75,7 @@ function AdminAdsComponent() {
       setLoading(true);
       axios
         .get(
-          `https://pak-deals-backend.vercel.app/api/ads/all-user-ads-paginated/${userId}?page=${page}&per_page=${perPage}`,
+          `https://pak-deals-backend.vercel.app/api/admin/all-user-ads?page=${currentPage}&per_page=${perPage}`,
         )
         .then((res) => {
           const result = res?.data?.data || {};
@@ -303,8 +303,7 @@ function AdminAdsComponent() {
             </div>
             <h3 className="text-lg font-bold text-slate-900">No Ads Found</h3>
             <p className="text-slate-500 max-w-xs mx-auto">
-              You haven't posted any ads yet or no results match your search
-              criteria.
+              The users have not posted any ads
             </p>
           </div>
         )}
@@ -397,7 +396,7 @@ function AdminAdsComponent() {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="lg:flex items-center gap-3 lg:space-y-0 space-y-3">
                 <Link
                   to={`/ad/${selectedAd.table_name}/${selectedAd.id}`}
                   className="block"
@@ -406,50 +405,9 @@ function AdminAdsComponent() {
                     View Public Listing
                   </button>
                 </Link>
-                {selectedAd.status !== "sold" && (
-                  <div className="grid grid-cols-2 gap-3">
-                    {selectedAd.status === "inactive" ||
-                    selectedAd.status === "pending" ? (
-                      <button
-                        onClick={() =>
-                          updateAdStatus(
-                            selectedAd.id,
-                            selectedAd.table_name,
-                            "active",
-                          )
-                        }
-                        className="py-3 bg-emerald-600 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-emerald-700"
-                      >
-                        Set Active
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          updateAdStatus(
-                            selectedAd.id,
-                            selectedAd.table_name,
-                            "inactive",
-                          )
-                        }
-                        className="py-3 bg-slate-600 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-700"
-                      >
-                        Set Inactive
-                      </button>
-                    )}
-                    <button
-                      onClick={() =>
-                        updateAdStatus(
-                          selectedAd.id,
-                          selectedAd.table_name,
-                          "sold",
-                        )
-                      }
-                      className="py-3 bg-amber-600 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-amber-700"
-                    >
-                      Mark Sold
-                    </button>
-                  </div>
-                )}
+                <button className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95">
+                  View Public Listing
+                </button>
               </div>
             </div>
           </div>

@@ -6,13 +6,27 @@ import AdminChartsComponent from "../../components/admin/AdminChartsComponent";
 import AdminRecentActivitiesComponent from "../../components/admin/AdminRecentActivitiesComponent";
 
 function AdminDashboardPage() {
+  // ==================== AUTH CHECK ====================
+  const userToken = localStorage.getItem("token");
+  const userId = localStorage.getItem("id");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userToken || !userId) {
+      const timer = setTimeout(() => {
+        navigate("/signup");
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [userToken, userId, navigate]);
+  
+  // ==================== API CONFIGURATION ====================
   const [totalListings, setTotalListings] = useState(Number(null));
   const [activeListings, setActiveListings] = useState(Number(null));
   const [blogs, setBlogs] = useState(Number(null));
   const [users, setUsers] = useState(Number(null));
   const [loading, setLoading] = useState(true);
 
-  // ==================== API CONFIGURATION ====================
   useEffect(() => {
     setLoading(true);
     axios
