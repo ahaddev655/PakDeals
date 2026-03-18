@@ -56,13 +56,15 @@ function AdminUserComponent() {
   };
 
   const filteredUsers = useMemo(() => {
-    return users.filter((u) => {
-      const fullName = `${u.firstName} ${u.lastName}`.toLowerCase();
-      const matchesSearch = fullName.includes(searchQuery.toLowerCase());
-      const matchesTab =
-        selectedNavTab === "all-users" || u.role === selectedNavTab;
-      return matchesSearch && matchesTab;
-    });
+    return (
+      users?.filter((u) => {
+        const fullName = `${u?.firstName} ${u?.lastName}`.toLowerCase();
+        const matchesSearch = fullName?.includes(searchQuery.toLowerCase());
+        const matchesTab =
+          selectedNavTab === "all-users" || u.role === selectedNavTab;
+        return matchesSearch && matchesTab;
+      }) ?? []
+    );
   }, [users, searchQuery, selectedNavTab]);
 
   const handlePageChange = (p) => {
