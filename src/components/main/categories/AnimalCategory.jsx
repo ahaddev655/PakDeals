@@ -2,10 +2,12 @@ import { ChevronDown, Plus, X, Camera, Info } from "lucide-react";
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const DEFAULT_FILTER = (label) => ({ id: "", label });
   const userId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     subCategory: DEFAULT_FILTER("Select Sub Category"),
@@ -21,7 +23,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     features: [],
     breed: "",
     age: "",
-    color: "#1e40af", // Default blue
+    color: "#1e40af",
     images: [],
   });
 
@@ -114,7 +116,11 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       )
       .then((res) => {
         toast.success(res?.data?.message || "Ad Posted Successfully!");
-        // Reset Logic
+        localStorage.setItem("table_name", "animal_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((err) =>
         toast.error(err?.response?.data?.error || "Submission failed"),

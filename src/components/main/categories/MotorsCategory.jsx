@@ -12,9 +12,11 @@ import {
   User,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -123,6 +125,11 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       )
       .then((res) => {
         toast.success(res?.data?.message || "Motor ad posted successfully!");
+        localStorage.setItem("table_name", "motors_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch(() => toast.error("Something went wrong"))
       .finally(() => setLoading(false));

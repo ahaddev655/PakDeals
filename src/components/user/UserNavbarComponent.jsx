@@ -15,7 +15,6 @@ function UserNavbarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   const links = [
     { text: "Home", link: "/" },
     { text: "Ads", link: "/all-ads" },
-    { text: "Pricing", link: "/pricing" },
     { text: "Blogs", link: "/blogs" },
     { text: "Contact", link: "/contact" },
   ];

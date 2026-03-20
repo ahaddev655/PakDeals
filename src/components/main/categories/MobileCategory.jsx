@@ -10,9 +10,11 @@ import {
   User,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -85,7 +87,11 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       )
       .then((res) => {
         toast.success(res?.data?.message || "Mobile ad posted!");
-        // Reset logic here
+        localStorage.setItem("table_name", "mobile_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((err) =>
         toast.error(err?.response?.data?.error || "Error submitting ad"),

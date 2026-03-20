@@ -10,9 +10,11 @@ import {
   MapPin,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -114,7 +116,11 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       )
       .then((res) => {
         toast.success(res?.data?.message || "Kids ad posted successfully!");
-        // Reset form would go here
+        localStorage.setItem("table_name", "kids_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch(() => toast.error("Submission failed"))
       .finally(() => setLoading(false));

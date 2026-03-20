@@ -11,12 +11,14 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function FashionAndBeautyCategory({
   openDropdown,
   setOpenDropdown,
   addAd_data,
 }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -124,7 +126,11 @@ function FashionAndBeautyCategory({
       )
       .then((res) => {
         toast.success(res?.data?.message || "Fashion Ad Posted!");
-        // Optional: setFormData reset logic here
+        localStorage.setItem("table_name", "fashion_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((err) => toast.error("Submission failed"))
       .finally(() => setLoading(false));

@@ -10,8 +10,10 @@ import {
 } from "lucide-react";
 import { useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const DEFAULT_FILTER = (label) => ({ id: "", label });
   const fileInputRef = useRef(null);
@@ -120,7 +122,11 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       )
       .then((res) => {
         toast.success(res?.data?.message || "Bike Ad Posted!");
-        // Reset state logic here...
+        localStorage.setItem("table_name", "bikes_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((err) =>
         toast.error(err?.response?.data?.error || "Error posting ad"),

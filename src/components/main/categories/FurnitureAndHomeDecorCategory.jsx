@@ -11,12 +11,14 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function FurnitureAndHomeDecorCategory({
   openDropdown,
   setOpenDropdown,
   addAd_data,
 }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -122,7 +124,11 @@ function FurnitureAndHomeDecorCategory({
       )
       .then((res) => {
         toast.success(res?.data?.message || "Furniture Ad Posted!");
-        // Reset form logic here
+        localStorage.setItem("table_name", "furniture_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch(() => toast.error("Something went wrong"))
       .finally(() => setLoading(false));

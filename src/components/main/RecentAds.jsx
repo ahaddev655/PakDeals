@@ -12,7 +12,7 @@ function RecentAds() {
   const fetchUserAds = () => {
     setLoading(true);
     axios
-      .get("https://pak-deals-backend.vercel.app/api/ads/all-user-ads")
+      .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
       .then((response) => {
         const res = response?.data?.data || {};
         const formatAd = (ad) => ({

@@ -10,6 +10,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 function ElectronicsAndHomeAppliancesCategory({
@@ -17,6 +18,7 @@ function ElectronicsAndHomeAppliancesCategory({
   setOpenDropdown,
   addAd_data,
 }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -122,7 +124,11 @@ function ElectronicsAndHomeAppliancesCategory({
       )
       .then((res) => {
         toast.success(res?.data?.message || "Electronics Ad Posted!");
-        // Add reset logic if desired
+        localStorage.setItem("table_name", "electronics_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((err) =>
         toast.error(err?.response?.data?.error || "Submission failed"),

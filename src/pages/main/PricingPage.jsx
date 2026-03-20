@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Zap, ShieldCheck, Star, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function PricingPage() {
-  const [selectedPlan, setSelectedPlan] = useState(2);
+  const navigate = useNavigate();
 
   const discountedPrice = (price, discount) => {
     if (!discount) return price;
@@ -52,10 +53,25 @@ function PricingPage() {
     },
   ];
 
+  const [selectedPlanId, setSelectedPlanId] = useState(2);
+  const [selectedPlanData, setSelectedPlanData] = useState(offers[1]);
+  const table_name = localStorage.getItem("table_name");
+  const ad_id = localStorage.getItem("ad_id");
+
+  const handlePaymentTransfer = () => {
+    if (!selectedPlanData) return;
+
+    const duration = selectedPlanData.title.split(" ")[0];
+
+    localStorage.setItem("payment_date", duration);
+    localStorage.setItem("payment", selectedPlanData.price);
+
+    navigate(`/payment/${table_name}/${ad_id}`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-6 md:py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-8 md:mb-10">
           <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
             Boost Your Ad Reach
@@ -65,10 +81,9 @@ function PricingPage() {
           </p>
         </div>
 
-        {/* Pricing List */}
         <div className="space-y-3 md:space-y-4">
           {offers.map((offer) => {
-            const isSelected = selectedPlan === offer.id;
+            const isSelected = selectedPlanId === offer.id;
             return (
               <label
                 key={offer.id}
@@ -86,17 +101,16 @@ function PricingPage() {
                   id={`pricing${offer.id}`}
                   className="hidden"
                   checked={isSelected}
-                  onChange={() => setSelectedPlan(offer.id)}
+                  onChange={() => {
+                    setSelectedPlanId(offer.id);
+                    setSelectedPlanData(offer);
+                  }}
                 />
 
                 <div className="flex flex-row items-center justify-between gap-3">
-                  {/* Left Side: Icon + Title */}
                   <div className="flex items-center gap-3 md:gap-4 flex-1">
-                    {/* Icon Circle - Hidden on ultra-small mobile to save space if needed, but kept here for UI */}
                     <div
-                      className={`shrink-0 p-2 md:p-2.5 rounded-xl ${
-                        isSelected ? "bg-blue-50" : "bg-gray-50"
-                      }`}
+                      className={`shrink-0 p-2 md:p-2.5 rounded-xl ${isSelected ? "bg-blue-50" : "bg-gray-50"}`}
                     >
                       {offer.icon}
                     </div>
@@ -118,7 +132,6 @@ function PricingPage() {
                     </div>
                   </div>
 
-                  {/* Right Side: Pricing */}
                   <div className="text-right shrink-0">
                     {offer.discount && (
                       <div className="bg-green-100 text-green-700 text-[9px] md:text-[10px] font-black px-1.5 py-0.5 rounded-full inline-block mb-1">
@@ -127,9 +140,7 @@ function PricingPage() {
                     )}
                     <div className="flex flex-col items-end">
                       <span
-                        className={`text-lg md:text-xl font-black leading-none ${
-                          isSelected ? "text-blue-900" : "text-slate-800"
-                        }`}
+                        className={`text-lg md:text-xl font-black leading-none ${isSelected ? "text-blue-900" : "text-slate-800"}`}
                       >
                         Rs {Number(offer.price).toLocaleString()}
                       </span>
@@ -142,7 +153,6 @@ function PricingPage() {
                   </div>
                 </div>
 
-                {/* Selection indicator - Tablet/Desktop only for cleaner mobile look */}
                 {isSelected && (
                   <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 md:w-2 h-6 md:h-8 bg-blue-800 rounded-r-full hidden xs:block" />
                 )}
@@ -151,15 +161,29 @@ function PricingPage() {
           })}
         </div>
 
-        {/* Action Button */}
         <div className="mt-8 md:mt-10 bg-white p-4 md:p-6 rounded-3xl border border-gray-100 shadow-sm text-center">
-          <button className="w-full bg-blue-900 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-black uppercase tracking-widest hover:bg-blue-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group">
-            Proceed to Payment
-            <ArrowRight
-              size={18}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-          </button>
+          <div className="md:flex items-center justify-center gap-5">
+            <button
+              className="w-full bg-gray-600 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-black uppercase tracking-widest hover:bg-gray-500 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group"
+              onClick={() => navigate("/user-dashboard/my-ads")}
+            >
+              Continue Free
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </button>
+            <button
+              className="w-full bg-blue-900 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-black uppercase tracking-widest hover:bg-blue-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group"
+              onClick={handlePaymentTransfer}
+            >
+              Proceed to Payment
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </button>
+          </div>
           <p className="text-[9px] md:text-[10px] text-gray-400 mt-4 font-bold uppercase tracking-wider">
             Secure 256-bit SSL Encrypted Payment
           </p>

@@ -11,6 +11,7 @@ import {
   Check,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 function PropertyForSaleCategory({
@@ -18,6 +19,7 @@ function PropertyForSaleCategory({
   setOpenDropdown,
   addAd_data,
 }) {
+  const navigate = useNavigatez();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -114,7 +116,11 @@ function PropertyForSaleCategory({
       )
       .then((res) => {
         toast.success(res?.data?.message || "Property listed successfully!");
-        // Reset form or redirect
+        localStorage.setItem("table_name", "property_sale_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch(() => toast.error("Submission failed"))
       .finally(() => setLoading(false));

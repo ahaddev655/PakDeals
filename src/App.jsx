@@ -28,8 +28,9 @@ import AdsDetailPage from "./pages/main/AdsDetailPage";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUserPage from "./pages/admin/AdminUserPage";
-import AdminAdsPage from './pages/admin/AdminAdsPage';
-import AdminBlogsPage from './pages/admin/AdminBlogsPage';
+import AdminAdsPage from "./pages/admin/AdminAdsPage";
+import AdminBlogsPage from "./pages/admin/AdminBlogsPage";
+import PaymentPage from "./pages/main/PaymentPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -94,6 +95,11 @@ function App() {
         {
           path: "login",
           element: <LoginComponent />,
+        },
+        // -------------------- PAYMENT PAGE --------------------
+        {
+          path: "/payment/:table_name/:id",
+          element: <PaymentPage />,
         },
       ],
     },

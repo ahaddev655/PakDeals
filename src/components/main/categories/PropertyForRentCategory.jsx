@@ -14,6 +14,7 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // --- REUSABLE COMPONENTS ---
 const FormInput = ({ label, icon: Icon, ...props }) => (
@@ -84,6 +85,7 @@ function PropertyForRentCategory({
   setOpenDropdown,
   addAd_data,
 }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -176,6 +178,11 @@ function PropertyForRentCategory({
       )
       .then((res) => {
         toast.success(res?.data?.message || "Listing published!");
+        localStorage.setItem("table_name", "property_rent_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((error) => {
         console.error("Submission error:", error);

@@ -10,8 +10,10 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -116,7 +118,11 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       )
       .then((res) => {
         toast.success(res?.data?.message || "Ad Published!");
-        // Reset logic...
+        localStorage.setItem("table_name", "books_ads");
+        localStorage.setItem("ad_id", res?.data?.ad_id);
+        setTimeout(() => {
+          navigate("/pricing");
+        }, 2000);
       })
       .catch((err) => toast.error("Submission failed"))
       .finally(() => setLoading(false));
