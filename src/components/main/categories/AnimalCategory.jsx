@@ -75,7 +75,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setFormData((prev) => {
-      const updatedImages = [...prev.images, ...files].slice(0, 5);
+      const updatedImages = [...prev.images, ...files].slice(0, 4);
       return { ...prev, images: updatedImages };
     });
   };
@@ -332,7 +332,7 @@ function AnimalCategory({ openDropdown, setOpenDropdown, addAd_data }) {
             </div>
           ))}
 
-          {formData.images.length < 5 && (
+          {formData.images.length < 4 && (
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}

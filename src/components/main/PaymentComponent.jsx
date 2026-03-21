@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CreditCard, ShieldCheck, Zap, Lock, ArrowRight } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 
 const PaymentComponent = ({ setIsPaymentSuccess }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const PaymentComponent = ({ setIsPaymentSuccess }) => {
   const featurePrice = localStorage.getItem("payment");
   const featuredDuration = localStorage.getItem("payment_date");
   const [loading, setLoading] = useState(false);
+  const ad_id = localStorage.getItem("ad_id");
+  const table_name = localStorage.getItem("table_name");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,12 +76,24 @@ const PaymentComponent = ({ setIsPaymentSuccess }) => {
       return;
     }
 
-    console.log("CARD DATA: ", formData);
-    setLoading(false);
-    setTimeout(() => {
-      setIsPaymentSuccess(true);
-    }, 2500);
-    removeItemArray.forEach((key) => localStorage.removeItem(key));
+    axios
+      .put(`http://localhost:5000/api/status/featured/${table_name}/${ad_id}`, {
+        featured_days: featuredDuration,
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success(res?.data?.message || "");
+        setTimeout(() => {
+          setIsPaymentSuccess(true);
+        }, 2500);
+        removeItemArray.forEach((key) => localStorage.removeItem(key));
+      })
+      .catch((error) => {
+        console.error(error?.response?.data?.error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

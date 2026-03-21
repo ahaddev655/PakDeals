@@ -82,7 +82,7 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
     const files = Array.from(e.target.files);
     setFormData((prev) => ({
       ...prev,
-      images: [...prev.images, ...files].slice(0, 5),
+      images: [...prev.images, ...files].slice(0, 4),
     }));
   };
 
@@ -314,7 +314,7 @@ function BooksAndSportsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
               )}
             </div>
           ))}
-          {formData.images.length < 5 && (
+          {formData.images.length < 4 && (
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}

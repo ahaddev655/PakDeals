@@ -153,7 +153,7 @@ function PropertyForRentCategory({
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setFormData((p) => ({ ...p, images: [...p.images, ...files].slice(0, 5) }));
+    setFormData((p) => ({ ...p, images: [...p.images, ...files].slice(0, 4) }));
   };
 
   const handleSubmit = (e) => {
@@ -419,7 +419,7 @@ function PropertyForRentCategory({
               )}
             </div>
           ))}
-          {formData.images.length < 5 && (
+          {formData.images.length < 4 && (
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
