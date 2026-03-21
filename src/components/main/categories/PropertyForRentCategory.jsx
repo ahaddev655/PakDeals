@@ -392,7 +392,7 @@ function PropertyForRentCategory({
         <label className="text-sm font-black text-blue-900 uppercase flex items-center gap-2">
           <Camera size={18} /> Photos
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {formData.images.map((img, idx) => (
             <div key={idx} className="relative aspect-square">
               <img

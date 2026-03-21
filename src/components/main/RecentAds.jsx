@@ -12,18 +12,18 @@ function RecentAds() {
   const fetchUserAds = () => {
     setLoading(true);
     axios
-      .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
+      .get("http://localhost:5000/api/ads/all-ads")
       .then((response) => {
         const res = response?.data?.data || {};
         const formatAd = (ad) => ({
           id: ad.id,
-          title: ad.adTitle,
-          category: ad.subCategory,
+          title: ad.adTitle || ad.title,
+          category: ad.subCategory || ad.category,
           price: ad.price ? Number(ad.price).toLocaleString() : "0",
           location: ad.location || "Location Unknown",
           table_name: ad.table_name || ad.source_table || "undefined",
-          createdAt: ad.created_at?.slice(5, 16).replaceAll("-", "/") || "",
-          img: JSON.parse(ad.images || "[]")[0] || "",
+          img: ad.image || "[]"[0],
+          featured: ad.isFeatured || "",
         });
         const formattedAds = (res.ads || []).map(formatAd);
         setAds(
@@ -120,7 +120,12 @@ function RecentAds() {
                 to={`/ad/${ad.table_name}/${ad.id}`}
                 className="group"
               >
-                <div className="border-2 border-blue-800 rounded-2xl p-2 bg-white hover:shadow-xl transition-all duration-300">
+                <div className="border-2 border-blue-800 rounded-2xl p-2 bg-white hover:shadow-xl transition-all duration-300 relative">
+                  {ad.featured && (
+                    <div className="absolute top-3.5 left-4 bg-yellow-400 text-black z-20 rounded-md py-1 px-3">
+                      <span className="text-sm font-bold tracking-wider">FEATURED</span>
+                    </div>
+                  )}
                   <div className="relative overflow-hidden rounded-xl">
                     <img
                       src={ad.img}

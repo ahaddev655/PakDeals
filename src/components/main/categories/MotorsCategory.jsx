@@ -340,9 +340,9 @@ function MotorsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
       {/* --- SECTION 6: MEDIA --- */}
       <div className="space-y-4">
         <label className="text-sm font-black text-blue-900 uppercase tracking-tighter flex items-center gap-2">
-          <Camera size={18} /> Photos (Max 5)
+          <Camera size={18} /> Photos (Max 4)
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {formData.images.map((img, idx) => (
             <div key={idx} className="relative aspect-video group">
               <img

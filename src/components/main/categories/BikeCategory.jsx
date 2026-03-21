@@ -313,7 +313,7 @@ function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
         <label className="text-sm font-black text-blue-900 uppercase tracking-tighter flex items-center gap-2">
           <Camera size={18} /> Upload Photos (Up to 5)
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {formData.images.map((img, idx) => (
             <div key={idx} className="relative aspect-square group">
               <img

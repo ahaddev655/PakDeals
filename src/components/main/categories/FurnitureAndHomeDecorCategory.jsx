@@ -321,9 +321,9 @@ function FurnitureAndHomeDecorCategory({
       {/* --- SECTION 5: MEDIA GALLERY --- */}
       <div className="space-y-4">
         <label className="text-sm font-black text-blue-900 uppercase tracking-tighter flex items-center gap-2">
-          <Camera size={18} /> Item Gallery (Max 5)
+          <Camera size={18} /> Item Gallery (Max 4)
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {formData.images.map((img, idx) => (
             <div key={idx} className="relative aspect-square group">
               <img
