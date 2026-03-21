@@ -408,7 +408,8 @@ function UserAdsComponent() {
                 </Link>
                 {selectedAd.status !== "sold" && (
                   <div className="grid grid-cols-2 gap-3">
-                    {selectedAd.status === "inactive" || selectedAd.status === "pending" ? (
+                    {selectedAd.status === "inactive" ||
+                    selectedAd.status === "pending" ? (
                       <button
                         onClick={() =>
                           updateAdStatus(

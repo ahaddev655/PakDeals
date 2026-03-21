@@ -9,7 +9,7 @@ function PaymentPage() {
       {isPaymentSuccess ? (
         <PaymentSuccessComponent />
       ) : (
-          <PaymentComponent setIsPaymentSuccess={setIsPaymentSuccess} />
+        <PaymentComponent setIsPaymentSuccess={setIsPaymentSuccess} />
       )}
     </div>
   );

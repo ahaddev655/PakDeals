@@ -12,7 +12,7 @@ function RecentAds() {
   const fetchUserAds = () => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/ads/all-ads")
+      .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
       .then((response) => {
         const res = response?.data?.data || {};
         const formatAd = (ad) => ({
@@ -122,8 +122,14 @@ function RecentAds() {
               >
                 <div className="border-2 border-blue-800 rounded-2xl p-2 bg-white hover:shadow-xl transition-all duration-300 relative">
                   {ad.featured && (
-                    <div className="absolute top-3.5 left-4 bg-yellow-400 text-black z-20 rounded-md py-1 px-3">
-                      <span className="text-sm font-bold tracking-wider">FEATURED</span>
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-linear-to-r from-amber-50 to-white backdrop-blur-md border border-amber-200/50 py-1 px-3 rounded-full shadow-[0_2px_10px_-3px_rgba(245,158,11,0.3)]">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                      </span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.15em] text-amber-700">
+                        Featured
+                      </span>
                     </div>
                   )}
                   <div className="relative overflow-hidden rounded-xl">

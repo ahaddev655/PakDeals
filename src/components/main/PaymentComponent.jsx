@@ -77,9 +77,12 @@ const PaymentComponent = ({ setIsPaymentSuccess }) => {
     }
 
     axios
-      .put(`http://localhost:5000/api/status/featured/${table_name}/${ad_id}`, {
-        featured_days: featuredDuration,
-      })
+      .put(
+        `https://pak-deals-backend.vercel.app/api/status/featured/${table_name}/${ad_id}`,
+        {
+          featured_days: featuredDuration,
+        },
+      )
       .then((res) => {
         console.log(res.data);
         toast.success(res?.data?.message || "");

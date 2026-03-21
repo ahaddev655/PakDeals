@@ -59,7 +59,9 @@ function UserDashboardPage() {
         `https://pak-deals-backend.vercel.app/api/users/fetch-user/${userId}`,
       )
       .then((response) => {
-        setUserName(response.data.user.firstName + " " + response.data.user.lastName);
+        setUserName(
+          response.data.user.firstName + " " + response.data.user.lastName,
+        );
       })
       .catch((error) => {
         console.error(
@@ -84,8 +86,8 @@ function UserDashboardPage() {
           </h1>
           <p className="text-slate-500 font-medium mt-1">
             Welcome back,{" "}
-            <span className="text-slate-900 font-bold">{userName}</span>. Here is
-            what's happening today.
+            <span className="text-slate-900 font-bold">{userName}</span>. Here
+            is what's happening today.
           </p>
         </div>
       </div>

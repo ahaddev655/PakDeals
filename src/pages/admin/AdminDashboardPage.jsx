@@ -19,7 +19,7 @@ function AdminDashboardPage() {
       return () => clearTimeout(timer);
     }
   }, [userToken, userId, navigate]);
-  
+
   // ==================== API CONFIGURATION ====================
   const [totalListings, setTotalListings] = useState(Number(null));
   const [activeListings, setActiveListings] = useState(Number(null));

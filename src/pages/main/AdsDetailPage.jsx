@@ -68,9 +68,7 @@ function AdsDetailPage() {
           ...ad,
           _tableName: tableName,
           title: ad.adTitle || "",
-          amount: ad.price
-            ? `Rs ${Number(ad.price).toLocaleString()}`
-            : "Rs 0",
+          amount: ad.price ? `Rs ${Number(ad.price).toLocaleString()}` : "Rs 0",
           type: ad.subCategory || "",
           postDate: ad.created_at ? ad.created_at.slice(0, 10) : "",
           number: ad.sellerContact || "",

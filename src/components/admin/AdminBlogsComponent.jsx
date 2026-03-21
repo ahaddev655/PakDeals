@@ -164,7 +164,9 @@ function AdminBlogsComponent() {
   const deleteBlog = () => {
     const loadId = toast.loading("Deleting blog...");
     axios
-      .delete(`https://pak-deals-backend.vercel.app/api/admin/delete-blog/${selectedBlog.id}`)
+      .delete(
+        `https://pak-deals-backend.vercel.app/api/admin/delete-blog/${selectedBlog.id}`,
+      )
       .then((res) => {
         toast.update(loadId, {
           render: res.data.message,

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function BikeCategory({ openDropdown, setOpenDropdown, addAd_data }) {
   const navigate = useNavigate();

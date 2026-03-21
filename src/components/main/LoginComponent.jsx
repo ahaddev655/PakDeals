@@ -75,7 +75,9 @@ function LoginComponent() {
             })
             .catch((error) => {
               console.error(error);
-              toast.error(error?.response?.data?.error || "Google sync failed.");
+              toast.error(
+                error?.response?.data?.error || "Google sync failed.",
+              );
             });
         })
         .catch(() => toast.error("Google data fetch failed"));
