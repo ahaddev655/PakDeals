@@ -82,7 +82,7 @@ function MobileCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
     axios
       .post(
-        `http://pak-deals-backend.vercel.app/api/ads/add-mobiles-ad/${userId}`,
+        `https://pak-deals-backend.vercel.app/api/ads/add-mobiles-ad/${userId}`,
         form,
       )
       .then((res) => {

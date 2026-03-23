@@ -1,5 +1,7 @@
 import { Search, ChevronDown, Filter, CreditCard } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function UserPaymentComponent() {
   const [selectedSort, setSelectedSort] = useState("by-date");
@@ -12,47 +14,52 @@ function UserPaymentComponent() {
     { key: "by-type", label: "Payment Type" },
   ];
 
-  const [payments] = useState([
-    {
-      id: 1,
-      type: "Direct Bank Transfer",
-      amount: "200000",
-      date: "2024-03-01",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      type: "EasyPaisa Transfer",
-      amount: "100000",
-      date: "2024-03-10",
-      status: "Processing",
-    },
-    {
-      id: 3,
-      type: "JazzCash",
-      amount: "50000",
-      date: "2024-02-15",
-      status: "Completed",
-    },
-  ]);
+  const [payments, setPayments] = useState([]);
+  const userId = localStorage.getItem("id");
 
-  // Handle Filtering and Sorting Logic
+  useEffect(() => {
+    axios
+      .get(`https://pak-deals-backend.vercel.app/api/users/transactions/${userId}`)
+      .then((response) => {
+        console.log(response.data);
+        toast.success(response?.data?.message);
+        setPayments(response.data.transactions);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.error || "");
+      });
+  }, []);
+
   const filteredAndSortedPayments = payments
-    .filter((p) => p.type.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter((p) => {
+      const searchTerm = searchQuery.toLowerCase();
+      const method = (p.transaction_method || "").toLowerCase();
+      const id = p.transaction_id?.toString() || "";
+
+      return method.includes(searchTerm) || id.includes(searchTerm);
+    })
     .sort((a, b) => {
-      if (selectedSort === "by-date")
-        return new Date(b.date) - new Date(a.date);
-      if (selectedSort === "by-amount")
-        return Number(b.amount) - Number(a.amount);
-      if (selectedSort === "by-type") return a.type.localeCompare(b.type);
+      if (selectedSort === "by-date") {
+        return (
+          new Date(b.transaction_made_on) - new Date(a.transaction_made_on)
+        );
+      }
+      if (selectedSort === "by-amount") {
+        return Number(b.transaction_amount) - Number(a.transaction_amount);
+      }
+      if (selectedSort === "by-type") {
+        return (a.transaction_method || "").localeCompare(
+          b.transaction_method || "",
+        );
+      }
       return 0;
     });
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case "Completed":
+      case 1:
         return "bg-green-100 text-green-700 border-green-200";
-      case "Processing":
+      case 0:
         return "bg-amber-100 text-amber-700 border-amber-200";
       default:
         return "bg-slate-100 text-slate-700 border-slate-200";
@@ -153,7 +160,7 @@ function UserPaymentComponent() {
                   className="hover:bg-slate-50/80 transition-colors group"
                 >
                   <td className="px-6 py-4 text-sm font-black text-blue-600">
-                    #{payment.id.toString().padStart(4, "0")}
+                    #{payment.transaction_id.toString().padStart(4, "0")}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -161,24 +168,26 @@ function UserPaymentComponent() {
                         <CreditCard size={16} />
                       </div>
                       <span className="text-sm font-bold text-slate-700">
-                        {payment.type}
+                        {payment.transaction_method}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-sm font-black text-slate-900">
-                      Rs {Number(payment.amount).toLocaleString()}
+                      Rs {Number(payment.transaction_amount).toLocaleString()}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(payment.status)}`}
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(payment.transaction_status)}`}
                     >
-                      {payment.status}
+                      {payment.transaction_status ? "completed" : "processing"}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-slate-500">
-                    {payment.date}
+                    {payment.transaction_made_on
+                      .slice(5, 16)
+                      .replaceAll(" ", "/")}
                   </td>
                 </tr>
               ))}
