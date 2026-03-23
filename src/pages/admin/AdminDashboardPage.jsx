@@ -36,7 +36,7 @@ function AdminDashboardPage() {
         const data = response.data;
         setActiveListings(data.active_listings);
         setUsers(data.total_users);
-        setBlogs(data.total_blogs);
+        setBlogs(data.total_blogs.total);
         setTotalListings(data.total_listings);
       })
       .catch((error) => {

@@ -31,6 +31,7 @@ import AdminUserPage from "./pages/admin/AdminUserPage";
 import AdminAdsPage from "./pages/admin/AdminAdsPage";
 import AdminBlogsPage from "./pages/admin/AdminBlogsPage";
 import PaymentPage from "./pages/main/PaymentPage";
+import AdminPaymentPage from "./pages/admin/AdminPaymentPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -154,6 +155,10 @@ function App() {
         {
           path: "ads",
           element: <AdminAdsPage />,
+        },
+        {
+          path: "payments",
+          element: <AdminPaymentPage />,
         },
         {
           path: "blogs",

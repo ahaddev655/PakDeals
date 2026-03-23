@@ -32,6 +32,11 @@ const ADMIN_LINKS = [
     link: "/control-center-9xA7kLm2/blogs",
   },
   {
+    icon: MessageSquareReply,
+    text: "Payment Management",
+    link: "/control-center-9xA7kLm2/payments",
+  },
+  {
     icon: CircleUserRound,
     text: "Profile Settings",
     link: "/control-center-9xA7kLm2/profile-settings",
