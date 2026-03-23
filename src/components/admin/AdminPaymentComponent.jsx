@@ -23,7 +23,7 @@ const AdminPaymentComponent = () => {
   const fetchData = () => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/admin/user-transactions")
+      .get("https://pak-deals-backend.vercel.app/api/admin/user-transactions")
       .then((response) => {
         const mappedData = response.data.transactions.map((tx) => ({
           id: tx.transaction_id,
