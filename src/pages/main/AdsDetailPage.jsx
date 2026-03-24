@@ -107,7 +107,7 @@ function AdsDetailPage() {
           {/* 1. Header & Pricing */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight lg:w-137.5">
+              <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight lg:w-120">
                 {adDetails.title}
               </h1>
               <div className="flex gap-4 mt-3 text-gray-500 text-sm font-medium">

@@ -12,27 +12,31 @@ function RecentAds() {
   const fetchUserAds = () => {
     setLoading(true);
     axios
-      .get("https://pak-deals-backend.vercel.app/api/ads/all-ads")
+      .get("https://pak-deals-backend.vercel.app/api/ads/recent-ads")
       .then((response) => {
-        const res = response?.data?.data || {};
-        const formatAd = (ad) => ({
+        const rawAds = response?.data?.ads || [];
+
+        const sortedAds = [...rawAds].sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+
+        const formattedAds = sortedAds.slice(0, 8).map((ad) => ({
           id: ad.id,
-          title: ad.adTitle || ad.title,
-          category: ad.subCategory || ad.category,
+          title: ad.adTitle || ad.title || "Untitled Ad",
+          category: ad.subCategory || ad.category || "General",
           price: ad.price ? Number(ad.price).toLocaleString() : "0",
           location: ad.location || "Location Unknown",
           table_name: ad.table_name || ad.source_table || "undefined",
-          img: ad.image || "[]"[0],
-          featured: ad.isFeatured || "",
-        });
-        const formattedAds = (res.ads || []).map(formatAd);
-        setAds(
-          formattedAds
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .slice(0, 8),
-        );
+          img: ad.image || "https://via.placeholder.com/150",
+          featured: ad.isFeatured || false,
+        }));
+
+        setAds(formattedAds);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error("Error fetching ads:", err);
+      })
       .finally(() => setLoading(false));
   };
 

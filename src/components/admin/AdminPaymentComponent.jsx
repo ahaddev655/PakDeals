@@ -16,10 +16,6 @@ const AdminPaymentComponent = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = () => {
     setLoading(true);
     axios
@@ -70,6 +66,13 @@ const AdminPaymentComponent = () => {
     );
   });
 
+  const chnageStatusToFeatured = () => {
+    
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className="min-h-screen bg-white text-black font-sans antialiased">
       {/* RESPONSIVE NAV */}
