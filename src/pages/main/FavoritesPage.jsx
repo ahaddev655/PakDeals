@@ -113,7 +113,6 @@ function FavoritesPage() {
                     }}
                     className="absolute top-3 right-3 grid place-items-center w-9 h-9 
                       bg-white text-red-500 shadow-xl z-10 cursor-pointer rounded-full hover:bg-red-50 hover:scale-110 transition-all"
-                    title="Remove from favorites"
                   >
                     <Heart fill="currentColor" size={20} />
                   </button>

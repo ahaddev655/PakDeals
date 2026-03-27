@@ -73,7 +73,7 @@ function PricingPage() {
     <div className="min-h-screen bg-gray-50 py-6 md:py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8 md:mb-10">
-          <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
             Boost Your Ad Reach
           </h2>
           <p className="text-sm md:text-base text-gray-500 mt-2 font-medium px-4">
@@ -117,11 +117,11 @@ function PricingPage() {
 
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-base md:text-lg font-black text-slate-800 whitespace-nowrap">
+                        <span className="text-base md:text-lg font-bold text-slate-800 whitespace-nowrap">
                           {offer.title}
                         </span>
                         {offer.recommended && (
-                          <span className="bg-orange-100 text-orange-700 text-[8px] md:text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md">
+                          <span className="bg-orange-100 text-orange-700 text-[8px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-md">
                             Best Value
                           </span>
                         )}
@@ -134,13 +134,13 @@ function PricingPage() {
 
                   <div className="text-right shrink-0">
                     {offer.discount && (
-                      <div className="bg-green-100 text-green-700 text-[9px] md:text-[10px] font-black px-1.5 py-0.5 rounded-full inline-block mb-1">
+                      <div className="bg-green-100 text-green-700 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full inline-block mb-1">
                         -{offer.discount}%
                       </div>
                     )}
                     <div className="flex flex-col items-end">
                       <span
-                        className={`text-lg md:text-xl font-black leading-none ${isSelected ? "text-blue-900" : "text-slate-800"}`}
+                        className={`text-lg md:text-xl font-bold leading-none ${isSelected ? "text-blue-900" : "text-slate-800"}`}
                       >
                         Rs {Number(offer.price).toLocaleString()}
                       </span>
@@ -164,7 +164,7 @@ function PricingPage() {
         <div className="mt-8 md:mt-10 bg-white p-4 md:p-6 rounded-3xl border border-gray-100 shadow-sm text-center">
           <div className="md:flex items-center justify-center gap-5">
             <button
-              className="w-full bg-gray-600 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-black uppercase tracking-widest hover:bg-gray-500 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group"
+              className="w-full bg-gray-600 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-bold uppercase tracking-widest hover:bg-gray-500 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group"
               onClick={() => navigate("/user-dashboard/my-ads")}
             >
               Continue Free
@@ -174,7 +174,7 @@ function PricingPage() {
               />
             </button>
             <button
-              className="w-full bg-blue-900 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-black uppercase tracking-widest hover:bg-blue-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group"
+              className="w-full bg-blue-900 text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-bold uppercase tracking-widest hover:bg-blue-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 group"
               onClick={handlePaymentTransfer}
             >
               Proceed to Payment

@@ -32,6 +32,7 @@ import AdminAdsPage from "./pages/admin/AdminAdsPage";
 import AdminBlogsPage from "./pages/admin/AdminBlogsPage";
 import PaymentPage from "./pages/main/PaymentPage";
 import AdminPaymentPage from "./pages/admin/AdminPaymentPage";
+import SearchPage from "./pages/main/SearchPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -85,6 +86,10 @@ function App() {
         {
           path: "/ad/:table_name/:id",
           element: <AdsDetailPage />,
+        },
+        {
+          path: "search",
+          element: <SearchPage />,
         },
 
         // -------------------- SIGNUP PAGE --------------------

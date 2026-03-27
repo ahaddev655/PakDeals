@@ -1,9 +1,16 @@
 import { Heart, Menu, Search, User, X } from "lucide-react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function MainHeader() {
   const [offCanvasToggle, setOffCanvasToggle] = useState(false);
+  const navigate = useNavigate();
+  const [val, setVal] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?search=${val}`);
+  };
 
   return (
     <>
@@ -21,13 +28,14 @@ function MainHeader() {
 
           {/* 2. Search Section (1/2 width maintained) */}
           <div className="w-1/2 lg:block hidden px-4">
-            <form className="relative w-full group">
+            <form className="relative w-full group" onSubmit={handleSearch}>
               <input
                 type="text"
                 name="search"
                 placeholder="What are you looking for?"
                 className="bg-white/95 w-full h-11 rounded-xl px-5 font-medium text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-400 outline-none transition-all shadow-inner"
                 required
+                onChange={(e) => setVal(e.target.value)}
               />
               <button
                 type="submit"
@@ -82,12 +90,13 @@ function MainHeader() {
               : "opacity-0 -translate-y-4 pointer-events-none"
           }`}
         >
-          <form className="relative w-full">
+          <form className="relative w-full" onSubmit={handleSearch}>
             <input
               type="text"
               placeholder="Search items..."
               className="bg-white w-full h-12 rounded-xl px-5 font-medium outline-none"
               required
+              onChange={(e) => setVal(e.target.value)}
             />
             <button
               type="submit"
