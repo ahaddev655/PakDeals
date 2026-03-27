@@ -15,7 +15,7 @@ function MainHeader() {
   return (
     <>
       <header className="bg-linear-to-r from-blue-900 via-blue-900 to-blue-950 relative z-100 shadow-xl">
-        <div className="flex items-center justify-between md:px-12 sm:px-6 px-4 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto py-4">
+        <div className="flex items-center justify-between container mx-auto px-3 md:px-24 py-4">
           {/* 1. Logo Section (1/5 width maintained) */}
           <div className="shrink-0 lg:w-1/5">
             <Link

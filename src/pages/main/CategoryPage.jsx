@@ -38,7 +38,7 @@ function CategoryPage() {
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* --- HEADER SECTION --- */}
       <div className="bg-white border-b border-gray-200 mb-8 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:flex items-center justify-between gap-6">
+        <div className="page sm:flex items-center justify-between gap-6">
           <div className="mb-4 sm:mb-0">
             <h1 className="text-3xl md:text-4xl font-black text-slate-900 capitalize tracking-tight">
               {categoryName}

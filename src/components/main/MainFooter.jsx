@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function MainFooter() {
   return (
     <footer className="bg-linear-to-r from-blue-900 via-blue-900 to-blue-950">
-      <div className="md:px-12 sm:px-6 px-4 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto py-16">
+      <div className="container mx-auto px-3 md:px-24 py-16">
         {/* -------------------- FOOTER GRID -------------------- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           {/* ==================== LOGO + DESCRIPTION ==================== */}
@@ -132,7 +132,7 @@ function MainFooter() {
 
       {/* -------------------- COPYRIGHT SECTION -------------------- */}
       <div className="border-t border-white/10 bg-black/10">
-        <div className="w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-blue-100/60 text-sm font-medium">
+        <div className="container mx-auto px-3 md:px-24 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-blue-100/60 text-sm font-medium">
           <p className="flex items-center gap-1.5">
             Built with <Heart size={14} className="text-red-500 fill-red-500" />{" "}
             by <span className="text-white font-bold">PakDeals Team</span>

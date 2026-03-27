@@ -54,7 +54,7 @@ function AddAdPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] py-12">
+    <div className="min-h-screen bg-[#f8f9fa] page">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
           {/* Header Section */}

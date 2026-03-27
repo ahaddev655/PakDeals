@@ -208,7 +208,12 @@ function UserPersonalSettingsComponent() {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-6 bg-white rounded-2xl">
-      <ToastContainer position="top-right" autoClose={2500} theme="colored" />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        theme="dark"
+      />
 
       {/* Header */}
       <div className="mb-8">

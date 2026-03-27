@@ -77,7 +77,7 @@ const PaymentComponent = ({ setIsPaymentSuccess }) => {
   return (
     <div className="min-h-screen bg-[#f8f8f8] flex items-center justify-center p-6 font-sans antialiased text-slate-900">
       <ToastContainer
-        position="bottom-center"
+        position="top-center"
         autoClose={1500}
         hideProgressBar
         theme="dark"

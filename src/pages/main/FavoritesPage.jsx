@@ -49,7 +49,7 @@ function FavoritesPage() {
   };
 
   return (
-    <div className="md:px-12 sm:px-6 px-4 w-full max-w-7xl mx-auto py-12 min-h-[80vh]">
+    <div className="page py-12 min-h-[80vh]">
       {/* -------------------- HEADER -------------------- */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-gray-100 pb-6">
         <div>

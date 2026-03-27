@@ -85,7 +85,7 @@ function AllAdsPage() {
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* --- PAGE HEADER --- */}
       <div className="bg-white border-b border-gray-200 mb-8 py-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="page flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">
               Browse All Ads

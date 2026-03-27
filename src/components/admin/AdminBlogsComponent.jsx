@@ -181,7 +181,12 @@ function AdminBlogsComponent() {
 
   return (
     <div className="p-6 bg-slate-50 min-h-screen">
-      <ToastContainer position="top-right" autoClose={1500} theme="colored" />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        theme="dark"
+      />
       <div className="text-end w-full mb-6">
         <button
           type="button"

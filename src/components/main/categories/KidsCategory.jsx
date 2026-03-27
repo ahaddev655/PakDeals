@@ -179,7 +179,12 @@ function KidsCategory({ openDropdown, setOpenDropdown, addAd_data }) {
 
   return (
     <form className="space-y-8 bg-white" onSubmit={handleSubmit}>
-      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        theme="dark"
+      />
 
       {/* --- SECTION 1: CORE DETAILS --- */}
       <div className="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 space-y-6">

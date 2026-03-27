@@ -96,7 +96,12 @@ function SignUpComponent() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
-      <ToastContainer position="top-right" autoClose={1500} theme="colored" />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        theme="dark"
+      />
 
       <div className="w-full max-w-lg bg-white border-2 border-blue-800 rounded-2xl shadow-2xl p-8 transition-all duration-300">
         <div className="text-center mb-6">

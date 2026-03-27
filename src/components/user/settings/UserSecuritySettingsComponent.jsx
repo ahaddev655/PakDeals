@@ -112,7 +112,12 @@ function UserSecuritySettingsComponent() {
 
   return (
     <div className="py-6 px-4 max-w-4xl">
-      <ToastContainer position="top-right" autoClose={2500} theme="colored" />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        theme="dark"
+      />
 
       {/* -------------------- HEADING -------------------- */}
       <div className="flex items-center gap-4 mb-8">

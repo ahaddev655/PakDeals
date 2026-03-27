@@ -8,11 +8,11 @@
 }
 
 .page {
-  @apply py-12 md:px-12 sm:px-6 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto;
+  @apply container mx-auto py-12 px-3 md:px-24;
 }
 
 .section {
-  @apply pb-12 md:px-12 sm:px-6 px-2.5 w-full sm:w-135 md:w-180 lg:w-240 xl:w-285 2xl:w-330 mx-auto;
+  @apply container mx-auto pb-12 px-3 md:px-24;
 }
 
 body {

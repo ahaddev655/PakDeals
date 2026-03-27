@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
-import fields from "../../data/adDetails_data.json";
 
 const EXCLUDED_KEYS = [
   "id",
@@ -84,8 +83,13 @@ function AdsDetailPage() {
       .catch((err) => console.error("Error fetching ad details:", err));
   }, [pathname]);
 
-  const formatKey = (key) =>
-    key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
+  const formatKey = (key) => {
+    return key
+      .replace(/_/g, " ")
+      .replace(/([A-Z])/g, " $1")
+      .trim()
+      .replace(/\b\w/g, (s) => s.toUpperCase());
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
@@ -101,7 +105,7 @@ function AdsDetailPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 lg:flex gap-8">
+      <div className="page lg:flex gap-8">
         {/* ==================== MAIN CONTENT AREA ==================== */}
         <div className="lg:w-[70%] space-y-6">
           {/* 1. Header & Pricing */}
@@ -167,19 +171,27 @@ function AdsDetailPage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-5">
               {Object.entries(adDetails)
-                .filter(([key, value]) => !EXCLUDED_KEYS.includes(key) && value)
+                .filter(
+                  ([key, value]) =>
+                    !EXCLUDED_KEYS.includes(key) &&
+                    value !== null &&
+                    value !== undefined &&
+                    value !== "",
+                )
                 .map(([key, value]) => (
                   <div
                     key={key}
-                    className="flex justify-between border-b border-gray-50 pb-2"
+                    className="flex justify-between border-b border-gray-100 pb-2"
                   >
                     <span className="text-gray-400 font-medium text-sm">
                       {formatKey(key)}
                     </span>
-                    <span className="text-slate-900 font-bold text-sm">
-                      {key === "price"
-                        ? `Rs ${Number(value).toLocaleString()}`
-                        : value}
+                    <span className="text-slate-900 font-bold text-sm text-right">
+                      {typeof value === "boolean"
+                        ? value
+                          ? "Yes"
+                          : "No"
+                        : String(value)}
                     </span>
                   </div>
                 ))}

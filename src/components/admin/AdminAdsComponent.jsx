@@ -136,7 +136,12 @@ function AdminAdsComponent() {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-      <ToastContainer position="top-right" autoClose={1500} theme="colored" />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        theme="dark"
+      />
 
       {/* HEADER CONTROLS */}
       <div className="p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-50/50">

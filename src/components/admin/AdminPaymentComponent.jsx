@@ -66,9 +66,7 @@ const AdminPaymentComponent = () => {
     );
   });
 
-  const chnageStatusToFeatured = () => {
-    
-  }
+  const chnageStatusToFeatured = () => {};
 
   useEffect(() => {
     fetchData();

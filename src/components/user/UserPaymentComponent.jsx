@@ -19,7 +19,9 @@ function UserPaymentComponent() {
 
   useEffect(() => {
     axios
-      .get(`https://pak-deals-backend.vercel.app/api/users/transactions/${userId}`)
+      .get(
+        `https://pak-deals-backend.vercel.app/api/users/transactions/${userId}`,
+      )
       .then((response) => {
         console.log(response.data);
         toast.success(response?.data?.message);
