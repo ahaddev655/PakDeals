@@ -26,7 +26,7 @@ function UserAdsComponent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalAds, setTotalAds] = useState(0);
-  const perPage = 20;
+  const perPage = 10;
 
   const tabs = [
     { key: "all-ads", label: "All Ads" },
@@ -53,8 +53,20 @@ function UserAdsComponent() {
     return "inactive";
   };
 
-  const formatAd = useCallback(
-    (ad) => ({
+  const formatAd = (ad) => {
+    let images = [];
+
+    if (typeof ad.images === "string") {
+      try {
+        images = JSON.parse(ad.images);
+      } catch {
+        images = [];
+      }
+    } else if (Array.isArray(ad.images)) {
+      images = ad.images;
+    }
+
+    return {
       id: ad.id,
       title: ad.adTitle,
       category: ad.subCategory,
@@ -64,35 +76,49 @@ function UserAdsComponent() {
         ? new Date(ad.created_at).toLocaleDateString("en-GB")
         : "N/A",
       status: getStatus(ad),
-      img:
-        JSON.parse(ad.images || "[]")[0] || "https://via.placeholder.com/300",
-    }),
-    [],
-  );
+      img: images[0] || "https://via.placeholder.com/300",
+    };
+  };
 
-  const fetchUserAds = useCallback(
-    (page = 1) => {
-      setLoading(true);
-      axios
-        .get(
-          `https://pak-deals-backend.vercel.app/api/ads/all-user-ads-paginated/${userId}?page=${page}&per_page=${perPage}`,
-        )
-        .then((res) => {
-          const result = res?.data?.data || {};
-          setAds((result.ads || []).map(formatAd));
-          setTotalPages(result.total_pages || 1);
-          setTotalAds(result.total || 0);
-          setCurrentPage(result.page || page);
-        })
-        .catch(() => toast.error("Failed to load ads"))
-        .finally(() => setLoading(false));
-    },
-    [userId, formatAd],
-  );
+  const fetchUserAds = (page = 1) => {
+    if (!userId) {
+      console.warn("No userId found in localStorage");
+      return;
+    }
+
+    setLoading(true);
+
+    axios
+      .get(
+        `https://pak-deals-backend.vercel.app/api/ads/all-user-ads-paginated/${userId}`,
+        {
+          params: {
+            page: page,
+            per_page: perPage,
+          },
+        },
+      )
+      .then((res) => {
+        const result = res.data?.data || res.data || {};
+        const rawAds = Array.isArray(result.ads) ? result.ads : [];
+
+        setAds(rawAds.map(formatAd));
+        setTotalPages(result.total_pages || 1);
+        setTotalAds(result.total || 0);
+        setCurrentPage(result.page || page);
+      })
+      .catch((err) => {
+        console.error("API Error:", err.response?.data || err.message);
+        toast.error("Failed to load ads");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     if (userId) fetchUserAds(1);
-  }, [userId, fetchUserAds]);
+  }, [userId, selectedNavTab]);
 
   const updateAdStatus = (id, tableName, newStatus) => {
     const endpoint = `https://pak-deals-backend.vercel.app/api/status/${newStatus}/${tableName}/${id}`;

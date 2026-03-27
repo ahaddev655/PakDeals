@@ -19,7 +19,7 @@ function PropertyForSaleCategory({
   setOpenDropdown,
   addAd_data,
 }) {
-  const navigate = useNavigatez();
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
