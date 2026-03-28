@@ -284,7 +284,7 @@ function UserAdsComponent() {
                         />
                         <div>
                           <p className="font-bold text-slate-900 line-clamp-1">
-                            {ad.title}
+                            {ad.title || ad.adTitle}
                           </p>
                           <p className="text-xs text-slate-400 font-medium">
                             {ad.createdAt}
