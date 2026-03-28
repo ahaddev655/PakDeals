@@ -181,17 +181,27 @@ function AdsDetailPage() {
                 .map(([key, value]) => (
                   <div
                     key={key}
-                    className="flex justify-between border-b border-gray-100 pb-2"
+                    className="flex justify-between border-b border-gray-100 pb-2 items-center"
                   >
                     <span className="text-gray-400 font-medium text-sm">
                       {formatKey(key)}
                     </span>
                     <span className="text-slate-900 font-bold text-sm text-right">
-                      {typeof value === "boolean"
-                        ? value
-                          ? "Yes"
-                          : "No"
-                        : String(value)}
+                      {key === "color" ? (
+                        <div
+                          className="w-6 h-6 rounded-md border border-gray-200 shadow-sm"
+                          style={{ backgroundColor: String(value) }}
+                          title={String(value)}
+                        />
+                      ) : typeof value === "boolean" ? (
+                        value ? (
+                          "Yes"
+                        ) : (
+                          "No"
+                        )
+                      ) : (
+                        String(value)
+                      )}
                     </span>
                   </div>
                 ))}
