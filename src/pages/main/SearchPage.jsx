@@ -22,7 +22,7 @@ function SearchPage() {
       setLoading(true);
       axios
         .get(
-          `https://pak-deals-backend.vercel.app/api/ads/search-ads?search=${searchQuery}`,
+          `http://localhost:5000/api/ads/search-ads?search=${searchQuery}`,
         )
         .then((response) => {
           setSearchResults(response.data);
