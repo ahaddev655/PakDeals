@@ -6,12 +6,12 @@ import UserNavbarComponent from "../components/user/UserNavbarComponent";
 function AdminLayout() {
   const [offCanvasToggle, setOffCanvasToggle] = useState(false);
   return (
-    <div className="flex w-full">
+    <div className="flex">
       <AdminSidebarComponent
         offCanvasToggle={offCanvasToggle}
         setOffCanvasToggle={setOffCanvasToggle}
       />
-      <div className="max-w-7xl">
+      <div className="w-full max-w-7xl">
         <UserNavbarComponent />
         <Outlet />
       </div>

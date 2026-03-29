@@ -27,6 +27,7 @@ const PaymentComponent = ({ setIsPaymentSuccess }) => {
   const userId = localStorage.getItem("id");
   const ad_table = localStorage.getItem("table_name");
   const ad_id = localStorage.getItem("ad_id");
+  const featured_days = localStorage.getItem("payment_date");
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -49,6 +50,7 @@ const PaymentComponent = ({ setIsPaymentSuccess }) => {
       transaction_method: activeTab,
       ad_table: ad_table,
       ad_id: ad_id,
+      featured_days: featured_days,
     };
 
     axios

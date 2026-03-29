@@ -118,7 +118,7 @@ function AdminUserComponent() {
         hideProgressBar
         theme="dark"
       />
-      <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         {/* HEADER & FILTERS */}
         <div className="p-6 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">

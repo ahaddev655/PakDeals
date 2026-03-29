@@ -29,6 +29,9 @@ const AdminPaymentComponent = () => {
           date: new Date(tx.transaction_made_on).toLocaleDateString(),
           method: tx.transaction_method,
           status: tx.transaction_status === 0 ? "Pending" : "Approved",
+          ad_id: tx.ad_id,
+          ad_table: tx.ad_table,
+          featured_days: tx.featured_days,
         }));
         setTransactions(mappedData);
       })
@@ -49,14 +52,6 @@ const AdminPaymentComponent = () => {
     return { pending, volume, rate };
   }, [transactions]);
 
-  const updateStatus = (id, newStatus) => {
-    setTransactions((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item,
-      ),
-    );
-  };
-
   const filteredTransactions = transactions.filter((tx) => {
     const search = searchTerm.toLowerCase();
     return (
@@ -66,7 +61,43 @@ const AdminPaymentComponent = () => {
     );
   });
 
-  const chnageStatusToFeatured = () => {};
+  const chnageStatusToFeatured = (
+    table_name,
+    ad_id,
+    transaction_id,
+    featured_days,
+  ) => {
+    // -------------------- CHANGE PAYMENT STATUS TO COMPLETED --------------------
+    axios
+      .put(
+        `https://pak-deals-backend.vercel.app/api/admin/approve-transaction/${transaction_id}`,
+      )
+      .then((response) => {
+        console.log("Transaction Approved:", response.data);
+
+        setTransactions((prev) =>
+          prev.map((item) =>
+            item.id === transaction_id ? { ...item, status: "Approved" } : item,
+          ),
+        );
+
+        // -------------------- CHANGE AD STATUS TO FEATURED --------------------
+        axios
+          .put(
+            `https://pak-deals-backend.vercel.app/api/status/featured/${table_name}/${ad_id}`,
+            { featured_days: featured_days },
+          )
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     fetchData();
@@ -75,7 +106,7 @@ const AdminPaymentComponent = () => {
     <div className="min-h-screen bg-white text-black font-sans antialiased">
       {/* RESPONSIVE NAV */}
       <nav className="border-b border-gray-100 px-4 md:px-8 py-4 bg-white sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+        <div className="container flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
           <div className="flex items-center justify-between w-full md:w-auto">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -209,7 +240,14 @@ const AdminPaymentComponent = () => {
                               </span>
                             </button>
                             <button
-                              onClick={() => updateStatus(tx.id, "Approved")}
+                              onClick={() => {
+                                chnageStatusToFeatured(
+                                  tx.ad_table,
+                                  tx.ad_id,
+                                  tx.id,
+                                  tx.featured_days,
+                                );
+                              }}
                               className="flex-2 md:flex-none bg-black text-white px-6 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-blue-600 transition-all shadow-sm"
                             >
                               <Check size={18} />

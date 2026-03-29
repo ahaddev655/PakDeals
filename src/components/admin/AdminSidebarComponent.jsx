@@ -133,7 +133,7 @@ function AdminSidebarComponent({ offCanvasToggle, setOffCanvasToggle }) {
   return (
     <>
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden lg:flex flex-col w-72 bg-[#0a0a0a] h-screen border-r border-white/5 sticky top-0 overflow-y-auto no-scrollbar">
+      <aside className="hidden lg:flex flex-col w-81.25 bg-[#0a0a0a] h-screen border-r border-white/5 sticky top-0 overflow-y-auto no-scrollbar">
         <SidebarContent />
       </aside>
 
